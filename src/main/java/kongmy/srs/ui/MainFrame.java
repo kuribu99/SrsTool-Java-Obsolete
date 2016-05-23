@@ -229,13 +229,9 @@ public class MainFrame extends javax.swing.JFrame {
         menuSettings.setText("Settings");
 
         menuItemWriteConfigurationFile.setText("Write configuration file");
-        menuItemWriteConfigurationFile.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                menuItemWriteConfigurationFileAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+        menuItemWriteConfigurationFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemWriteConfigurationFileActionPerformed(evt);
             }
         });
         menuSettings.add(menuItemWriteConfigurationFile);
@@ -305,16 +301,21 @@ public class MainFrame extends javax.swing.JFrame {
         dlg.setVisible(true);
     }//GEN-LAST:event_menuItemModifyDomainActionPerformed
 
-    private void menuItemWriteConfigurationFileAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_menuItemWriteConfigurationFileAncestorAdded
+    private void menuItemWriteConfigurationFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemWriteConfigurationFileActionPerformed
         try {
             Application.getInstance().getConfiguration().WriteConfigurationToFile();
+            JOptionPane.showMessageDialog(this, 
+                    "Configuration file created successfully", 
+                    "Success", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, 
                     ex.getMessage(), 
                     "Error saving configuration", 
                     JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_menuItemWriteConfigurationFileAncestorAdded
+    }//GEN-LAST:event_menuItemWriteConfigurationFileActionPerformed
     
     /**
      * @param args the command line arguments
