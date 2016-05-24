@@ -33,21 +33,25 @@ public class OntologyModule extends Module {
     }
     
     public List<String> getActorsFromModule(String domainName, String moduleName) {
+        if(moduleName == null) {
+            List<String> all = new ArrayList<>(allowed);
+            all.addAll(disallowed);
+            return all;
+        }
         if(true)
             return moduleName.equals("allowed")? allowed: disallowed;
         
-        OntologyHelper reader = new OntologyHelper("ontology.owl");
+        OntologyHelper helper = new OntologyHelper("ontology.owl");
         
         if(domainName == null)
-            return reader.getClassInstances(OntologyKey.Class.ACTOR);
+            return helper.getClassInstances(OntologyKey.Class.ACTOR);
         
         if(moduleName == null)
-            return reader.getClassInstances(OntologyKey.Class.ACTOR);
-        
-        else {
-            return reader.getInstancesByObjectProperty(OntologyKey.Class.ACTOR, OntologyKey.ObjectProperty.HAS_ACTOR);
-        }
-        
+            return helper.getClassInstances(OntologyKey.Class.ACTOR);
+        else 
+            return helper.getInstancesByObjectProperty(
+                    moduleName,
+                    OntologyKey.ObjectProperty.HAS_ACTOR);        
     }
     
     

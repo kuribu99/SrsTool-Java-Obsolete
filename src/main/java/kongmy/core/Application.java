@@ -53,6 +53,8 @@ public abstract class Application implements Runnable {
         String[] moduleClassNames = this.configuration.settings.get(Configuration.MODULES_CLASS_NAMES).split("[, ]+");
         
         for(String moduleClassName: moduleClassNames) {
+            if (moduleClassName.isEmpty())
+                continue;
             try {
                 Module module = (Module) Class.forName(moduleClassName).newInstance();
                 this.modules.put(module.getModuleName(), module);

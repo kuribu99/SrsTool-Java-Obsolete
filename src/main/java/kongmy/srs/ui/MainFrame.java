@@ -35,7 +35,7 @@ public class MainFrame extends javax.swing.JFrame {
             if(module instanceof HasMenuItem) {
                 HasMenuItem menuModule = (HasMenuItem) module;
                 JMenuItem menuItem = new JMenuItem(menuModule.getMenuItemName());
-                menuItem.addActionListener(menuModule);
+                menuItem.addActionListener((e) -> menuModule.onMenuItemClicked(this));
                 menuModules.add(menuItem);
             }
         });

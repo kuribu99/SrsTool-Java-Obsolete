@@ -9,6 +9,8 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.Popup;
 import kongmy.core.HasMenuItem;
 import kongmy.srs.core.RequirementModule;
 import kongmy.srs.modules.ui.AccessControlDialog;
@@ -24,14 +26,8 @@ public class AccessControlModule extends RequirementModule implements HasMenuIte
     }
     
     @Override
-    public void actionPerformed(ActionEvent e) {
-        JMenuItem menuItem = (JMenuItem) e.getSource();
-        
-        Container container = menuItem.getParent();
-        while(!(container instanceof JFrame))
-            container = container.getParent();
-        
-        AccessControlDialog dlg = new AccessControlDialog((JFrame) container, true, this);
+    public void onMenuItemClicked(JFrame parent) {
+        AccessControlDialog dlg = new AccessControlDialog(parent, true, this);
         dlg.setVisible(true);
     }
 

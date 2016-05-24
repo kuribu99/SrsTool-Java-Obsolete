@@ -17,9 +17,9 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
-public class Configuration {
+public abstract class Configuration {
     // Constants
     protected static final String FILE_NAME = "config.txt";
     public static final String MODULES_CLASS_NAMES = "modules_class_name";
@@ -30,20 +30,8 @@ public class Configuration {
         settings = new HashMap<>();
     }
     
-    public Map<String, String> getSettings() {
-        return this.settings;
-    }
-    
-    public static Configuration ReadOrDefaultConfiguration() {
-        Configuration configuration = new Configuration();
-        
-        try {
-            configuration.ReadConfigurationFile();
-        } catch (FileNotFoundException ex) {
-            configuration = getDefaultConfiguration();
-            Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return configuration;
+    public String getSetting(String key) {
+        return this.settings.get(key);
     }
     
     public void AddConfiguration(Configurable conf) {
@@ -52,13 +40,9 @@ public class Configuration {
         });
     }
     
-    public static Configuration getDefaultConfiguration() {
-        Configuration configuration = new Configuration();        
-        configuration.settings.put(MODULES_CLASS_NAMES, "");        
-        return configuration;
-    }
-
-    protected void ReadConfigurationFile() throws FileNotFoundException {
+    public abstract void LoadDefaultConfiguration();
+    
+    public void ReadConfigurationFile() throws FileNotFoundException {
         try (Scanner in = new Scanner(new File(FILE_NAME))) {
             String[] lineSplit = null;
             while(in.hasNextLine()) {
@@ -75,8 +59,9 @@ public class Configuration {
                     writer.write(entry.getKey().trim());
                     writer.write("=");
                     writer.write(entry.getValue().trim());
-                } catch (IOException ex) {
-                    Logger.getLogger(Configuration.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                catch (IOException ex) {
+                    Logger.getLogger(Configuration.class.getName()).log(Level.WARNING, "Configuration file not found", ex);
                 }
             });
             

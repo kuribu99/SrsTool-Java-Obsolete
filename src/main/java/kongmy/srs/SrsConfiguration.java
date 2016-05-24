@@ -5,6 +5,9 @@
  */
 package kongmy.srs;
 
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kongmy.core.Configuration;
 
 /**
@@ -12,12 +15,31 @@ import kongmy.core.Configuration;
  * @author Owner
  */
 public class SrsConfiguration extends Configuration {
-    // Constants
-    protected static final String SRS_DEFAULT_MODULES = "kongmy.srs.modules.DummyDataModule";
     
-    public static Configuration getDefaultConfiguration() {
-        Configuration configuration = Configuration.getDefaultConfiguration();
-        configuration.getSettings().put(MODULES_CLASS_NAMES, SRS_DEFAULT_MODULES);
+    public static Configuration ReadOrDefaultConfiguration() {
+        Configuration configuration = new SrsConfiguration();
+        
+        try {
+            configuration.ReadConfigurationFile();
+        }
+        catch (FileNotFoundException ex) {
+            configuration.LoadDefaultConfiguration();
+            Logger.getLogger(Configuration.class.getName()).log(Level.INFO, "Default configuration file loaded", ex);
+        }
         return configuration;
+    }
+
+    private static String[] getDefaultModules() {
+        return new String[] {
+            "kongmy.srs.modules.DummyDataModule",
+            "kongmy.srs.modules.OntologyModule",
+            "kongmy.srs.modules.AccessControlModule"
+        };
+    }
+
+    @Override
+    public void LoadDefaultConfiguration() {
+        settings.clear();
+        settings.put(MODULES_CLASS_NAMES, String.join(",", getDefaultModules()));
     }
 }

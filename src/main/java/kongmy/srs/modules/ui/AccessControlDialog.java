@@ -7,7 +7,9 @@ package kongmy.srs.modules.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JCheckBox;
 import kongmy.core.Application;
+import kongmy.srs.SrsApplication;
 import kongmy.srs.modules.AccessControlModule;
 import kongmy.srs.modules.OntologyModule;
 
@@ -41,21 +43,29 @@ public class AccessControlDialog extends javax.swing.JDialog {
         tabbedPane = new javax.swing.JTabbedPane();
         accessControlPanel = new javax.swing.JPanel();
         allowedScrollPane = new javax.swing.JScrollPane();
+        panelAllowed = new javax.swing.JPanel();
         lblAllowed = new javax.swing.JLabel();
         restrictedScrollPanel = new javax.swing.JScrollPane();
-        lblAllowed1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        panelRestricted = new javax.swing.JPanel();
+        lblRestricted = new javax.swing.JLabel();
+        actionControlPanel = new javax.swing.JPanel();
         cbxSelectedModule = new javax.swing.JComboBox();
         lblSelectedModule = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        panelAllowed.setLayout(new javax.swing.BoxLayout(panelAllowed, javax.swing.BoxLayout.Y_AXIS));
+        allowedScrollPane.setViewportView(panelAllowed);
+
         lblAllowed.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAllowed.setText("Allowed user");
 
-        lblAllowed1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblAllowed1.setText("Restrictred user");
+        panelRestricted.setLayout(new javax.swing.BoxLayout(panelRestricted, javax.swing.BoxLayout.Y_AXIS));
+        restrictedScrollPanel.setViewportView(panelRestricted);
+
+        lblRestricted.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblRestricted.setText("Restrictred user");
 
         javax.swing.GroupLayout accessControlPanelLayout = new javax.swing.GroupLayout(accessControlPanel);
         accessControlPanel.setLayout(accessControlPanelLayout);
@@ -63,13 +73,13 @@ public class AccessControlDialog extends javax.swing.JDialog {
             accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(accessControlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblAllowed, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                    .addComponent(allowedScrollPane))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(restrictedScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblAllowed1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblAllowed, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(allowedScrollPane))
+                .addGap(10, 10, 10)
+                .addGroup(accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(restrictedScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblRestricted, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         accessControlPanelLayout.setVerticalGroup(
@@ -78,28 +88,28 @@ public class AccessControlDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAllowed)
-                    .addComponent(lblAllowed1))
+                    .addComponent(lblRestricted))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(allowedScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                    .addComponent(allowedScrollPane)
                     .addComponent(restrictedScrollPanel))
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Access Control", accessControlPanel);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout actionControlPanelLayout = new javax.swing.GroupLayout(actionControlPanel);
+        actionControlPanel.setLayout(actionControlPanelLayout);
+        actionControlPanelLayout.setHorizontalGroup(
+            actionControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 302, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        actionControlPanelLayout.setVerticalGroup(
+            actionControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 216, Short.MAX_VALUE)
         );
 
-        tabbedPane.addTab("Action Control", jPanel1);
+        tabbedPane.addTab("Action Control", actionControlPanel);
 
         cbxSelectedModule.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -199,20 +209,62 @@ public class AccessControlDialog extends javax.swing.JDialog {
     private final AccessControlModule module;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel accessControlPanel;
+    private javax.swing.JPanel actionControlPanel;
     private javax.swing.JScrollPane allowedScrollPane;
     private javax.swing.JButton btnBack;
     private javax.swing.JComboBox cbxSelectedModule;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblAllowed;
-    private javax.swing.JLabel lblAllowed1;
+    private javax.swing.JLabel lblRestricted;
     private javax.swing.JLabel lblSelectedModule;
+    private javax.swing.JPanel panelAllowed;
+    private javax.swing.JPanel panelRestricted;
     private javax.swing.JScrollPane restrictedScrollPanel;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 
     private void initData() {
+        SrsApplication.bootstrap();
         OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
         List<String> allActor = ontologyModule.getActorsFromDomain(null);
-        List<String> allowedActor = ontologyModule.getActorsFromModule(null, null);
+        List<String> allowedActor = ontologyModule.getActorsFromModule(null, "allowed");
+        List<String> restrictedActor = new ArrayList<>(allActor);
+        restrictedActor.removeAll(allowedActor);
+        
+        allowedActor.forEach((actor) -> {
+            JCheckBox cbx = new JCheckBox(actor, true);
+            cbx.addActionListener(((e)-> {
+                if(cbx.isSelected()) {                    
+                    panelRestricted.remove(cbx);
+                    panelAllowed.add(cbx);
+                }
+                else {
+                    panelAllowed.remove(cbx);
+                    panelRestricted.add(cbx);
+                }
+                RefreshPanels();
+            }));
+            panelAllowed.add(cbx);
+        });
+        restrictedActor.forEach((actor) -> {
+            JCheckBox cbx = new JCheckBox(actor, false);
+            cbx.addActionListener(((e)-> {
+                if(cbx.isSelected()) {                    
+                    panelRestricted.remove(cbx);
+                    panelAllowed.add(cbx);
+                }
+                else {
+                    panelAllowed.remove(cbx);
+                    panelRestricted.add(cbx);
+                }
+                RefreshPanels();
+            }));
+            panelRestricted.add(cbx);
+        });
+        RefreshPanels();
+    }
+    
+    public void RefreshPanels() {
+        panelAllowed.setSize(panelAllowed.getPreferredSize());
+        panelRestricted.setSize(panelRestricted.getPreferredSize());
     }
 }
