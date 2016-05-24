@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import kongmy.srs.core.Requirement;
 import kongmy.core.Application;
+import kongmy.core.HasMenuItem;
+import kongmy.srs.core.RequirementModule;
 
 /**
  *
@@ -30,9 +32,12 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         
         Application.getInstance().getModules().values().forEach((module) -> {
-            JMenuItem menuItem = new JMenuItem(module.getModuleName());
-            menuItem.addActionListener(module);
-            menuModules.add(menuItem);
+            if(module instanceof HasMenuItem) {
+                HasMenuItem menuModule = (HasMenuItem) module;
+                JMenuItem menuItem = new JMenuItem(menuModule.getMenuItemName());
+                menuItem.addActionListener(menuModule);
+                menuModules.add(menuItem);
+            }
         });
         
         UpdateRequirements();
@@ -392,13 +397,16 @@ public class MainFrame extends javax.swing.JFrame {
         requirementByModules.clear();
         moduleTabbedPane.removeAll();
         
-        Application.getInstance().getModules().values().forEach((module)-> {
-            module.getRequirements().forEach((requirement)-> {
-                if(!requirementByModules.containsKey(requirement.getModule())) {
-                    requirementByModules.put(requirement.getModule(), new ArrayList<>());
-                }
-                requirementByModules.get(requirement.getModule()).add(requirement);
-            });
+        Application.getInstance().getModules().values().stream()
+                .filter((module) -> module instanceof RequirementModule)
+                .map((module) -> (RequirementModule) module)
+                .forEach((module)-> {
+                    module.getRequirements().forEach((requirement)-> {
+                        if(!requirementByModules.containsKey(requirement.getModule())) {
+                            requirementByModules.put(requirement.getModule(), new ArrayList<>());
+                        }
+                        requirementByModules.get(requirement.getModule()).add(requirement);
+                    });
         });
         
         requirementByModules.entrySet().forEach((entry)-> {

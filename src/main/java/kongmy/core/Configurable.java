@@ -5,14 +5,14 @@
  */
 package kongmy.core;
 
+import java.util.Map;
+
 /**
  *
- * @author Owner
+ * @author Kong My
  */
-public abstract class Module {
+public interface Configurable {
     
-    public String getModuleName() {
-        return this.getClass().getName();
-    }
+    public Map<String, String> getConfiguration();
     
 }

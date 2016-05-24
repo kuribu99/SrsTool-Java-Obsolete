@@ -21,7 +21,7 @@ public abstract class Application implements Runnable {
     protected final Map<String, Module> modules;
     protected final List<String> modulesNotFound;
     
-    protected Application(Configuration configuration) {
+    public Application(Configuration configuration) {
         this.configuration = configuration;
         this.modules = new HashMap<>();
         this.modulesNotFound = new ArrayList<>();
@@ -29,6 +29,10 @@ public abstract class Application implements Runnable {
     
     public static Application getInstance() {
         return instance;
+    }
+    
+    public Module getModule(String moduleName) {
+        return this.modules.get(moduleName);
     }
     
     public Map<String, Module> getModules() {

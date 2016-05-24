@@ -5,14 +5,14 @@
  */
 package kongmy.core;
 
+import java.awt.event.ActionListener;
+
 /**
  *
- * @author Owner
+ * @author Kong My
  */
-public abstract class Module {
+public interface HasMenuItem extends ActionListener {
     
-    public String getModuleName() {
-        return this.getClass().getName();
-    }
+    public String getMenuItemName();
     
 }

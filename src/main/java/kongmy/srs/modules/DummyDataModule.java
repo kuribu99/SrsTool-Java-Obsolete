@@ -5,25 +5,23 @@
  */
 package kongmy.srs.modules;
 
-import java.awt.event.ActionEvent;
-import javax.swing.JOptionPane;
-import kongmy.core.Module;
 import kongmy.srs.core.Requirement;
+import kongmy.srs.core.RequirementModule;
 
 /**
  *
  * @author Owner
  */
-public class DummyDataModule extends Module {
-
-    public static final String MODULE_NAME = "Dummy Data";
+public class DummyDataModule extends RequirementModule {
     
     public DummyDataModule() {
-        super(MODULE_NAME);
+        super();
     }
 
     @Override
     protected void UpdateGeneratedRequirements() {
+        this.generatedRequirements.clear();
+        
         String[][] samples = new String[][] {
             {"Login page", "If the student ID and password is correct, the student shall be able to login to the system"},
             {"Login page", "The load time of login page shall less than 3 seconds"},
@@ -32,15 +30,8 @@ public class DummyDataModule extends Module {
             {"Login page", "The student shall be able to search subject with unit code or unit name"},
             {"Register Subject page", "The student should be able to register subjects"}
         };
-        for (String[] arr: samples)
+        for(String[] arr: samples)
             this.generatedRequirements.add(new Requirement(arr[0], arr[1]));
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        JOptionPane.showMessageDialog(null, "Hello world", "Dialog", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    
+    }    
     
 }

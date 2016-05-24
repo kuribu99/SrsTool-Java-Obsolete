@@ -46,6 +46,12 @@ public class Configuration {
         return configuration;
     }
     
+    public void AddConfiguration(Configurable conf) {
+        conf.getConfiguration().entrySet().forEach((entry) -> {
+            this.settings.put(entry.getKey(), entry.getValue());
+        });
+    }
+    
     public static Configuration getDefaultConfiguration() {
         Configuration configuration = new Configuration();        
         configuration.settings.put(MODULES_CLASS_NAMES, "");        
