@@ -8,33 +8,22 @@ package kongmy.ontology;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyFormat;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
-import org.semanticweb.owlapi.model.RemoveAxiom;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 
@@ -46,19 +35,19 @@ public class OWLHelper {
     
     private final OWLOntologyManager manager;
     private final OWLDataFactory factory;
-    private final OWLReasoner reasoner;
+    private OWLReasoner reasoner;
     private String baseIRI;
     private OWLOntology ontology;
         
     public OWLHelper() {        
         manager =  OWLManager.createOWLOntologyManager();
         factory = manager.getOWLDataFactory();
-        reasoner = new StructuralReasonerFactory().createReasoner(ontology);
     }
     
     public void Load(String fileName) throws OWLOntologyCreationException {
         ontology = manager.loadOntologyFromOntologyDocument(new File(fileName));        
         baseIRI = ontology.getOntologyID().getOntologyIRI().toString();
+        reasoner = new StructuralReasonerFactory().createReasoner(ontology);
     }
     
     public static IRI getIRI(String baseIRI, String name) {
@@ -66,7 +55,7 @@ public class OWLHelper {
     }
     
     public IRI getIRI(String name) {
-        return this.getIRI(name);
+        return getIRI(baseIRI, name);
     }
     
     public static String getString(IRI iri) {
@@ -77,9 +66,16 @@ public class OWLHelper {
         return factory.getOWLClass(getIRI(className));
     }
     
-    public OWLNamedIndividual getIndividual(String name) {
+    public OWLIndividual getIndividual(String name) {
+        return name == null? 
+                factory.getOWLAnonymousIndividual():
+                factory.getOWLNamedIndividual(getIRI(name));
+    }
+    
+    public OWLIndividual getNamedIndividual(String name) {
         return factory.getOWLNamedIndividual(getIRI(name));
     }
+    
     
     public OWLObjectProperty getObjectProperty(String name) {
         return factory.getOWLObjectProperty(getIRI(name));
@@ -91,7 +87,7 @@ public class OWLHelper {
     }
     
     public Set<OWLNamedIndividual> getObjectPropertyTargets(String sourceName, String propertyName) {
-        OWLNamedIndividual source = getIndividual(sourceName);
+        OWLNamedIndividual source = getIndividual(sourceName).asOWLNamedIndividual();
         OWLObjectProperty property = getObjectProperty(propertyName);
         return reasoner.getObjectPropertyValues(source, property).getFlattened();
     }
@@ -145,7 +141,12 @@ public class OWLHelper {
         manager.addAxiom(ontology, axiom);
     }
     
-    public void RemoveObjectProperty(String sourceName, String propertyName, String targetName) {
+    public void AddObjectPropertyAssertion(String sourceName, String propertyName, String targetName) {
+        OWLObjectPropertyAssertionAxiom axiom = getObjectPropertyAxiom(sourceName, propertyName, targetName);
+        manager.addAxiom(ontology, axiom);
+    }
+    
+    public void RemoveObjectPropertyAssertion(String sourceName, String propertyName, String targetName) {
         OWLObjectPropertyAssertionAxiom axiom = getObjectPropertyAxiom(sourceName, propertyName, targetName);
         manager.removeAxiom(ontology, axiom);
     }

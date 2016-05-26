@@ -5,33 +5,27 @@
  */
 package kongmy.ontology;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import org.semanticweb.owlapi.model.OWLLogicalAxiom;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 /**
  *
  * @author Kong My
  */
-public class OntologyHelper {
+public class OntologyHelper extends OWLHelper {
 
     private final String fileName;
-    private final OWLHelper helper;
     
     public OntologyHelper(String fileName) {
+        super();
         this.fileName = fileName;
-        this.helper = new OWLHelper();
     }
     
     public boolean Load() {    
         try {
-            helper.Load(fileName);
+            super.Load(fileName);
             return true;
         }
         catch (Exception ex) {
@@ -45,15 +39,15 @@ public class OntologyHelper {
         return this.fileName;
     }
         
-    public List<String> getInstancesByObjectProperty (String sourceName, String propertyName) {
-        return helper.getObjectPropertyTargets(sourceName, propertyName).stream()
-                .map((ind) -> helper.getString(ind.getIRI()))
+    public List<String> getTargetIndividualsByObjectProperty (String sourceName, String propertyName) {
+        return getObjectPropertyTargets(sourceName, propertyName).stream()
+                .map((ind) -> getString(ind.getIRI()))
                 .collect(Collectors.toList());
     }
     
-    public List<String> getClassInstances(String className) {
-        return helper.getIndividualsFromClass(className).stream()
-                .map((ind) -> helper.getString(ind.getIRI()))
+    public List<String> getClassIndividuals(String className) {
+        return getIndividualsFromClass(className).stream()
+                .map((ind) -> getString(ind.getIRI()))
                 .collect(Collectors.toList());
     }
     
