@@ -7,8 +7,11 @@ package kongmy.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -19,12 +22,12 @@ public abstract class Application implements Runnable {
     protected static Application instance;
     protected final Configuration configuration;
     protected final Map<String, Module> modules;
-    protected final List<String> modulesNotFound;
+    protected final Set<String> modulesNotFound;
     
     public Application(Configuration configuration) {
         this.configuration = configuration;
         this.modules = new HashMap<>();
-        this.modulesNotFound = new ArrayList<>();
+        this.modulesNotFound = new HashSet<>();
     }
     
     public static Application getInstance() {
@@ -39,7 +42,7 @@ public abstract class Application implements Runnable {
         return this.modules;
     }
     
-    public List<String> getModulesNotFound() {
+    public Set<String> getModulesNotFound() {
         return this.modulesNotFound;
     }
     
@@ -52,16 +55,33 @@ public abstract class Application implements Runnable {
         this.modulesNotFound.clear();
         String[] moduleClassNames = this.configuration.settings.get(Configuration.MODULES_CLASS_NAMES).split("[, ]+");
         
-        for(String moduleClassName: moduleClassNames) {
-            if (moduleClassName.isEmpty())
-                continue;
-            try {
-                Module module = (Module) Class.forName(moduleClassName).newInstance();
-                this.modules.put(module.getModuleName(), module);
-                
-            } catch (ClassNotFoundException|InstantiationException|IllegalAccessException ex) {
+        for(String moduleClassName: moduleClassNames)
+            if(!LoadModule(moduleClassName))
                 modulesNotFound.add(moduleClassName);
+        
+    }
+    
+    protected boolean LoadModule(String className) {        
+        if (className == null || className.isEmpty())
+            return true;
+        try {
+            Module module = (Module) Class.forName(className).newInstance();
+            List<String> dependencies = module.getDependencies();
+            if(dependencies != null && dependencies.size() > 0) {
+                List<String> required = dependencies.stream()
+                        .filter((dep) -> !modules.containsKey(dep))
+                        .collect(Collectors.toList());
+                for(String dep: required)
+                    if(!LoadModule(dep)) {
+                        modulesNotFound.add(dep);
+                        return false;                        
+                    }
             }
+            this.modules.put(module.getModuleName(), module);
+            return true;
+        } catch (ClassNotFoundException|InstantiationException|IllegalAccessException ex) {
+            modulesNotFound.add(className);
+            return false;
         }
     }
 }

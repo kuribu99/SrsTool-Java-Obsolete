@@ -36,7 +36,8 @@ public abstract class Configuration {
     
     public void AddConfiguration(Configurable conf) {
         conf.getConfiguration().entrySet().forEach((entry) -> {
-            this.settings.put(entry.getKey(), entry.getValue());
+            if(!settings.containsKey(entry.getKey()))
+                settings.put(entry.getKey(), entry.getValue());
         });
     }
     
@@ -59,6 +60,7 @@ public abstract class Configuration {
                     writer.write(entry.getKey().trim());
                     writer.write("=");
                     writer.write(entry.getValue().trim());
+                    writer.write("\n");
                 }
                 catch (IOException ex) {
                     Logger.getLogger(Configuration.class.getName()).log(Level.WARNING, "Configuration file not found", ex);

@@ -5,6 +5,8 @@
  */
 package kongmy.core;
 
+import java.util.List;
+
 /**
  *
  * @author Owner
@@ -14,5 +16,7 @@ public abstract class Module {
     public String getModuleName() {
         return this.getClass().getName();
     }
+    
+    public abstract List<String> getDependencies();
     
 }

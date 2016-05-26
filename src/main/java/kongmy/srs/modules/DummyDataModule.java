@@ -5,6 +5,7 @@
  */
 package kongmy.srs.modules;
 
+import java.util.List;
 import kongmy.srs.core.Requirement;
 import kongmy.srs.core.RequirementModule;
 
@@ -33,5 +34,10 @@ public class DummyDataModule extends RequirementModule {
         for(String[] arr: samples)
             this.generatedRequirements.add(new Requirement(arr[0], arr[1]));
     }    
+
+    @Override
+    public List<String> getDependencies() {
+        return null;
+    }
     
 }

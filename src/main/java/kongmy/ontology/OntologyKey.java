@@ -11,17 +11,14 @@ package kongmy.ontology;
  */
 public final class OntologyKey {
     
-    public static final ClassName Class = new ClassName();
-    public static final ObjectPropertyName ObjectProperty = new ObjectPropertyName();
-    
-    public static final class ClassName {
+    public static final class Class {
         public static final String ACTOR = "actor";
         public static final String DOMAIN = "domain";
         public static final String MODULE = "module";
         public static final String ACTION = "action";
     }
     
-    public static final class ObjectPropertyName {
+    public static final class ObjectProperty {
         public static final String HAS_ACTOR = "has-actor";
         public static final String HAS_MODULE = "has-module";
         public static final String HAS_ACTION = "has-action";

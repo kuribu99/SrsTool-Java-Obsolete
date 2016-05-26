@@ -5,12 +5,9 @@
  */
 package kongmy.srs.modules;
 
-import java.awt.Container;
-import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.Popup;
 import kongmy.core.HasMenuItem;
 import kongmy.srs.core.RequirementModule;
 import kongmy.srs.modules.ui.AccessControlDialog;
@@ -38,6 +35,13 @@ public class AccessControlModule extends RequirementModule implements HasMenuIte
 
     @Override
     protected void UpdateGeneratedRequirements() {
+    }
+
+    @Override
+    public List<String> getDependencies() {
+        List<String> dependencies = new ArrayList<String>();
+        dependencies.add(OntologyModule.class.getName());
+        return dependencies;
     }
     
 }
