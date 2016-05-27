@@ -6,6 +6,7 @@
 package kongmy.srs;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kongmy.core.Configuration;
@@ -20,7 +21,7 @@ import kongmy.srs.modules.OntologyModule;
  */
 public class SrsConfiguration extends Configuration {
     
-    public static Configuration ReadOrDefaultConfiguration() {
+    public static Configuration ReadOrDefaultConfiguration() throws IOException {
         Configuration configuration = new SrsConfiguration();
         
         try {
@@ -28,6 +29,7 @@ public class SrsConfiguration extends Configuration {
         }
         catch (FileNotFoundException ex) {
             configuration.LoadDefaultConfiguration();
+            configuration.WriteConfigurationToFile();
             Logger.getLogger(Configuration.class.getName()).log(Level.INFO, "Default configuration file loaded", ex);
         }
         return configuration;

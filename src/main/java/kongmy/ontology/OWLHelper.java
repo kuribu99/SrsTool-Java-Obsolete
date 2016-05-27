@@ -33,11 +33,11 @@ import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
  */
 public class OWLHelper {
     
-    private final OWLOntologyManager manager;
-    private final OWLDataFactory factory;
-    private OWLReasoner reasoner;
-    private String baseIRI;
-    private OWLOntology ontology;
+    protected final OWLOntologyManager manager;
+    protected final OWLDataFactory factory;
+    protected OWLReasoner reasoner;
+    protected String baseIRI;
+    protected OWLOntology ontology;
         
     public OWLHelper() {        
         manager =  OWLManager.createOWLOntologyManager();
@@ -67,7 +67,7 @@ public class OWLHelper {
     }
     
     public OWLIndividual getIndividual(String name) {
-        return name == null? 
+        return name == null || name.isEmpty()? 
                 factory.getOWLAnonymousIndividual():
                 factory.getOWLNamedIndividual(getIRI(name));
     }

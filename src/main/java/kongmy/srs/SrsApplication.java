@@ -33,12 +33,6 @@ public class SrsApplication extends Application {
     public static Application bootstrap() {
         instance = new SrsApplication();
         instance.LoadModules();
-        instance.getModules().values().stream()
-                .filter((module) -> module instanceof Configurable)
-                .map((module) -> (Configurable) module)
-                .forEach((conf) -> {
-                    instance.getConfiguration().AddConfiguration(conf);
-                });
         return instance;
     }
 

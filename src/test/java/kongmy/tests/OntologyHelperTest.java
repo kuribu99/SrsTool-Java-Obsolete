@@ -33,7 +33,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 public class OntologyHelperTest {
     
     private final static String FILE_NAME = "OwlHelperTestFile.owl";    
-    private final static String BASE_IRI = "http://www.example.com/kongmy/test";    
+    private final static String BASE_IRI = "http://www.semanticweb.org/kongmy/ontologies/2016/5/test";    
     private static OntologyHelper helper;
     private static OWLOntologyManager manager;
     private static OWLDataFactory factory;;

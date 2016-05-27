@@ -10,12 +10,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import kongmy.srs.core.Requirement;
 import kongmy.core.Application;
 import kongmy.core.HasMenu;
+import kongmy.srs.SrsApplication;
 import kongmy.srs.core.RequirementModule;
+import sun.tools.jar.Main;
 
 /**
  *
@@ -57,10 +62,13 @@ public class MainFrame extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemNewSRS = new javax.swing.JMenuItem();
+        menuItemOpenSRS = new javax.swing.JMenuItem();
+        separatorOpenClose = new javax.swing.JPopupMenu.Separator();
         menuItemSaveSRS = new javax.swing.JMenuItem();
-        menuItemLoadSRS = new javax.swing.JMenuItem();
         menuItemExportSRS = new javax.swing.JMenuItem();
         menuItemCloseSRS = new javax.swing.JMenuItem();
+        separatorClose = new javax.swing.JPopupMenu.Separator();
+        menuItemRestart = new javax.swing.JMenuItem();
         menuItemExit = new javax.swing.JMenuItem();
         menuOntology = new javax.swing.JMenu();
         menuItemLoadOntology = new javax.swing.JMenuItem();
@@ -73,6 +81,7 @@ public class MainFrame extends javax.swing.JFrame {
         menuModules = new javax.swing.JMenu();
         menuSettings = new javax.swing.JMenu();
         menuItemWriteConfigurationFile = new javax.swing.JMenuItem();
+        menuItemWriteDefaultConfigurationFile = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Software Requirement Specification Tool");
@@ -160,17 +169,27 @@ public class MainFrame extends javax.swing.JFrame {
         menuItemNewSRS.setText("New SRS");
         menuFile.add(menuItemNewSRS);
 
+        menuItemOpenSRS.setText("Open SRS");
+        menuFile.add(menuItemOpenSRS);
+        menuFile.add(separatorOpenClose);
+
         menuItemSaveSRS.setText("Save SRS");
         menuFile.add(menuItemSaveSRS);
-
-        menuItemLoadSRS.setText("Load SRS");
-        menuFile.add(menuItemLoadSRS);
 
         menuItemExportSRS.setText("Export SRS");
         menuFile.add(menuItemExportSRS);
 
         menuItemCloseSRS.setText("Close");
         menuFile.add(menuItemCloseSRS);
+        menuFile.add(separatorClose);
+
+        menuItemRestart.setText("Restart");
+        menuItemRestart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemRestartActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemRestart);
 
         menuItemExit.setText("Exit");
         menuItemExit.addActionListener(new java.awt.event.ActionListener() {
@@ -235,6 +254,14 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
         menuSettings.add(menuItemWriteConfigurationFile);
+
+        menuItemWriteDefaultConfigurationFile.setText("Write default configuration file");
+        menuItemWriteDefaultConfigurationFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemWriteDefaultConfigurationFileActionPerformed(evt);
+            }
+        });
+        menuSettings.add(menuItemWriteDefaultConfigurationFile);
 
         menuBar.add(menuSettings);
 
@@ -316,6 +343,30 @@ public class MainFrame extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_menuItemWriteConfigurationFileActionPerformed
+
+    private void menuItemWriteDefaultConfigurationFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemWriteDefaultConfigurationFileActionPerformed
+        try {
+            Application.getInstance().getConfiguration().LoadDefaultConfiguration();
+            Application.getInstance().getConfiguration().WriteConfigurationToFile();
+            JOptionPane.showMessageDialog(this, 
+                    "Configuration file created successfully", 
+                    "Success", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, 
+                    ex.getMessage(), 
+                    "Error saving configuration", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_menuItemWriteDefaultConfigurationFileActionPerformed
+
+    private void menuItemRestartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemRestartActionPerformed
+        new Thread(() -> {
+            SrsApplication.bootstrap().run();
+        }).start();
+        this.dispose();
+    }//GEN-LAST:event_menuItemRestartActionPerformed
     
     /**
      * @param args the command line arguments
@@ -367,17 +418,21 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemExportSRS;
     private javax.swing.JMenuItem menuItemImportBoilerplates;
     private javax.swing.JMenuItem menuItemLoadOntology;
-    private javax.swing.JMenuItem menuItemLoadSRS;
     private javax.swing.JMenuItem menuItemModifyBoilerplates;
     private javax.swing.JMenuItem menuItemModifyDomain;
     private javax.swing.JMenuItem menuItemModifyMetrics;
     private javax.swing.JMenuItem menuItemNewSRS;
+    private javax.swing.JMenuItem menuItemOpenSRS;
+    private javax.swing.JMenuItem menuItemRestart;
     private javax.swing.JMenuItem menuItemSaveSRS;
     private javax.swing.JMenuItem menuItemWriteConfigurationFile;
+    private javax.swing.JMenuItem menuItemWriteDefaultConfigurationFile;
     private javax.swing.JMenu menuModules;
     private javax.swing.JMenu menuOntology;
     private javax.swing.JMenu menuSettings;
     private javax.swing.JTabbedPane moduleTabbedPane;
+    private javax.swing.JPopupMenu.Separator separatorClose;
+    private javax.swing.JPopupMenu.Separator separatorOpenClose;
     private javax.swing.JTextField tbxSelectedDomainAndModule;
     // End of variables declaration//GEN-END:variables
     private final Map<String, List<Requirement>> requirementByModules;

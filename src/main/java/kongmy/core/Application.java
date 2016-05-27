@@ -57,6 +57,16 @@ public abstract class Application implements Runnable {
         for(String moduleClassName: moduleClassNames)
             if(!LoadModule(moduleClassName))
                 modulesNotFound.add(moduleClassName);
+        this.modules.values().stream()
+                .filter((module) -> module instanceof Configurable)
+                .map((module) -> (Configurable) module)
+                .forEach((conf) -> {
+                    instance.getConfiguration().AddConfiguration(conf);
+                });
+        this.modules.values().stream()
+                .filter((module) -> module instanceof Loadable)
+                .map((module) -> (Loadable) module)
+                .forEach((module) -> module.Load());
         
     }
     

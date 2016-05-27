@@ -5,8 +5,11 @@
  */
 package kongmy.srs.modules.ui;
 
-import javax.swing.JFrame;
+import java.util.List;
+import javax.swing.JCheckBox;
+import kongmy.core.Application;
 import kongmy.srs.modules.DomainAttributeModule;
+import kongmy.srs.modules.OntologyModule;
 
 /**
  *
@@ -21,6 +24,7 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         super(parent, modal);
         this.module = module;
         initComponents();
+        UpdateData();
     }
 
     /**
@@ -32,25 +36,417 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblSelectedModule1 = new javax.swing.JLabel();
+        cbxSelectedDomain = new javax.swing.JComboBox();
+        tabbedPane = new javax.swing.JTabbedPane();
+        panelModules = new javax.swing.JPanel();
+        btnModifyModule = new javax.swing.JButton();
+        lblModuleFilter = new javax.swing.JLabel();
+        tbxModuleFilter = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        panelModulesIncluded = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        panelModulesExcluded = new javax.swing.JPanel();
+        panelActor = new javax.swing.JPanel();
+        btnModifyActor = new javax.swing.JButton();
+        lblActorFilter = new javax.swing.JLabel();
+        tbxActorFilter = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        panelActorsIncluded = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        panelActorsExcluded = new javax.swing.JPanel();
+        panelAction = new javax.swing.JPanel();
+        btnModifyActions = new javax.swing.JButton();
+        lblActionFilter = new javax.swing.JLabel();
+        tbxActionFilter = new javax.swing.JTextField();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        panelActionsIncluded = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        panelActionsExcluded = new javax.swing.JPanel();
+        btnModifyDomain = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Configure Domain Attributes");
+
+        lblSelectedModule1.setText("Selected Domain:");
+
+        cbxSelectedDomain.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "university subject registration system", "university venue booking system", " " }));
+        cbxSelectedDomain.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbxSelectedDomainItemStateChanged(evt);
+            }
+        });
+
+        btnModifyModule.setText("Modify");
+
+        lblModuleFilter.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblModuleFilter.setText("Filter");
+
+        jScrollPane1.setBorder(null);
+
+        panelModulesIncluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Modules Included"));
+        panelModulesIncluded.setLayout(new javax.swing.BoxLayout(panelModulesIncluded, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane1.setViewportView(panelModulesIncluded);
+
+        jScrollPane2.setBorder(null);
+
+        panelModulesExcluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Modules Excluded"));
+        panelModulesExcluded.setLayout(new javax.swing.BoxLayout(panelModulesExcluded, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane2.setViewportView(panelModulesExcluded);
+
+        javax.swing.GroupLayout panelModulesLayout = new javax.swing.GroupLayout(panelModules);
+        panelModules.setLayout(panelModulesLayout);
+        panelModulesLayout.setHorizontalGroup(
+            panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelModulesLayout.createSequentialGroup()
+                .addGroup(panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelModulesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2))
+                    .addGroup(panelModulesLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(lblModuleFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tbxModuleFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                        .addComponent(btnModifyModule, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelModulesLayout.setVerticalGroup(
+            panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelModulesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModifyModule)
+                    .addComponent(lblModuleFilter)
+                    .addComponent(tbxModuleFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        tabbedPane.addTab("Modules", panelModules);
+
+        btnModifyActor.setText("Modify");
+
+        lblActorFilter.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblActorFilter.setText("Filter");
+
+        jScrollPane3.setBorder(null);
+
+        panelActorsIncluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Actors Included"));
+        panelActorsIncluded.setLayout(new javax.swing.BoxLayout(panelActorsIncluded, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane3.setViewportView(panelActorsIncluded);
+
+        jScrollPane4.setBorder(null);
+
+        panelActorsExcluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Actors Excluded"));
+        panelActorsExcluded.setLayout(new javax.swing.BoxLayout(panelActorsExcluded, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane4.setViewportView(panelActorsExcluded);
+
+        javax.swing.GroupLayout panelActorLayout = new javax.swing.GroupLayout(panelActor);
+        panelActor.setLayout(panelActorLayout);
+        panelActorLayout.setHorizontalGroup(
+            panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelActorLayout.createSequentialGroup()
+                .addGroup(panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelActorLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4))
+                    .addGroup(panelActorLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(lblActorFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tbxActorFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                        .addComponent(btnModifyActor, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelActorLayout.setVerticalGroup(
+            panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelActorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModifyActor)
+                    .addComponent(lblActorFilter)
+                    .addComponent(tbxActorFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        tabbedPane.addTab("Actor", panelActor);
+
+        btnModifyActions.setText("Modify");
+
+        lblActionFilter.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblActionFilter.setText("Filter");
+
+        jScrollPane5.setBorder(null);
+
+        panelActionsIncluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions Included"));
+        panelActionsIncluded.setLayout(new javax.swing.BoxLayout(panelActionsIncluded, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane5.setViewportView(panelActionsIncluded);
+
+        jScrollPane6.setBorder(null);
+
+        panelActionsExcluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions Excluded"));
+        panelActionsExcluded.setLayout(new javax.swing.BoxLayout(panelActionsExcluded, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane6.setViewportView(panelActionsExcluded);
+
+        javax.swing.GroupLayout panelActionLayout = new javax.swing.GroupLayout(panelAction);
+        panelAction.setLayout(panelActionLayout);
+        panelActionLayout.setHorizontalGroup(
+            panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelActionLayout.createSequentialGroup()
+                .addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelActionLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane6))
+                    .addGroup(panelActionLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(lblActionFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tbxActionFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                        .addComponent(btnModifyActions, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelActionLayout.setVerticalGroup(
+            panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelActionLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                    .addComponent(jScrollPane6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModifyActions)
+                    .addComponent(lblActionFilter)
+                    .addComponent(tbxActionFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        tabbedPane.addTab("Actions", panelAction);
+
+        btnModifyDomain.setText("Modify");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tabbedPane)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblSelectedModule1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbxSelectedDomain, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnModifyDomain, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblSelectedModule1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cbxSelectedDomain)
+                        .addComponent(btnModifyDomain)))
+                .addGap(7, 7, 7)
+                .addComponent(tabbedPane)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cbxSelectedDomainItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSelectedDomainItemStateChanged
+        UpdateData();
+    }//GEN-LAST:event_cbxSelectedDomainItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnModifyActions;
+    private javax.swing.JButton btnModifyActor;
+    private javax.swing.JButton btnModifyDomain;
+    private javax.swing.JButton btnModifyModule;
+    private javax.swing.JComboBox cbxSelectedDomain;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JLabel lblActionFilter;
+    private javax.swing.JLabel lblActorFilter;
+    private javax.swing.JLabel lblModuleFilter;
+    private javax.swing.JLabel lblSelectedModule1;
+    private javax.swing.JPanel panelAction;
+    private javax.swing.JPanel panelActionsExcluded;
+    private javax.swing.JPanel panelActionsIncluded;
+    private javax.swing.JPanel panelActor;
+    private javax.swing.JPanel panelActorsExcluded;
+    private javax.swing.JPanel panelActorsIncluded;
+    private javax.swing.JPanel panelModules;
+    private javax.swing.JPanel panelModulesExcluded;
+    private javax.swing.JPanel panelModulesIncluded;
+    private javax.swing.JTabbedPane tabbedPane;
+    private javax.swing.JTextField tbxActionFilter;
+    private javax.swing.JTextField tbxActorFilter;
+    private javax.swing.JTextField tbxModuleFilter;
     // End of variables declaration//GEN-END:variables
     private final DomainAttributeModule module;
 
+    private void UpdateData() {
+        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+        String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
+        List<String> includedModules = ontologyModule.getModulesFromDomain(selectedDomain);
+        List<String> excludedModules = ontologyModule.getAllModules();
+        excludedModules.removeAll(includedModules);
+
+        includedModules.forEach((module) -> {
+            JCheckBox cbx = new JCheckBox(module, true);
+            cbx.addActionListener(((e)-> {
+                if(cbx.isSelected()) {
+                    ontologyModule.AddModuleToDomain(selectedDomain, module);
+                    panelModulesExcluded.remove(cbx);
+                    panelModulesIncluded.add(cbx);
+                }
+                else {
+                    ontologyModule.RemoveModuleFromDomain(selectedDomain, module);
+                    panelModulesIncluded.remove(cbx);
+                    panelModulesExcluded.add(cbx);
+                }
+                RefreshModulePanels();
+            }));
+            panelModulesIncluded.add(cbx);
+        });
+
+        excludedModules.forEach((module) -> {
+            JCheckBox cbx = new JCheckBox(module, false);
+            cbx.addActionListener(((e)-> {
+                if(cbx.isSelected()) {
+                    ontologyModule.AddModuleToDomain(selectedDomain, module);
+                    panelModulesExcluded.remove(cbx);
+                    panelModulesIncluded.add(cbx);
+                }
+                else {
+                    ontologyModule.RemoveModuleFromDomain(selectedDomain, module);
+                    panelModulesIncluded.remove(cbx);
+                    panelModulesExcluded.add(cbx);
+                }
+                RefreshModulePanels();
+            }));
+            panelModulesExcluded.add(cbx);
+        });
+
+        List<String> includedActors = ontologyModule.getActorsFromDomain(selectedDomain);
+        List<String> excludedActors = ontologyModule.getAllActors();
+        excludedActors.removeAll(includedActors);
+
+        includedActors.forEach((actor) -> {
+            JCheckBox cbx = new JCheckBox(actor, true);
+            cbx.addActionListener(((e)-> {
+                if(cbx.isSelected()) {
+                    ontologyModule.AddActorToDomain(selectedDomain, actor);
+                    panelActorsExcluded.remove(cbx);
+                    panelActorsIncluded.add(cbx);
+                }
+                else {
+                    ontologyModule.RemoveActorFromDomain(selectedDomain, actor);
+                    panelActorsIncluded.remove(cbx);
+                    panelActorsExcluded.add(cbx);
+                }
+                RefreshModulePanels();
+            }));
+            panelActorsIncluded.add(cbx);
+        });
+
+        excludedActors.forEach((actor) -> {
+            JCheckBox cbx = new JCheckBox(actor, false);
+            cbx.addActionListener(((e)-> {
+                if(cbx.isSelected()) {
+                    ontologyModule.AddActorToDomain(selectedDomain, actor);
+                    panelActorsExcluded.remove(cbx);
+                    panelActorsIncluded.add(cbx);
+                }
+                else {
+                    ontologyModule.RemoveActorFromDomain(selectedDomain, actor);
+                    panelActorsIncluded.remove(cbx);
+                    panelActorsExcluded.add(cbx);
+                }
+                RefreshActorPanels();
+            }));
+            panelActorsExcluded.add(cbx);
+        });
+
+        List<String> includedActions = ontologyModule.getActionsFromDomain(selectedDomain);
+        List<String> excludedActions = ontologyModule.getAllActions();
+        excludedActions.removeAll(includedActions);
+
+        includedActions.forEach((action) -> {
+            JCheckBox cbx = new JCheckBox(action, true);
+            cbx.addActionListener(((e)-> {
+                if(cbx.isSelected()) {
+                    ontologyModule.AddActionToDomain(selectedDomain, action);
+                    panelActionsExcluded.remove(cbx);
+                    panelActionsIncluded.add(cbx);
+                }
+                else {
+                    ontologyModule.RemoveActionFromDomain(selectedDomain, action);
+                    panelActionsIncluded.remove(cbx);
+                    panelActionsExcluded.add(cbx);
+                }
+                RefreshModulePanels();
+            }));
+            panelActionsIncluded.add(cbx);
+        });
+
+        excludedActions.forEach((action) -> {
+            JCheckBox cbx = new JCheckBox(action, false);
+            cbx.addActionListener(((e)-> {
+                if(cbx.isSelected()) {
+                    ontologyModule.AddActionToDomain(selectedDomain, action);
+                    panelActionsExcluded.remove(cbx);
+                    panelActionsIncluded.add(cbx);
+                }
+                else {
+                    ontologyModule.RemoveActionFromDomain(selectedDomain, action);
+                    panelActionsIncluded.remove(cbx);
+                    panelActionsExcluded.add(cbx);
+                }
+                RefreshActionPanels();
+            }));
+            panelActionsExcluded.add(cbx);
+        });
+    }
+
+    public void RefreshModulePanels() {
+        panelModulesIncluded.setSize(panelModulesIncluded.getPreferredSize());
+        panelModulesExcluded.setSize(panelModulesExcluded.getPreferredSize());
+    }
+
+    public void RefreshActorPanels() {
+        panelActorsIncluded.setSize(panelActorsIncluded.getPreferredSize());
+        panelActorsExcluded.setSize(panelActorsExcluded.getPreferredSize());
+    }
+
+    public void RefreshActionPanels() {
+        panelActionsIncluded.setSize(panelActionsIncluded.getPreferredSize());
+        panelActionsExcluded.setSize(panelActionsExcluded.getPreferredSize());
+    }
 }

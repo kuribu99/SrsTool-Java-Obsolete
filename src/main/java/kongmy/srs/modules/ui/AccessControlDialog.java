@@ -47,6 +47,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
         actionControlPanel = new javax.swing.JPanel();
         lblSelectedModule1 = new javax.swing.JLabel();
         cbxSelectedUser = new javax.swing.JComboBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
         panelActions = new javax.swing.JPanel();
         cbxSelectedModule = new javax.swing.JComboBox();
         lblSelectedModule = new javax.swing.JLabel();
@@ -55,9 +56,13 @@ public class AccessControlDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure Access Control");
 
+        allowedScrollPane.setBorder(null);
+
         panelAllowed.setBorder(javax.swing.BorderFactory.createTitledBorder("Allowed User"));
         panelAllowed.setLayout(new javax.swing.BoxLayout(panelAllowed, javax.swing.BoxLayout.Y_AXIS));
         allowedScrollPane.setViewportView(panelAllowed);
+
+        restrictedScrollPanel.setBorder(null);
 
         panelRestricted.setBorder(javax.swing.BorderFactory.createTitledBorder("Restricted User"));
         panelRestricted.setLayout(new javax.swing.BoxLayout(panelRestricted, javax.swing.BoxLayout.Y_AXIS));
@@ -69,9 +74,9 @@ public class AccessControlDialog extends javax.swing.JDialog {
             accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(accessControlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(allowedScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(restrictedScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(allowedScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(restrictedScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
                 .addContainerGap())
         );
         accessControlPanelLayout.setVerticalGroup(
@@ -79,8 +84,8 @@ public class AccessControlDialog extends javax.swing.JDialog {
             .addGroup(accessControlPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(restrictedScrollPanel)
-                    .addComponent(allowedScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
+                    .addComponent(allowedScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                    .addComponent(restrictedScrollPanel))
                 .addContainerGap())
         );
 
@@ -95,8 +100,11 @@ public class AccessControlDialog extends javax.swing.JDialog {
             }
         });
 
+        jScrollPane1.setBorder(null);
+
         panelActions.setBorder(javax.swing.BorderFactory.createTitledBorder("Allowed Actions:"));
         panelActions.setLayout(new javax.swing.BoxLayout(panelActions, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane1.setViewportView(panelActions);
 
         javax.swing.GroupLayout actionControlPanelLayout = new javax.swing.GroupLayout(actionControlPanel);
         actionControlPanel.setLayout(actionControlPanelLayout);
@@ -105,11 +113,11 @@ public class AccessControlDialog extends javax.swing.JDialog {
             .addGroup(actionControlPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(actionControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelActions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(actionControlPanelLayout.createSequentialGroup()
                         .addComponent(lblSelectedModule1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbxSelectedUser, 0, 176, Short.MAX_VALUE)))
+                        .addComponent(cbxSelectedUser, 0, 333, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         actionControlPanelLayout.setVerticalGroup(
@@ -120,7 +128,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
                     .addComponent(lblSelectedModule1)
                     .addComponent(cbxSelectedUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelActions, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
 
@@ -188,6 +196,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnBack;
     private javax.swing.JComboBox cbxSelectedModule;
     private javax.swing.JComboBox cbxSelectedUser;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblSelectedModule;
     private javax.swing.JLabel lblSelectedModule1;
     private javax.swing.JPanel panelActions;
@@ -198,67 +207,78 @@ public class AccessControlDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     private List<String> availableActions;
     private final AccessControlModule module;
-    
+
     private void initData() {
-        SrsApplication.bootstrap();
+        String selectedModule = cbxSelectedModule.getSelectedItem().toString();
         OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        List<String> allActor = ontologyModule.getActorsFromModule(null, null);
-        List<String> allowedActor = ontologyModule.getActorsFromModule(null, "allowed");
-        List<String> restrictedActor = new ArrayList<>(allActor);
+        List<String> allowedActor = ontologyModule.getActorsFromModule(selectedModule);
+        List<String> restrictedActor = ontologyModule.getActorsFromDomain(null);
         restrictedActor.removeAll(allowedActor);
-        
+
         allowedActor.forEach((actor) -> {
             JCheckBox cbx = new JCheckBox(actor, true);
             cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {                    
+                if(cbx.isSelected()) {
+                    ontologyModule.AddActorToModule(selectedModule, actor);
                     panelRestricted.remove(cbx);
                     panelAllowed.add(cbx);
                 }
                 else {
+                    ontologyModule.RemoveActorFromModule(selectedModule, actor);
                     panelAllowed.remove(cbx);
                     panelRestricted.add(cbx);
                 }
-                RefreshPanels();
+                RefreshAccessControlPanels();
             }));
             panelAllowed.add(cbx);
         });
         restrictedActor.forEach((actor) -> {
             JCheckBox cbx = new JCheckBox(actor, false);
             cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {                    
+                if(cbx.isSelected()) {
+                    ontologyModule.AddActorToModule(selectedModule, actor);
                     panelRestricted.remove(cbx);
-                    panelAllowed.add(cbx);                    
+                    panelAllowed.add(cbx);
                 }
                 else {
+                    ontologyModule.RemoveActorFromModule(selectedModule, actor);
                     panelAllowed.remove(cbx);
                     panelRestricted.add(cbx);
                 }
-                RefreshPanels();
+                RefreshAccessControlPanels();
             }));
             panelRestricted.add(cbx);
         });
-        RefreshPanels();
+        RefreshAccessControlPanels();
         RefreshActionPanel();
     }
-    
-    public void RefreshActionPanel() {      
+
+    public void RefreshActionPanel() {
         panelActions.removeAll();
 
+        String selectedModule = cbxSelectedModule.getSelectedItem().toString();
         OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        
+
         availableActions = ontologyModule.getAllActions();
         availableActions.forEach((action) -> {
             JCheckBox cbx = new JCheckBox(action, false);
             cbx.addActionListener(((e)-> {
-                // TODO: logic later
+                if(cbx.isSelected())
+                    ontologyModule.AddActionToModule(selectedModule, action);
+                else                    
+                    ontologyModule.RemoveActionFromModule(selectedModule, action);
             }));
             panelActions.add(cbx);
         });
         panelActions.validate();
     }
-    
-    public void RefreshPanels() {
+
+    public void RefreshAccessControlPanels() {
         panelAllowed.setSize(panelAllowed.getPreferredSize());
         panelRestricted.setSize(panelRestricted.getPreferredSize());
+    }
+
+    public void RefreshActionControlPanel() {
+        panelActions.setSize(panelActions.getPreferredSize());
     }
 }

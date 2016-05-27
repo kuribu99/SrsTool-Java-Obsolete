@@ -20,14 +20,16 @@
                 <Property name="text" type="java.lang.String" value="New SRS"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemOpenSRS">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Open SRS"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="separatorOpenClose">
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemSaveSRS">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Save SRS"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menuItemLoadSRS">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Load SRS"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemExportSRS">
@@ -39,6 +41,16 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Close"/>
               </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="separatorClose">
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemRestart">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Restart"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemRestartActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemExit">
               <Properties>
@@ -119,6 +131,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemWriteConfigurationFileActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemWriteDefaultConfigurationFile">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Write default configuration file"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemWriteDefaultConfigurationFileActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
