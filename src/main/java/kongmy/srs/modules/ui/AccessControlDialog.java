@@ -53,6 +53,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
         btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Configure Access Control");
 
         panelAllowed.setBorder(javax.swing.BorderFactory.createTitledBorder("Allowed User"));
         panelAllowed.setLayout(new javax.swing.BoxLayout(panelAllowed, javax.swing.BoxLayout.Y_AXIS));
@@ -180,50 +181,6 @@ public class AccessControlDialog extends javax.swing.JDialog {
         RefreshActionPanel();
     }//GEN-LAST:event_cbxSelectedUserItemStateChanged
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AccessControlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AccessControlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AccessControlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AccessControlDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AccessControlDialog dialog = new AccessControlDialog(new javax.swing.JFrame(), true, new AccessControlModule());
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-
-    private List<String> availableActions;
-    private final AccessControlModule module;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel accessControlPanel;
     private javax.swing.JPanel actionControlPanel;
@@ -239,7 +196,9 @@ public class AccessControlDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane restrictedScrollPanel;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
-
+    private List<String> availableActions;
+    private final AccessControlModule module;
+    
     private void initData() {
         SrsApplication.bootstrap();
         OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
@@ -295,6 +254,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
             }));
             panelActions.add(cbx);
         });
+        panelActions.validate();
     }
     
     public void RefreshPanels() {

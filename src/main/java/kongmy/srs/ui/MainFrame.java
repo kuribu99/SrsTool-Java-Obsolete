@@ -10,17 +10,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import kongmy.srs.core.Requirement;
 import kongmy.core.Application;
-import kongmy.core.HasMenuItem;
+import kongmy.core.HasMenu;
 import kongmy.srs.core.RequirementModule;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class MainFrame extends javax.swing.JFrame {
 
@@ -32,12 +31,8 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         
         Application.getInstance().getModules().values().forEach((module) -> {
-            if(module instanceof HasMenuItem) {
-                HasMenuItem menuModule = (HasMenuItem) module;
-                JMenuItem menuItem = new JMenuItem(menuModule.getMenuItemName());
-                menuItem.addActionListener((e) -> menuModule.onMenuItemClicked(this));
-                menuModules.add(menuItem);
-            }
+            if(module instanceof HasMenu)
+                menuModules.add(((HasMenu) module).getMenu(this));
         });
         
         UpdateRequirements();
@@ -357,13 +352,6 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     
-    private void AddModuleTab(ModulePanel panel) {
-        JScrollPane scrollPane = new JScrollPane(panel);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(30);
-        moduleTabbedPane.addTab(panel.getModuleName(), scrollPane);
-    }
-    
-    private final Map<String, List<Requirement>> requirementByModules;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel actionPanel;
     private javax.swing.JButton btnAddFunctionalRequirement;
@@ -392,6 +380,13 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane moduleTabbedPane;
     private javax.swing.JTextField tbxSelectedDomainAndModule;
     // End of variables declaration//GEN-END:variables
+    private final Map<String, List<Requirement>> requirementByModules;
+    
+    private void AddModuleTab(ModulePanel panel) {
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(30);
+        moduleTabbedPane.addTab(panel.getModuleName(), scrollPane);
+    }
     
     private void UpdateRequirements() {     
         requirementByModules.clear();

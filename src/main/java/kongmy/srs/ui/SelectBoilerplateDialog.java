@@ -10,15 +10,9 @@ import kongmy.srs.core.Requirement;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class SelectBoilerplateDialog extends javax.swing.JDialog {
-
-    private boolean result;
-    public boolean getResult() { return result; }
-    
-    private Requirement generatedRequirement;
-    public Requirement getGeneratedRequirement() { return generatedRequirement; }
     
     /**
      * Creates new form NewJDialog
@@ -245,4 +239,10 @@ public class SelectBoilerplateDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+    private boolean result;
+    private Requirement generatedRequirement;
+    
+    public boolean getResult() { return result; }
+    public Requirement getGeneratedRequirement() { return generatedRequirement; }
+
 }

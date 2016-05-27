@@ -11,7 +11,7 @@ import kongmy.srs.core.RequirementModule;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class DummyDataModule extends RequirementModule {
     

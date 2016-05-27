@@ -6,22 +6,14 @@
 package kongmy.srs.ui;
 
 import java.awt.Frame;
-import javax.swing.JDialog;
 import kongmy.srs.core.Requirement;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class AddNonFunctionalRequirementDialog extends javax.swing.JDialog {
 
-    private Frame parent;
-    private boolean result;
-    public boolean getResult() { return result; }
-    
-    private Requirement generatedRequirement;
-    public Requirement getGeneratedRequirement() { return generatedRequirement; }
-    
     /**
      * Creates new form NewJDialog
      */
@@ -29,7 +21,6 @@ public class AddNonFunctionalRequirementDialog extends javax.swing.JDialog {
         super(parent, modal);
         this.parent = parent;
         initComponents();
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         
         result = false;
     }
@@ -323,37 +314,7 @@ public class AddNonFunctionalRequirementDialog extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(AddNonFunctionalRequirementDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+        
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -394,4 +355,12 @@ public class AddNonFunctionalRequirementDialog extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextArea tbxBoilerplate;
     // End of variables declaration//GEN-END:variables
+    private final Frame parent;
+    private boolean result;
+    private Requirement generatedRequirement;
+    
+    public boolean getResult() { return result; }
+    public Requirement getGeneratedRequirement() { return generatedRequirement; }
+    
+
 }

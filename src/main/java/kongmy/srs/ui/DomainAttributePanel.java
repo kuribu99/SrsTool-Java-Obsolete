@@ -9,7 +9,7 @@ import javax.swing.DefaultListModel;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class DomainAttributePanel extends javax.swing.JPanel {
 
@@ -93,8 +93,6 @@ public class DomainAttributePanel extends javax.swing.JPanel {
         btnDelete.setEnabled(list.getSelectedIndex() >= 0);
     }//GEN-LAST:event_listValueChanged
 
-
-    private DefaultListModel<String> model;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
@@ -102,4 +100,6 @@ public class DomainAttributePanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> list;
     // End of variables declaration//GEN-END:variables
+    private DefaultListModel<String> model;
+    
 }

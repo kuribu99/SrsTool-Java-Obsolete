@@ -10,7 +10,7 @@ import java.awt.Color;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class RequirementPanel extends javax.swing.JPanel {
 

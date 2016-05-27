@@ -10,12 +10,9 @@ import kongmy.srs.core.Requirement;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class ModulePanel extends javax.swing.JPanel {
-
-    private final String moduleName;
-    private final List<Requirement> requirements;
 
     /**
      * Creates new form ModulePanel
@@ -45,6 +42,11 @@ public class ModulePanel extends javax.swing.JPanel {
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
     }// </editor-fold>//GEN-END:initComponents
 
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
+    private final String moduleName;
+    private final List<Requirement> requirements;
+    
     public String getModuleName() {
         return moduleName;
     }
@@ -52,8 +54,4 @@ public class ModulePanel extends javax.swing.JPanel {
     public List<Requirement> getRequirements() {
         return requirements;
     }
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
 }

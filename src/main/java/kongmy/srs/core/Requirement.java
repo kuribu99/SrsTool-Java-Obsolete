@@ -7,7 +7,7 @@ package kongmy.srs.core;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class Requirement {
     

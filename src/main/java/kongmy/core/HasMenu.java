@@ -5,16 +5,15 @@
  */
 package kongmy.core;
 
-import java.awt.event.ActionListener;
+import java.awt.Component;
 import javax.swing.JFrame;
 
 /**
  *
  * @author Kong My
  */
-public interface HasMenuItem {
+public interface HasMenu {
     
-    public String getMenuItemName();
-    public void onMenuItemClicked(JFrame parent);
+    public Component getMenu(JFrame parent);
     
 }

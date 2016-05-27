@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public abstract class Module {
     

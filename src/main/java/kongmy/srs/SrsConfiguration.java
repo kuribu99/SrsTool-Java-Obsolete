@@ -9,10 +9,14 @@ import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kongmy.core.Configuration;
+import kongmy.srs.modules.AccessControlModule;
+import kongmy.srs.modules.DomainAttributeModule;
+import kongmy.srs.modules.DummyDataModule;
+import kongmy.srs.modules.OntologyModule;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class SrsConfiguration extends Configuration {
     
@@ -31,9 +35,10 @@ public class SrsConfiguration extends Configuration {
 
     private static String[] getDefaultModules() {
         return new String[] {
-            "kongmy.srs.modules.DummyDataModule",
-            "kongmy.srs.modules.OntologyModule",
-            "kongmy.srs.modules.AccessControlModule"
+            DummyDataModule.class.getName(),
+            OntologyModule.class.getName(),
+            AccessControlModule.class.getName(),
+            DomainAttributeModule.class.getName()
         };
     }
 

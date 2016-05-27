@@ -7,7 +7,7 @@ package kongmy.srs.ui;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class SelectModuleDialog extends javax.swing.JDialog {
 

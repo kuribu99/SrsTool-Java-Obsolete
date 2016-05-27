@@ -19,7 +19,7 @@ import kongmy.srs.ui.MainFrame;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class SrsApplication extends Application {
     

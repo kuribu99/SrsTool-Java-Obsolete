@@ -5,7 +5,6 @@
  */
 package kongmy.core;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public abstract class Application implements Runnable {
     

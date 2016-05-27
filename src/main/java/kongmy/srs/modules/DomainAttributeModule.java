@@ -11,36 +11,27 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import kongmy.core.HasMenu;
-import kongmy.srs.core.RequirementModule;
-import kongmy.srs.modules.ui.AccessControlDialog;
+import kongmy.core.Module;
+import kongmy.srs.modules.ui.DomainAttributeDialog;
 
 /**
  *
  * @author Kong My
  */
-public class AccessControlModule extends RequirementModule implements HasMenu {
-    
-    public AccessControlModule() {
-        super();
-    }
-
-    @Override
-    protected void UpdateGeneratedRequirements() {
-        
-    }
+public class DomainAttributeModule extends Module implements HasMenu {
 
     @Override
     public List<String> getDependencies() {
-        List<String> dependencies = new ArrayList<String>();
+        List<String> dependencies = new ArrayList<>();
         dependencies.add(OntologyModule.class.getName());
         return dependencies;
     }
 
     @Override
     public Component getMenu(JFrame parent) {
-        JMenuItem menuItem = new JMenuItem("Configure Access Control");
+        JMenuItem menuItem = new JMenuItem("Configure Domain Attributres");
         menuItem.addActionListener((e) -> {
-            AccessControlDialog dlg = new AccessControlDialog(parent, true, this);
+            DomainAttributeDialog dlg = new DomainAttributeDialog(parent, true, this);
             dlg.setVisible(true);
         });
         return menuItem;

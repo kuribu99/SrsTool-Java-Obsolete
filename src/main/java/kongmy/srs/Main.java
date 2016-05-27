@@ -9,7 +9,7 @@ import kongmy.core.Application;
 
 /**
  *
- * @author Owner
+ * @author Kong My
  */
 public class Main {
     
