@@ -5,23 +5,32 @@
  */
 package kongmy.srs.modules;
 
-import java.util.ArrayList;
+import java.awt.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import kongmy.core.Application;
 import kongmy.core.Configurable;
+import kongmy.core.HasMenu;
 import kongmy.core.Loadable;
 import kongmy.core.Module;
 import kongmy.ontology.OntologyHelper;
 import kongmy.ontology.OntologyKey;
+import kongmy.srs.modules.ui.ModifyActionDialog;
+import kongmy.srs.modules.ui.ModifyActorDialog;
+import kongmy.srs.modules.ui.ModifyDomainDialog;
+import kongmy.srs.modules.ui.ModifyModuleDialog;
 
 /**
  *
  * @author Kong My
  */
-public class OntologyModule extends Module implements Configurable, Loadable {
+public class OntologyModule extends Module
+    implements Configurable, Loadable, HasMenu {
 
     public static final String ONTOLOGY_FILE_PATH = "ontology_file_path";
     private OntologyHelper helper;
@@ -55,102 +64,62 @@ public class OntologyModule extends Module implements Configurable, Loadable {
         }
     }
 
+    @Override
+    public Component getMenu(JFrame parent) {
+        JMenu menu = new JMenu("Modify Ontology Attributes");
+        
+        JMenuItem menuItem = new JMenuItem("Modify Domains");
+        menuItem.addActionListener((e) -> new ModifyDomainDialog(parent, true, this).setVisible(true));
+        menu.add(menuItem);
+                
+        menuItem = new JMenuItem("Modify Modules");
+        menuItem.addActionListener((e) -> new ModifyModuleDialog(parent, true, this).setVisible(true));
+        menu.add(menuItem);
+                
+        menuItem = new JMenuItem("Modify Actors");
+        menuItem.addActionListener((e) -> new ModifyActorDialog(parent, true, this).setVisible(true));
+        menu.add(menuItem);
+                
+        menuItem = new JMenuItem("Modify Actions");
+        menuItem.addActionListener((e) -> new ModifyActionDialog(parent, true, this).setVisible(true));
+        menu.add(menuItem);
+        
+        return menu;
+    }
+    
+    public void Save() {
+        helper.Save();
+    }
+
+    public List<String> getAllDomains() {
+        return helper.getClassIndividuals(OntologyKey.Class.DOMAIN);
+    }
+
     public List<String> getAllModules() {
-        if(true) {
-            List<String> modules = new ArrayList<>();
-            modules.add("subject registration");
-            modules.add("login");
-            modules.add("class modification");
-            return modules;
-        }
         return helper.getClassIndividuals(OntologyKey.Class.MODULE);
     }
 
     public List<String> getAllActors() {
-        if(true) {
-            List<String> actors = new ArrayList<>();
-            actors.add("student");
-            actors.add("officer");
-            actors.add("lecturer");
-            return actors;
-        }
         return helper.getClassIndividuals(OntologyKey.Class.ACTOR);
     }
 
     public List<String> getAllActions() {
-        if(true) {
-            List<String> actions = new ArrayList<>();
-            actions.add("register subject");
-            actions.add("login");
-            actions.add("add class");
-            return actions;
-        }
         return helper.getClassIndividuals(OntologyKey.Class.ACTION);
     }
 
     public List<String> getModulesFromDomain(String domainName) {
-        if(true) {
-            List<String> modules = new ArrayList<>();
-            modules.add("login");
-            modules.add("class modification");
-            return modules;
-        }
         return helper.getTargetIndividualsByObjectProperty(domainName, OntologyKey.ObjectProperty.HAS_MODULE);
     }
 
     public List<String> getActorsFromDomain(String domainName) {
-        if(true) {
-            List<String> actors = new ArrayList<>();
-            actors.add("student");
-            actors.add("officer");
-            actors.add("lecturer");
-            return actors;
-        }
         return helper.getTargetIndividualsByObjectProperty(domainName, OntologyKey.ObjectProperty.HAS_ACTOR);
     }
 
     public List<String> getActionsFromDomain(String domainName) {
-        if(true) {
-            List<String> actions = new ArrayList<>();
-            actions.add("register subject");
-            actions.add("login");
-            return actions;
-        }
         return helper.getTargetIndividualsByObjectProperty(domainName, OntologyKey.ObjectProperty.HAS_ACTION);
     }
 
     public List<String> getActorsFromModule(String moduleName) {
-        List<String> allowed = new ArrayList<>();
-        List<String> disallowed = new ArrayList<>();
-
-        allowed.add("student");
-        disallowed.add("officer");
-        disallowed.add("lecturer");
-        allowed.add("student");
-        disallowed.add("officer");
-        disallowed.add("lecturer");
-        allowed.add("student");
-        disallowed.add("officer");
-        disallowed.add("lecturer");
-        allowed.add("student");
-        disallowed.add("officer");
-        disallowed.add("lecturer");
-        allowed.add("student");
-        disallowed.add("officer");
-        disallowed.add("lecturer");
-        allowed.add("student");
-        disallowed.add("officer");
-        disallowed.add("lecturer");
-
-        if(moduleName == null) {
-            List<String> all = new ArrayList<>(allowed);
-            all.addAll(disallowed);
-            return all;
-        }
-        if(true)
-            return moduleName.equals("allowed")? allowed: disallowed;
-
-        // Aboves are dummy data
         return helper.getTargetIndividualsByObjectProperty(moduleName, OntologyKey.ObjectProperty.HAS_ACTOR);
     }
 
@@ -193,4 +162,37 @@ public class OntologyModule extends Module implements Configurable, Loadable {
     public void RemoveActionFromModule(String moduleName, String actionName) {
         helper.RemoveObjectPropertyAssertion(moduleName, OntologyKey.ObjectProperty.HAS_ACTION, actionName);
     }
+    
+    public void AddNewDomain(String domainName) {
+        helper.AddIndividual(OntologyKey.Class.DOMAIN, domainName);
+    }
+    
+    public void AddNewModule(String moduleName) {
+        helper.AddIndividual(OntologyKey.Class.MODULE, moduleName);
+    }
+    
+    public void AddNewActor(String actorName) {
+        helper.AddIndividual(OntologyKey.Class.ACTOR, actorName);
+    }
+    
+    public void AddNewAction(String actionName) {
+        helper.AddIndividual(OntologyKey.Class.ACTION, actionName);
+    }
+    
+    public void RemoveDomain(String domainName) {
+        helper.RemoveIndividual(OntologyKey.Class.DOMAIN, domainName);
+    }
+    
+    public void RemoveModule(String moduleName) {
+        helper.RemoveIndividual(OntologyKey.Class.MODULE, moduleName);
+    }
+    
+    public void RemoveActor(String actorName) {
+        helper.RemoveIndividual(OntologyKey.Class.ACTOR, actorName);
+    }
+    
+    public void RemoveAction(String actionName) {
+        helper.RemoveIndividual(OntologyKey.Class.ACTION, actionName);
+    }
+
 }

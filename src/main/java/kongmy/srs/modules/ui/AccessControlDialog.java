@@ -5,6 +5,7 @@
  */
 package kongmy.srs.modules.ui;
 
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JCheckBox;
@@ -40,10 +41,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
 
         tabbedPane = new javax.swing.JTabbedPane();
         accessControlPanel = new javax.swing.JPanel();
-        allowedScrollPane = new javax.swing.JScrollPane();
-        panelAllowed = new javax.swing.JPanel();
-        restrictedScrollPanel = new javax.swing.JScrollPane();
-        panelRestricted = new javax.swing.JPanel();
+        accessControlCheckboxDualPanel = new kongmy.srs.ui.CheckboxDualPanel();
         actionControlPanel = new javax.swing.JPanel();
         lblSelectedModule1 = new javax.swing.JLabel();
         cbxSelectedUser = new javax.swing.JComboBox();
@@ -56,36 +54,20 @@ public class AccessControlDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure Access Control");
 
-        allowedScrollPane.setBorder(null);
-
-        panelAllowed.setBorder(javax.swing.BorderFactory.createTitledBorder("Allowed User"));
-        panelAllowed.setLayout(new javax.swing.BoxLayout(panelAllowed, javax.swing.BoxLayout.Y_AXIS));
-        allowedScrollPane.setViewportView(panelAllowed);
-
-        restrictedScrollPanel.setBorder(null);
-
-        panelRestricted.setBorder(javax.swing.BorderFactory.createTitledBorder("Restricted User"));
-        panelRestricted.setLayout(new javax.swing.BoxLayout(panelRestricted, javax.swing.BoxLayout.Y_AXIS));
-        restrictedScrollPanel.setViewportView(panelRestricted);
-
         javax.swing.GroupLayout accessControlPanelLayout = new javax.swing.GroupLayout(accessControlPanel);
         accessControlPanel.setLayout(accessControlPanelLayout);
         accessControlPanelLayout.setHorizontalGroup(
             accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(accessControlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(allowedScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(restrictedScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
+                .addComponent(accessControlCheckboxDualPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                 .addContainerGap())
         );
         accessControlPanelLayout.setVerticalGroup(
             accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(accessControlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(allowedScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-                    .addComponent(restrictedScrollPanel))
+                .addComponent(accessControlCheckboxDualPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -190,9 +172,9 @@ public class AccessControlDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cbxSelectedUserItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private kongmy.srs.ui.CheckboxDualPanel accessControlCheckboxDualPanel;
     private javax.swing.JPanel accessControlPanel;
     private javax.swing.JPanel actionControlPanel;
-    private javax.swing.JScrollPane allowedScrollPane;
     private javax.swing.JButton btnBack;
     private javax.swing.JComboBox cbxSelectedModule;
     private javax.swing.JComboBox cbxSelectedUser;
@@ -200,9 +182,6 @@ public class AccessControlDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblSelectedModule;
     private javax.swing.JLabel lblSelectedModule1;
     private javax.swing.JPanel panelActions;
-    private javax.swing.JPanel panelAllowed;
-    private javax.swing.JPanel panelRestricted;
-    private javax.swing.JScrollPane restrictedScrollPanel;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
     private List<String> availableActions;
@@ -215,41 +194,18 @@ public class AccessControlDialog extends javax.swing.JDialog {
         List<String> restrictedActor = ontologyModule.getActorsFromDomain(null);
         restrictedActor.removeAll(allowedActor);
 
-        allowedActor.forEach((actor) -> {
-            JCheckBox cbx = new JCheckBox(actor, true);
-            cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {
-                    ontologyModule.AddActorToModule(selectedModule, actor);
-                    panelRestricted.remove(cbx);
-                    panelAllowed.add(cbx);
-                }
-                else {
-                    ontologyModule.RemoveActorFromModule(selectedModule, actor);
-                    panelAllowed.remove(cbx);
-                    panelRestricted.add(cbx);
-                }
-                RefreshAccessControlPanels();
-            }));
-            panelAllowed.add(cbx);
-        });
-        restrictedActor.forEach((actor) -> {
-            JCheckBox cbx = new JCheckBox(actor, false);
-            cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {
-                    ontologyModule.AddActorToModule(selectedModule, actor);
-                    panelRestricted.remove(cbx);
-                    panelAllowed.add(cbx);
-                }
-                else {
-                    ontologyModule.RemoveActorFromModule(selectedModule, actor);
-                    panelAllowed.remove(cbx);
-                    panelRestricted.add(cbx);
-                }
-                RefreshAccessControlPanels();
-            }));
-            panelRestricted.add(cbx);
-        });
-        RefreshAccessControlPanels();
+        ActionListener moduleAccessListener = (e) -> {
+            JCheckBox cbx = (JCheckBox) e.getSource();
+            if(cbx.isSelected())
+                ontologyModule.AddActorToModule(selectedModule, cbx.getText());
+            else
+                ontologyModule.RemoveActorFromModule(selectedModule, cbx.getText());
+        };
+        
+        accessControlCheckboxDualPanel.setPanelNames("Allowed Modules", "Restricted Modules");
+        accessControlCheckboxDualPanel.PopulateData(allowedActor, restrictedActor, 
+                moduleAccessListener, moduleAccessListener);
+        
         RefreshActionPanel();
     }
 
@@ -271,11 +227,6 @@ public class AccessControlDialog extends javax.swing.JDialog {
             panelActions.add(cbx);
         });
         panelActions.validate();
-    }
-
-    public void RefreshAccessControlPanels() {
-        panelAllowed.setSize(panelAllowed.getPreferredSize());
-        panelRestricted.setSize(panelRestricted.getPreferredSize());
     }
 
     public void RefreshActionControlPanel() {

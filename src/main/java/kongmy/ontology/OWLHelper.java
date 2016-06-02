@@ -51,6 +51,7 @@ public class OWLHelper {
     }
     
     public static IRI getIRI(String baseIRI, String name) {
+        name = name.replaceAll("[\\W+]", " ").trim();
         return IRI.create(baseIRI + "#" + name);
     }
     
@@ -59,7 +60,8 @@ public class OWLHelper {
     }
     
     public static String getString(IRI iri) {
-        return iri.getRemainder().get();
+        String str = iri.toString();
+        return str.substring(str.indexOf("#") + 1);
     }
     
     public OWLClass getClass(String className) {
