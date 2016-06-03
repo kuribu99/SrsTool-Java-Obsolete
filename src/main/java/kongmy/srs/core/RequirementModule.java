@@ -14,19 +14,19 @@ import kongmy.core.Module;
  * @author Kong My
  */
 public abstract class RequirementModule extends Module {
-    
+
     protected final List<Requirement> generatedRequirements;
 
     public RequirementModule() {
         super();
         this.generatedRequirements = new ArrayList<>();
     }
-    
+
     public List<Requirement> getRequirements() {
         this.UpdateGeneratedRequirements();
         return this.generatedRequirements;
     }
-    
+
     protected abstract void UpdateGeneratedRequirements();
-    
+
 }

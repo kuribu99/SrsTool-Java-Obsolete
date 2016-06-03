@@ -12,7 +12,7 @@ import java.util.Map;
  * @author Kong My
  */
 public interface Configurable {
-    
+
     public Map<String, String> getConfiguration();
-    
+
 }

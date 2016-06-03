@@ -134,41 +134,38 @@ public class ModifyActionDialog extends javax.swing.JDialog {
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         String oldAction = list.getSelectedValue().toString();
         Object newAction = null;
-        
-        while(true) {
+
+        while (true) {
             newAction = JOptionPane.showInputDialog(
-                rootPane, 
-                "Please enter the name of action", 
-                "Add Action", 
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                null,
-                oldAction);
-            
-            if(newAction == null)
+                    rootPane,
+                    "Please enter the name of action",
+                    "Add Action",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    null,
+                    oldAction);
+
+            if (newAction == null) {
                 return;
-            else if (newAction.toString().isEmpty()) {
+            } else if (newAction.toString().isEmpty()) {
                 JOptionPane.showMessageDialog(
-                    rootPane, 
-                    "Please enter a name", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            }        
-            else if (listModel.contains(newAction)) {
-                JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "New action already exist", 
-                        "Error", 
+                        rootPane,
+                        "Please enter a name",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else if (newAction.equals(oldAction)) {
+            } else if (listModel.contains(newAction)) {
                 JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "Please enter new value for action", 
-                        "Error", 
+                        rootPane,
+                        "New action already exist",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else {
+            } else if (newAction.equals(oldAction)) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "Please enter new value for action",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 listModel.removeElement(oldAction);
                 listModel.addElement(newAction.toString().replaceAll("[\\W+]", " ").trim());
                 module.Rename(oldAction, newAction.toString());
@@ -197,31 +194,29 @@ public class ModifyActionDialog extends javax.swing.JDialog {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         String newAction = null;
-        
-        while(true) {
+
+        while (true) {
             newAction = JOptionPane.showInputDialog(
-                rootPane, 
-                "Please enter the name of action", 
-                "Add Action", 
-                JOptionPane.QUESTION_MESSAGE);
-            
-            if(newAction == null)
-                return;            
-            else if (newAction.isEmpty()) {
+                    rootPane,
+                    "Please enter the name of action",
+                    "Add Action",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (newAction == null) {
+                return;
+            } else if (newAction.isEmpty()) {
                 JOptionPane.showMessageDialog(
-                    rootPane, 
-                    "Please enter a name", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            }       
-            else if (listModel.contains(newAction)) {
-                JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "New action already exist", 
-                        "Error", 
+                        rootPane,
+                        "Please enter a name",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else {
+            } else if (listModel.contains(newAction)) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "New action already exist",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 listModel.addElement(newAction.replaceAll("[\\W+]", " ").trim());
                 module.AddNewAction(newAction);
                 return;

@@ -21,7 +21,7 @@ public class AddNonFunctionalRequirementDialog extends javax.swing.JDialog {
         super(parent, modal);
         this.parent = parent;
         initComponents();
-        
+
         result = false;
     }
 
@@ -314,7 +314,7 @@ public class AddNonFunctionalRequirementDialog extends javax.swing.JDialog {
             java.util.logging.Logger.getLogger(AddNonFunctionalRequirementDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -358,9 +358,13 @@ public class AddNonFunctionalRequirementDialog extends javax.swing.JDialog {
     private final Frame parent;
     private boolean result;
     private Requirement generatedRequirement;
-    
-    public boolean getResult() { return result; }
-    public Requirement getGeneratedRequirement() { return generatedRequirement; }
-    
+
+    public boolean getResult() {
+        return result;
+    }
+
+    public Requirement getGeneratedRequirement() {
+        return generatedRequirement;
+    }
 
 }

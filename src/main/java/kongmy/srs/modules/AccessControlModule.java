@@ -19,14 +19,14 @@ import kongmy.srs.modules.ui.AccessControlDialog;
  * @author Kong My
  */
 public class AccessControlModule extends RequirementModule implements HasMenu {
-    
+
     public AccessControlModule() {
         super();
     }
 
     @Override
     protected void UpdateGeneratedRequirements() {
-        
+
     }
 
     @Override
@@ -45,5 +45,5 @@ public class AccessControlModule extends RequirementModule implements HasMenu {
         });
         return menuItem;
     }
-    
+
 }

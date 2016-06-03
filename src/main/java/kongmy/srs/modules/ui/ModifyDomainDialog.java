@@ -134,44 +134,41 @@ public class ModifyDomainDialog extends javax.swing.JDialog {
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         String oldDomain = list.getSelectedValue().toString();
         Object newDomain = null;
-        
-        while(true) {
+
+        while (true) {
             newDomain = JOptionPane.showInputDialog(
-                rootPane, 
-                "Please enter the name of domain", 
-                "Add Domain", 
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                null,
-                oldDomain);
-            
-            if(newDomain == null)
+                    rootPane,
+                    "Please enter the name of domain",
+                    "Add Domain",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    null,
+                    oldDomain);
+
+            if (newDomain == null) {
                 return;
-            else if (newDomain.toString().isEmpty()) {
+            } else if (newDomain.toString().isEmpty()) {
                 JOptionPane.showMessageDialog(
-                    rootPane, 
-                    "Please enter a name", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            }        
-            else if (listModel.contains(newDomain)) {
-                JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "New domain already exist", 
-                        "Error", 
+                        rootPane,
+                        "Please enter a name",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else if (newDomain.equals(oldDomain)) {
+            } else if (listModel.contains(newDomain)) {
                 JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "Please enter new value for domain", 
-                        "Error", 
+                        rootPane,
+                        "New domain already exist",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else {
+            } else if (newDomain.equals(oldDomain)) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "Please enter new value for domain",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 listModel.removeElement(oldDomain);
                 listModel.addElement(newDomain.toString().replaceAll("[\\W+]", " ").trim());
-                module.Rename(oldDomain, newDomain.toString());   
+                module.Rename(oldDomain, newDomain.toString());
                 return;
             }
         }
@@ -197,31 +194,29 @@ public class ModifyDomainDialog extends javax.swing.JDialog {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         String newDomain = null;
-        
-        while(true) {
+
+        while (true) {
             newDomain = JOptionPane.showInputDialog(
-                rootPane, 
-                "Please enter the name of domain", 
-                "Add Domain", 
-                JOptionPane.QUESTION_MESSAGE);
-            
-            if(newDomain == null)
-                return;            
-            else if (newDomain.isEmpty()) {
+                    rootPane,
+                    "Please enter the name of domain",
+                    "Add Domain",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (newDomain == null) {
+                return;
+            } else if (newDomain.isEmpty()) {
                 JOptionPane.showMessageDialog(
-                    rootPane, 
-                    "Please enter a name", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            }       
-            else if (listModel.contains(newDomain)) {
-                JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "New domain already exist", 
-                        "Error", 
+                        rootPane,
+                        "Please enter a name",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else {
+            } else if (listModel.contains(newDomain)) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "New domain already exist",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 listModel.addElement(newDomain.replaceAll("[\\W+]", " ").trim());
                 module.AddNewDomain(newDomain);
                 return;

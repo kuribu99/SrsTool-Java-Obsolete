@@ -34,16 +34,15 @@ public class AccessControlDialog extends javax.swing.JDialog {
         List<String> allDomains = ontologyModule.getAllDomains();
         if (allDomains.size() == 0) {
             JOptionPane.showMessageDialog(
-                    parent, 
-                    "There is no domain to configure, please add at least 1 domain by modifying domains", 
-                    "No domain found", 
+                    parent,
+                    "There is no domain to configure, please add at least 1 domain by modifying domains",
+                    "No domain found",
                     JOptionPane.INFORMATION_MESSAGE);
             dispose();
-        }
-        else {
+        } else {
             allDomains.forEach((val) -> domainModel.addElement(val));
             initComponents();
-            accessControlCheckboxPanel.setPanelNames("Allowed Actors", "Restricted Actors");        
+            accessControlCheckboxPanel.setPanelNames("Allowed Actors", "Restricted Actors");
             UpdateModules();
             UpdateActors();
         }
@@ -226,12 +225,13 @@ public class AccessControlDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void cbxSelectedActorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSelectedActorItemStateChanged
-        String selectedString = cbxSelectedActor.getSelectedItem() == null?
-                "": cbxSelectedActor.getSelectedItem().toString();
-        
+        String selectedString = cbxSelectedActor.getSelectedItem() == null
+                ? "" : cbxSelectedActor.getSelectedItem().toString();
+
         panelActions.removeAll();
-        if(!selectedString.isEmpty())
+        if (!selectedString.isEmpty()) {
             UpdateActionControlData();
+        }
     }//GEN-LAST:event_cbxSelectedActorItemStateChanged
 
     private void cbxSelectedDomainItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSelectedDomainItemStateChanged
@@ -240,12 +240,13 @@ public class AccessControlDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cbxSelectedDomainItemStateChanged
 
     private void cbxSelectedModuleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSelectedModuleItemStateChanged
-        String selectedString = cbxSelectedModule.getSelectedItem() == null?
-                "": cbxSelectedModule.getSelectedItem().toString();
-        
+        String selectedString = cbxSelectedModule.getSelectedItem() == null
+                ? "" : cbxSelectedModule.getSelectedItem().toString();
+
         accessControlCheckboxPanel.ClearPanels();
-        if(!selectedString.isEmpty())
+        if (!selectedString.isEmpty()) {
             UpdateAccessControlData();
+        }
     }//GEN-LAST:event_cbxSelectedModuleItemStateChanged
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -279,7 +280,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
         String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
         String selectedModule = cbxSelectedModule.getSelectedItem().toString();
         OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        
+
         List<String> allowedActor = ontologyModule.getActorsFrom(selectedModule);
         List<String> restrictedActor = ontologyModule.getActorsFrom(selectedDomain);
         restrictedActor.removeAll(allowedActor);
@@ -310,10 +311,11 @@ public class AccessControlDialog extends javax.swing.JDialog {
         selectedActions.forEach((action) -> {
             JCheckBox cbx = new JCheckBox(action, true);
             cbx.addActionListener(((e) -> {
-                if (cbx.isSelected()) 
+                if (cbx.isSelected()) {
                     ontologyModule.AddActionTo(selectedActor, action);
-                else
-                    ontologyModule.RemoveActionFrom(selectedActor, action);                
+                } else {
+                    ontologyModule.RemoveActionFrom(selectedActor, action);
+                }
             }));
             panelActions.add(cbx);
         });
@@ -321,10 +323,11 @@ public class AccessControlDialog extends javax.swing.JDialog {
         notSelectedActions.forEach((action) -> {
             JCheckBox cbx = new JCheckBox(action, false);
             cbx.addActionListener(((e) -> {
-                if (cbx.isSelected())
+                if (cbx.isSelected()) {
                     ontologyModule.AddActionTo(selectedActor, action);
-                else
+                } else {
                     ontologyModule.RemoveActionFrom(selectedActor, action);
+                }
             }));
             panelActions.add(cbx);
         });
@@ -336,14 +339,14 @@ public class AccessControlDialog extends javax.swing.JDialog {
         List<String> modules = ontologyModule.getModulesFrom(cbxSelectedDomain.getSelectedItem().toString());
         moduleModel.removeAllElements();
         modules.forEach((val) -> moduleModel.addElement(val));
-        
+
     }
 
     private void UpdateActors() {
         OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
         List<String> modules = ontologyModule.getActorsFrom(cbxSelectedDomain.getSelectedItem().toString());
         actorModel.removeAllElements();
-        modules.forEach((val) -> actorModel.addElement(val));  
+        modules.forEach((val) -> actorModel.addElement(val));
     }
 
 }

@@ -18,12 +18,13 @@ public class DomainAttributePanel extends javax.swing.JPanel {
      */
     public DomainAttributePanel() {
         model = new DefaultListModel<>();
-        
-        for(int i = 1; i <= 5; i++)
+
+        for (int i = 1; i <= 5; i++) {
             model.addElement("Element " + i);
-        
+        }
+
         initComponents();
-        
+
         btnLink.setEnabled(list.getSelectedIndex() >= 0);
         btnDelete.setEnabled(list.getSelectedIndex() >= 0);
     }
@@ -101,5 +102,5 @@ public class DomainAttributePanel extends javax.swing.JPanel {
     private javax.swing.JList<String> list;
     // End of variables declaration//GEN-END:variables
     private DefaultListModel<String> model;
-    
+
 }

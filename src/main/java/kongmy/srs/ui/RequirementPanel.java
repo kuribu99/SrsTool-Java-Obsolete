@@ -7,7 +7,6 @@ package kongmy.srs.ui;
 
 import java.awt.Color;
 
-
 /**
  *
  * @author Kong My
@@ -19,7 +18,7 @@ public class RequirementPanel extends javax.swing.JPanel {
      */
     public RequirementPanel() {
         initComponents();
-        
+
         btnEdit.setVisible(false);
         btnDelete.setVisible(false);
     }
@@ -140,7 +139,7 @@ public class RequirementPanel extends javax.swing.JPanel {
         lblIndex.setText(String.valueOf(index));
         lblRequirement.setText("<html>" + requirement + "</html>");
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;

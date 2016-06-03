@@ -14,7 +14,7 @@ import kongmy.srs.core.RequirementModule;
  * @author Kong My
  */
 public class DummyDataModule extends RequirementModule {
-    
+
     public DummyDataModule() {
         super();
     }
@@ -22,8 +22,8 @@ public class DummyDataModule extends RequirementModule {
     @Override
     protected void UpdateGeneratedRequirements() {
         this.generatedRequirements.clear();
-        
-        String[][] samples = new String[][] {
+
+        String[][] samples = new String[][]{
             {"Login page", "If the student ID and password is correct, the student shall be able to login to the system"},
             {"Login page", "The load time of login page shall less than 3 seconds"},
             {"Login page", "The student shall be able to login if they already met their academic advisor"},
@@ -31,13 +31,14 @@ public class DummyDataModule extends RequirementModule {
             {"Login page", "The student shall be able to search subject with unit code or unit name"},
             {"Register Subject page", "The student should be able to register subjects"}
         };
-        for(String[] arr: samples)
+        for (String[] arr : samples) {
             this.generatedRequirements.add(new Requirement(arr[0], arr[1]));
-    }    
+        }
+    }
 
     @Override
     public List<String> getDependencies() {
         return null;
     }
-    
+
 }

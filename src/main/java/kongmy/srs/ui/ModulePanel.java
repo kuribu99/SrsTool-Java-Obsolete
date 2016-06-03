@@ -19,11 +19,11 @@ public class ModulePanel extends javax.swing.JPanel {
      */
     public ModulePanel(String moduleName, List<Requirement> requirements) {
         initComponents();
-        
+
         this.moduleName = moduleName;
-        this.requirements = requirements;        
-        
-        for(int i = 0; i < requirements.size(); i++) {
+        this.requirements = requirements;
+
+        for (int i = 0; i < requirements.size(); i++) {
             RequirementPanel panel = new RequirementPanel();
             panel.setRequirement(i + 1, requirements.get(i).toString());
             add(panel);
@@ -46,7 +46,7 @@ public class ModulePanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     private final String moduleName;
     private final List<Requirement> requirements;
-    
+
     public String getModuleName() {
         return moduleName;
     }

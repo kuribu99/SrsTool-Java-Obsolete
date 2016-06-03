@@ -20,17 +20,17 @@ public class CheckboxDualPanel extends javax.swing.JPanel {
     public CheckboxDualPanel() {
         initComponents();
     }
-    
+
     public CheckboxDualPanel(String leftPanelName, String rightPanelName) {
         this();
         setPanelNames(leftPanelName, rightPanelName);
-    }    
-    
+    }
+
     public CheckboxDualPanel(
             String leftPanelName, String rightPanelName,
             List<String> leftData, List<String> rightData,
             ActionListener leftDataActionListener, ActionListener rightDataActionListener) {
-        
+
         this(leftPanelName, rightPanelName);
         PopulateData(leftData, rightData, leftDataActionListener, rightDataActionListener);
     }
@@ -90,62 +90,63 @@ public class CheckboxDualPanel extends javax.swing.JPanel {
         ((TitledBorder) this.leftPanel.getBorder()).setTitle(leftPanelName);
         ((TitledBorder) this.rightPanel.getBorder()).setTitle(rightPanelName);
     }
-    
+
     public JPanel getLeftPanel() {
         return this.leftPanel;
     }
-    
+
     public JPanel getRightPanel() {
         return this.rightPanel;
     }
-    
+
     private ActionListener getPanelTransferListener(JCheckBox cbx) {
         return (e) -> {
-                if(cbx.isSelected()) {
-                    rightPanel.remove(cbx);
-                    leftPanel.add(cbx);
-                }
-                else {
-                    leftPanel.remove(cbx);
-                    rightPanel.add(cbx);                    
-                }
-                UpdatePanels();
-            };
+            if (cbx.isSelected()) {
+                rightPanel.remove(cbx);
+                leftPanel.add(cbx);
+            } else {
+                leftPanel.remove(cbx);
+                rightPanel.add(cbx);
+            }
+            UpdatePanels();
+        };
     }
-    
+
     public void PopulateData(
             List<String> leftData, List<String> rightData,
             ActionListener leftDataActionListener, ActionListener rightDataActionListener) {
-        
+
         ClearPanels();
-        
+
         leftData.forEach((datum) -> {
             JCheckBox cbx = new JCheckBox(datum, true);
             cbx.addActionListener(getPanelTransferListener(cbx));
-            if(leftDataActionListener != null)
+            if (leftDataActionListener != null) {
                 cbx.addActionListener(leftDataActionListener);
+            }
             leftPanel.add(cbx);
         });
-        
+
         rightData.forEach((datum) -> {
             JCheckBox cbx = new JCheckBox(datum, false);
             cbx.addActionListener(getPanelTransferListener(cbx));
-            if(rightDataActionListener != null)
+            if (rightDataActionListener != null) {
                 cbx.addActionListener(rightDataActionListener);
+            }
             rightPanel.add(cbx);
         });
-        
+
         UpdatePanels();
     }
-    
+
     public void UpdatePanels() {
         leftPanel.setSize(leftPanel.getPreferredSize());
         rightPanel.setSize(rightPanel.getPreferredSize());
     }
-    
+
     public void ClearPanels() {
         leftPanel.removeAll();
         rightPanel.removeAll();
     }
-    
+
 }

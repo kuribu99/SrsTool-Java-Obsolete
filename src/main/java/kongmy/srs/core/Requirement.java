@@ -10,26 +10,26 @@ package kongmy.srs.core;
  * @author Kong My
  */
 public class Requirement {
-    
+
     private String module;
     private String requirement;
-    
+
     public Requirement(String module, String requirement) {
         this.module = module;
         this.requirement = requirement;
     }
-    
+
     public String getModule() {
         return this.module;
     }
-    
+
     public String getRequirement() {
         return this.requirement;
     }
-    
+
     @Override
     public String toString() {
         return requirement;
     }
-    
+
 }

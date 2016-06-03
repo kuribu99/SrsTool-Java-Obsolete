@@ -134,44 +134,41 @@ public class ModifyModuleDialog extends javax.swing.JDialog {
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         String oldModule = list.getSelectedValue().toString();
         Object newModule = null;
-        
-        while(true) {
+
+        while (true) {
             newModule = JOptionPane.showInputDialog(
-                rootPane, 
-                "Please enter the name of module", 
-                "Add Module", 
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                null,
-                oldModule);
-            
-            if(newModule == null)
+                    rootPane,
+                    "Please enter the name of module",
+                    "Add Module",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    null,
+                    oldModule);
+
+            if (newModule == null) {
                 return;
-            else if (newModule.toString().isEmpty()) {
+            } else if (newModule.toString().isEmpty()) {
                 JOptionPane.showMessageDialog(
-                    rootPane, 
-                    "Please enter a name", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            }        
-            else if (listModel.contains(newModule)) {
-                JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "New module already exist", 
-                        "Error", 
+                        rootPane,
+                        "Please enter a name",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else if (newModule.equals(oldModule)) {
+            } else if (listModel.contains(newModule)) {
                 JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "Please enter new value for module", 
-                        "Error", 
+                        rootPane,
+                        "New module already exist",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else {
+            } else if (newModule.equals(oldModule)) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "Please enter new value for module",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 listModel.removeElement(oldModule);
                 listModel.addElement(newModule.toString().replaceAll("[\\W+]", " ").trim());
-                module.Rename(oldModule, newModule.toString());   
+                module.Rename(oldModule, newModule.toString());
                 return;
             }
         }
@@ -197,31 +194,29 @@ public class ModifyModuleDialog extends javax.swing.JDialog {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         String newModule = null;
-        
-        while(true) {
+
+        while (true) {
             newModule = JOptionPane.showInputDialog(
-                rootPane, 
-                "Please enter the name of module", 
-                "Add Module", 
-                JOptionPane.QUESTION_MESSAGE);
-            
-            if(newModule == null)
-                return;            
-            else if (newModule.isEmpty()) {
+                    rootPane,
+                    "Please enter the name of module",
+                    "Add Module",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (newModule == null) {
+                return;
+            } else if (newModule.isEmpty()) {
                 JOptionPane.showMessageDialog(
-                    rootPane, 
-                    "Please enter a name", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            }       
-            else if (listModel.contains(newModule)) {
-                JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "New module already exist", 
-                        "Error", 
+                        rootPane,
+                        "Please enter a name",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else {
+            } else if (listModel.contains(newModule)) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "New module already exist",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 listModel.addElement(newModule.replaceAll("[\\W+]", " ").trim());
                 module.AddNewModule(newModule);
                 return;

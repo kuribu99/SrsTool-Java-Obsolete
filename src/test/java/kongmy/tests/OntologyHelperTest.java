@@ -31,30 +31,31 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
  * @author Kong My
  */
 public class OntologyHelperTest {
-    
-    private final static String FILE_NAME = "OwlHelperTestFile.owl";    
-    private final static String BASE_IRI = "http://www.semanticweb.org/kongmy/ontologies/2016/5/test";    
+
+    private final static String FILE_NAME = "OwlHelperTestFile.owl";
+    private final static String BASE_IRI = "http://www.semanticweb.org/kongmy/ontologies/2016/5/test";
     private static OntologyHelper helper;
     private static OWLOntologyManager manager;
-    private static OWLDataFactory factory;;
+    private static OWLDataFactory factory;
+    ;
     private static OWLOntology ontology;
-    
+
     public static String getIRIString(String suffix) {
         return BASE_IRI + "#" + suffix;
     }
-    
+
     public static IRI getIRI(String suffix) {
         return IRI.create(getIRIString(suffix));
     }
-    
+
     public static IRI getBaseIRI() {
         return IRI.create(BASE_IRI);
     }
-    
+
     @Before
     public void setUp() throws Exception {
         helper = new OntologyHelper(FILE_NAME);
-        manager =  OWLManager.createOWLOntologyManager();
+        manager = OWLManager.createOWLOntologyManager();
         factory = manager.getOWLDataFactory();
         ontology = manager.createOntology(getBaseIRI());
         manager.saveOntology(ontology, new FileOutputStream(FILE_NAME));
@@ -63,16 +64,17 @@ public class OntologyHelperTest {
     @After
     public void tearDown() {
         File file = new File(FILE_NAME);
-        if(file.exists())
+        if (file.exists()) {
             file.delete();
+        }
     }
-    
+
     @Test
     public void TestLoad() throws Exception {
         helper.Load();
         assertEquals(getIRIString("abc"), helper.getIRI("abc").toString());
     }
-    
+
     @Test
     public void TestGetClassIndividuals() throws Exception {
         List<String> expectedResult = new ArrayList<>();
@@ -80,8 +82,8 @@ public class OntologyHelperTest {
         OWLClass cls;
         OWLIndividual ind;
         OWLClassAssertionAxiom assertion;
-        
-        for(int i = 0; i <= 5; i++) {
+
+        for (int i = 0; i <= 5; i++) {
             name = "abc_" + i;
             expectedResult.add(name);
             cls = factory.getOWLClass(getIRI("testClass"));
@@ -91,13 +93,13 @@ public class OntologyHelperTest {
         }
         manager.saveOntology(ontology, new FileOutputStream(FILE_NAME));
         helper.Load();
-        
+
         List<String> actualResult = helper.getClassIndividuals("testClass");
         expectedResult.removeAll(actualResult);
-        
+
         assertEquals(0, expectedResult.size());
     }
-    
+
     @Test
     public void TestGetTargetIndividualsByObjectProperty() throws Exception {
         List<String> expectedResult = new ArrayList<>();
@@ -106,22 +108,22 @@ public class OntologyHelperTest {
         OWLNamedIndividual source = factory.getOWLNamedIndividual(getIRI("source"));
         OWLNamedIndividual target;
         OWLObjectPropertyAssertionAxiom assertion;
-        
-        for(int i = 0; i <= 5; i++) {
+
+        for (int i = 0; i <= 5; i++) {
             name = "abc_" + i;
             expectedResult.add(name);
             target = factory.getOWLNamedIndividual(getIRI(name));
             assertion = factory.getOWLObjectPropertyAssertionAxiom(property, source, target);
             manager.addAxiom(ontology, assertion);
         }
-        
+
         manager.saveOntology(ontology, new FileOutputStream(FILE_NAME));
         helper.Load();
-        
+
         List<String> actualResult = helper.getTargetIndividualsByObjectProperty("source", "property");
         expectedResult.removeAll(actualResult);
-        
+
         assertEquals(0, expectedResult.size());
     }
-    
+
 }

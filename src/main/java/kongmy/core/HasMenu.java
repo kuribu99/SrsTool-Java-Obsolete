@@ -13,7 +13,7 @@ import javax.swing.JFrame;
  * @author Kong My
  */
 public interface HasMenu {
-    
+
     public Component getMenu(JFrame parent);
-    
+
 }

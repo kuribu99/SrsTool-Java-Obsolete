@@ -23,34 +23,33 @@ public class OntologyHelper extends OWLHelper {
 
     protected static final String DEFAULT_ONTOLOGY_IRI = "http://www.semanticweb.org/kongmy/ontologies/2016/5/srs";
     private final String fileName;
-    
+
     public OntologyHelper(String fileName) {
         super();
         this.fileName = fileName;
     }
-    
-    public boolean Load() {    
+
+    public boolean Load() {
         try {
             super.Load(fileName);
             return true;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             Logger.getLogger(OntologyHelper.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
     }
-    
+
     public String getFileName() {
         return this.fileName;
     }
-        
-    public List<String> getTargetIndividualsByObjectProperty (String sourceName, String propertyName) {
+
+    public List<String> getTargetIndividualsByObjectProperty(String sourceName, String propertyName) {
         return getObjectPropertyTargets(sourceName, propertyName).stream()
                 .map((ind) -> getString(ind.getIRI()))
                 .collect(Collectors.toList());
     }
-    
+
     public List<String> getClassIndividuals(String className) {
         return getIndividualsFromClass(className).stream()
                 .map((ind) -> getString(ind.getIRI()))
@@ -70,10 +69,9 @@ public class OntologyHelper extends OWLHelper {
             super.AddObjectProperty(null, OntologyKey.ObjectProperty.HAS_ACTOR, null);
             super.AddObjectProperty(null, OntologyKey.ObjectProperty.HAS_MODULE, null);
             Save();
-        }
-        catch (OWLOntologyStorageException|OWLOntologyCreationException|IOException ex) {
+        } catch (OWLOntologyStorageException | OWLOntologyCreationException | IOException ex) {
             Logger.getLogger(OntologyHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

@@ -36,5 +36,5 @@ public class DomainAttributeModule extends Module implements HasMenu {
         });
         return menuItem;
     }
-    
+
 }

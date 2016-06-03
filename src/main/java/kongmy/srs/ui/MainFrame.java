@@ -30,12 +30,13 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         requirementByModules = new HashMap<>();
         initComponents();
-        
+
         Application.getInstance().getModules().values().forEach((module) -> {
-            if(module instanceof HasMenu)
+            if (module instanceof HasMenu) {
                 menuModules.add(((HasMenu) module).getMenu(this));
+            }
         });
-        
+
         UpdateRequirements();
     }
 
@@ -327,15 +328,15 @@ public class MainFrame extends javax.swing.JFrame {
     private void menuItemWriteConfigurationFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemWriteConfigurationFileActionPerformed
         try {
             Application.getInstance().getConfiguration().WriteConfigurationToFile();
-            JOptionPane.showMessageDialog(this, 
-                    "Configuration file created successfully", 
-                    "Success", 
+            JOptionPane.showMessageDialog(this,
+                    "Configuration file created successfully",
+                    "Success",
                     JOptionPane.INFORMATION_MESSAGE);
-            
+
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, 
-                    ex.getMessage(), 
-                    "Error saving configuration", 
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Error saving configuration",
                     JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_menuItemWriteConfigurationFileActionPerformed
@@ -344,15 +345,15 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             Application.getInstance().getConfiguration().LoadDefaultConfiguration();
             Application.getInstance().getConfiguration().WriteConfigurationToFile();
-            JOptionPane.showMessageDialog(this, 
-                    "Configuration file created successfully", 
-                    "Success", 
+            JOptionPane.showMessageDialog(this,
+                    "Configuration file created successfully",
+                    "Success",
                     JOptionPane.INFORMATION_MESSAGE);
-            
+
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, 
-                    ex.getMessage(), 
-                    "Error saving configuration", 
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Error saving configuration",
                     JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_menuItemWriteDefaultConfigurationFileActionPerformed
@@ -363,42 +364,7 @@ public class MainFrame extends javax.swing.JFrame {
         }).start();
         this.dispose();
     }//GEN-LAST:event_menuItemRestartActionPerformed
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame().setVisible(true);
-            }
-        });
-    }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel actionPanel;
     private javax.swing.JButton btnAddFunctionalRequirement;
@@ -432,30 +398,30 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField tbxSelectedDomainAndModule;
     // End of variables declaration//GEN-END:variables
     private final Map<String, List<Requirement>> requirementByModules;
-    
+
     private void AddModuleTab(ModulePanel panel) {
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.getVerticalScrollBar().setUnitIncrement(30);
         moduleTabbedPane.addTab(panel.getModuleName(), scrollPane);
     }
-    
-    private void UpdateRequirements() {     
+
+    private void UpdateRequirements() {
         requirementByModules.clear();
         moduleTabbedPane.removeAll();
-        
+
         Application.getInstance().getModules().values().stream()
                 .filter((module) -> module instanceof RequirementModule)
                 .map((module) -> (RequirementModule) module)
-                .forEach((module)-> {
-                    module.getRequirements().forEach((requirement)-> {
-                        if(!requirementByModules.containsKey(requirement.getModule())) {
+                .forEach((module) -> {
+                    module.getRequirements().forEach((requirement) -> {
+                        if (!requirementByModules.containsKey(requirement.getModule())) {
                             requirementByModules.put(requirement.getModule(), new ArrayList<>());
                         }
                         requirementByModules.get(requirement.getModule()).add(requirement);
                     });
-        });
-        
-        requirementByModules.entrySet().forEach((entry)-> {
+                });
+
+        requirementByModules.entrySet().forEach((entry) -> {
             AddModuleTab(new ModulePanel(entry.getKey(), entry.getValue()));
         });
     }

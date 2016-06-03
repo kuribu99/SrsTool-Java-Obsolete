@@ -16,16 +16,16 @@ public class ModifyDomainDialog extends javax.swing.JDialog {
      */
     public ModifyDomainDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        
+
         initComponents();
-        
-        String[] tabs = new String[] {
-            "Module", 
-            "Entity", 
+
+        String[] tabs = new String[]{
+            "Module",
+            "Entity",
             "Action",
             "Condition"
         };
-        for(String tab: tabs) {
+        for (String tab : tabs) {
             AddTab(tab);
         }
     }

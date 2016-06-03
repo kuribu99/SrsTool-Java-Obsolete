@@ -13,7 +13,7 @@ import kongmy.srs.core.Requirement;
  * @author Kong My
  */
 public class SelectBoilerplateDialog extends javax.swing.JDialog {
-    
+
     /**
      * Creates new form NewJDialog
      */
@@ -21,7 +21,7 @@ public class SelectBoilerplateDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        
+
         result = false;
     }
 
@@ -241,8 +241,13 @@ public class SelectBoilerplateDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
     private boolean result;
     private Requirement generatedRequirement;
-    
-    public boolean getResult() { return result; }
-    public Requirement getGeneratedRequirement() { return generatedRequirement; }
+
+    public boolean getResult() {
+        return result;
+    }
+
+    public Requirement getGeneratedRequirement() {
+        return generatedRequirement;
+    }
 
 }

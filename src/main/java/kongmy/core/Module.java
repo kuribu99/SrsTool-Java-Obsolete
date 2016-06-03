@@ -12,11 +12,11 @@ import java.util.List;
  * @author Kong My
  */
 public abstract class Module {
-    
+
     public String getModuleName() {
         return this.getClass().getName();
     }
-    
+
     public abstract List<String> getDependencies();
-    
+
 }

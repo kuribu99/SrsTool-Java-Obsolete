@@ -134,44 +134,41 @@ public class ModifyActorDialog extends javax.swing.JDialog {
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         String oldActor = list.getSelectedValue().toString();
         Object newActor = null;
-        
-        while(true) {
+
+        while (true) {
             newActor = JOptionPane.showInputDialog(
-                rootPane, 
-                "Please enter the name of actor", 
-                "Add Actor", 
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                null,
-                oldActor);
-            
-            if(newActor == null)
+                    rootPane,
+                    "Please enter the name of actor",
+                    "Add Actor",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    null,
+                    oldActor);
+
+            if (newActor == null) {
                 return;
-            else if (newActor.toString().isEmpty()) {
+            } else if (newActor.toString().isEmpty()) {
                 JOptionPane.showMessageDialog(
-                    rootPane, 
-                    "Please enter a name", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            }        
-            else if (listModel.contains(newActor)) {
-                JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "New actor already exist", 
-                        "Error", 
+                        rootPane,
+                        "Please enter a name",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else if (newActor.equals(oldActor)) {
+            } else if (listModel.contains(newActor)) {
                 JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "Please enter new value for actor", 
-                        "Error", 
+                        rootPane,
+                        "New actor already exist",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else {
+            } else if (newActor.equals(oldActor)) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "Please enter new value for actor",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 listModel.removeElement(oldActor);
                 listModel.addElement(newActor.toString().replaceAll("[\\W+]", " ").trim());
-                module.Rename(oldActor, newActor.toString());   
+                module.Rename(oldActor, newActor.toString());
                 return;
             }
         }
@@ -197,31 +194,29 @@ public class ModifyActorDialog extends javax.swing.JDialog {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         String newActor = null;
-        
-        while(true) {
+
+        while (true) {
             newActor = JOptionPane.showInputDialog(
-                rootPane, 
-                "Please enter the name of actor", 
-                "Add Actor", 
-                JOptionPane.QUESTION_MESSAGE);
-            
-            if(newActor == null)
-                return;            
-            else if (newActor.isEmpty()) {
+                    rootPane,
+                    "Please enter the name of actor",
+                    "Add Actor",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            if (newActor == null) {
+                return;
+            } else if (newActor.isEmpty()) {
                 JOptionPane.showMessageDialog(
-                    rootPane, 
-                    "Please enter a name", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            }       
-            else if (listModel.contains(newActor)) {
-                JOptionPane.showMessageDialog(
-                        rootPane, 
-                        "New actor already exist", 
-                        "Error", 
+                        rootPane,
+                        "Please enter a name",
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-            else {
+            } else if (listModel.contains(newActor)) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "New actor already exist",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
                 listModel.addElement(newActor.replaceAll("[\\W+]", " ").trim());
                 module.AddNewActor(newActor);
                 return;
