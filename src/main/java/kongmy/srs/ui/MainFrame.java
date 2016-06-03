@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import kongmy.srs.core.Requirement;
@@ -20,7 +17,6 @@ import kongmy.core.Application;
 import kongmy.core.HasMenu;
 import kongmy.srs.SrsApplication;
 import kongmy.srs.core.RequirementModule;
-import sun.tools.jar.Main;
 
 /**
  *

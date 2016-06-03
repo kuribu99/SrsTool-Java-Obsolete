@@ -5,6 +5,7 @@
  */
 package kongmy.srs.modules.ui;
 
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -29,6 +30,10 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         ontologyModule.getAllDomains().forEach((val) -> domainModel.addElement(val));
         initComponents();
         UpdateData();
+        
+        moduleCheckboxPanel.setPanelNames("Included Modules", "Excluded Modules");
+        actionCheckboxPanel.setPanelNames("Included Actions", "Excluded Actions");
+        actorCheckboxPanel.setPanelNames("Included Actors", "Excluded Actors");
     }
 
     /**
@@ -44,20 +49,11 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         cbxSelectedDomain = new javax.swing.JComboBox();
         tabbedPane = new javax.swing.JTabbedPane();
         panelModules = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        panelModulesIncluded = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        panelModulesExcluded = new javax.swing.JPanel();
+        moduleCheckboxPanel = new kongmy.srs.ui.CheckboxDualPanel();
         panelActor = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        panelActorsIncluded = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        panelActorsExcluded = new javax.swing.JPanel();
+        actorCheckboxPanel = new kongmy.srs.ui.CheckboxDualPanel();
         panelAction = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        panelActionsIncluded = new javax.swing.JPanel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        panelActionsExcluded = new javax.swing.JPanel();
+        actionCheckboxPanel = new kongmy.srs.ui.CheckboxDualPanel();
         btnCancel = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
 
@@ -73,52 +69,24 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             }
         });
 
-        jScrollPane1.setBorder(null);
-
-        panelModulesIncluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Modules Included"));
-        panelModulesIncluded.setLayout(new javax.swing.BoxLayout(panelModulesIncluded, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane1.setViewportView(panelModulesIncluded);
-
-        jScrollPane2.setBorder(null);
-
-        panelModulesExcluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Modules Excluded"));
-        panelModulesExcluded.setLayout(new javax.swing.BoxLayout(panelModulesExcluded, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane2.setViewportView(panelModulesExcluded);
-
         javax.swing.GroupLayout panelModulesLayout = new javax.swing.GroupLayout(panelModules);
         panelModules.setLayout(panelModulesLayout);
         panelModulesLayout.setHorizontalGroup(
             panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelModulesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .addComponent(moduleCheckboxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelModulesLayout.setVerticalGroup(
             panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelModulesLayout.createSequentialGroup()
+            .addGroup(panelModulesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                .addComponent(moduleCheckboxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Modules", panelModules);
-
-        jScrollPane3.setBorder(null);
-
-        panelActorsIncluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Actors Included"));
-        panelActorsIncluded.setLayout(new javax.swing.BoxLayout(panelActorsIncluded, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane3.setViewportView(panelActorsIncluded);
-
-        jScrollPane4.setBorder(null);
-
-        panelActorsExcluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Actors Excluded"));
-        panelActorsExcluded.setLayout(new javax.swing.BoxLayout(panelActorsExcluded, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane4.setViewportView(panelActorsExcluded);
 
         javax.swing.GroupLayout panelActorLayout = new javax.swing.GroupLayout(panelActor);
         panelActor.setLayout(panelActorLayout);
@@ -126,53 +94,33 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelActorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .addComponent(actorCheckboxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelActorLayout.setVerticalGroup(
             panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelActorLayout.createSequentialGroup()
+            .addGroup(panelActorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4))
+                .addComponent(actorCheckboxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        tabbedPane.addTab("Actor", panelActor);
-
-        jScrollPane5.setBorder(null);
-
-        panelActionsIncluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions Included"));
-        panelActionsIncluded.setLayout(new javax.swing.BoxLayout(panelActionsIncluded, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane5.setViewportView(panelActionsIncluded);
-
-        jScrollPane6.setBorder(null);
-
-        panelActionsExcluded.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions Excluded"));
-        panelActionsExcluded.setLayout(new javax.swing.BoxLayout(panelActionsExcluded, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane6.setViewportView(panelActionsExcluded);
+        tabbedPane.addTab("Actors", panelActor);
 
         javax.swing.GroupLayout panelActionLayout = new javax.swing.GroupLayout(panelAction);
         panelAction.setLayout(panelActionLayout);
         panelActionLayout.setHorizontalGroup(
             panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelActionLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelActionLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(actionCheckboxPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         panelActionLayout.setVerticalGroup(
             panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelActionLayout.createSequentialGroup()
+            .addGroup(panelActionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
-                    .addComponent(jScrollPane6))
+                .addComponent(actionCheckboxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -248,25 +196,16 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private kongmy.srs.ui.CheckboxDualPanel actionCheckboxPanel;
+    private kongmy.srs.ui.CheckboxDualPanel actorCheckboxPanel;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cbxSelectedDomain;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JLabel lblSelectedModule1;
+    private kongmy.srs.ui.CheckboxDualPanel moduleCheckboxPanel;
     private javax.swing.JPanel panelAction;
-    private javax.swing.JPanel panelActionsExcluded;
-    private javax.swing.JPanel panelActionsIncluded;
     private javax.swing.JPanel panelActor;
-    private javax.swing.JPanel panelActorsExcluded;
-    private javax.swing.JPanel panelActorsIncluded;
     private javax.swing.JPanel panelModules;
-    private javax.swing.JPanel panelModulesExcluded;
-    private javax.swing.JPanel panelModulesIncluded;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
     private final DomainAttributeModule module;
@@ -280,135 +219,47 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         List<String> excludedModules = ontologyModule.getAllModules();
         excludedModules.removeAll(includedModules);
 
-        includedModules.forEach((module) -> {
-            JCheckBox cbx = new JCheckBox(module, true);
-            cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {
-                    ontologyModule.AddModuleTo(selectedDomain, module);
-                    panelModulesExcluded.remove(cbx);
-                    panelModulesIncluded.add(cbx);
-                }
-                else {
-                    ontologyModule.RemoveModuleFrom(selectedDomain, module);
-                    panelModulesIncluded.remove(cbx);
-                    panelModulesExcluded.add(cbx);
-                }
-                RefreshModulePanels();
-            }));
-            panelModulesIncluded.add(cbx);
-        });
+        ActionListener moduleActionListener = (e) -> {
+            JCheckBox cbx = (JCheckBox) e.getSource();
+            if (cbx.isSelected())
+                ontologyModule.AddModuleTo(selectedDomain, cbx.getText());
+            else
+                ontologyModule.RemoveModuleFrom(selectedDomain, cbx.getText());
+            moduleCheckboxPanel.UpdatePanels();
+        };        
+        moduleCheckboxPanel.PopulateData(includedModules, excludedModules, moduleActionListener, moduleActionListener);
+        moduleCheckboxPanel.UpdatePanels();
 
-        excludedModules.forEach((module) -> {
-            JCheckBox cbx = new JCheckBox(module, false);
-            cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {
-                    ontologyModule.AddModuleTo(selectedDomain, module);
-                    panelModulesExcluded.remove(cbx);
-                    panelModulesIncluded.add(cbx);
-                }
-                else {
-                    ontologyModule.RemoveModuleFrom(selectedDomain, module);
-                    panelModulesIncluded.remove(cbx);
-                    panelModulesExcluded.add(cbx);
-                }
-                RefreshModulePanels();
-            }));
-            panelModulesExcluded.add(cbx);
-        });
-
+        
         List<String> includedActors = ontologyModule.getActorsFrom(selectedDomain);
         List<String> excludedActors = ontologyModule.getAllActors();
         excludedActors.removeAll(includedActors);
 
-        includedActors.forEach((actor) -> {
-            JCheckBox cbx = new JCheckBox(actor, true);
-            cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {
-                    ontologyModule.AddActorTo(selectedDomain, actor);
-                    panelActorsExcluded.remove(cbx);
-                    panelActorsIncluded.add(cbx);
-                }
-                else {
-                    ontologyModule.RemoveActorFrom(selectedDomain, actor);
-                    panelActorsIncluded.remove(cbx);
-                    panelActorsExcluded.add(cbx);
-                }
-                RefreshActorPanels();
-            }));
-            panelActorsIncluded.add(cbx);
-        });
-
-        excludedActors.forEach((actor) -> {
-            JCheckBox cbx = new JCheckBox(actor, false);
-            cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {
-                    ontologyModule.AddActorTo(selectedDomain, actor);
-                    panelActorsExcluded.remove(cbx);
-                    panelActorsIncluded.add(cbx);
-                }
-                else {
-                    ontologyModule.RemoveActorFrom(selectedDomain, actor);
-                    panelActorsIncluded.remove(cbx);
-                    panelActorsExcluded.add(cbx);
-                }
-                RefreshActorPanels();
-            }));
-            panelActorsExcluded.add(cbx);
-        });
+        ActionListener actorActionListener = (e) -> {
+            JCheckBox cbx = (JCheckBox) e.getSource();
+            if (cbx.isSelected())
+                ontologyModule.AddActorTo(selectedDomain, cbx.getText());
+            else
+                ontologyModule.RemoveActorFrom(selectedDomain, cbx.getText());
+            actorCheckboxPanel.UpdatePanels();
+        };        
+        actorCheckboxPanel.PopulateData(includedActors, excludedActors, actorActionListener, actorActionListener);
+        actorCheckboxPanel.UpdatePanels();
 
         List<String> includedActions = ontologyModule.getActionsFrom(selectedDomain);
         List<String> excludedActions = ontologyModule.getAllActions();
         excludedActions.removeAll(includedActions);
 
-        includedActions.forEach((action) -> {
-            JCheckBox cbx = new JCheckBox(action, true);
-            cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {
-                    ontologyModule.AddActionTo(selectedDomain, action);
-                    panelActionsExcluded.remove(cbx);
-                    panelActionsIncluded.add(cbx);
-                }
-                else {
-                    ontologyModule.RemoveActionFrom(selectedDomain, action);
-                    panelActionsIncluded.remove(cbx);
-                    panelActionsExcluded.add(cbx);
-                }
-                RefreshActionPanels();
-            }));
-            panelActionsIncluded.add(cbx);
-        });
-
-        excludedActions.forEach((action) -> {
-            JCheckBox cbx = new JCheckBox(action, false);
-            cbx.addActionListener(((e)-> {
-                if(cbx.isSelected()) {
-                    ontologyModule.AddActionTo(selectedDomain, action);
-                    panelActionsExcluded.remove(cbx);
-                    panelActionsIncluded.add(cbx);
-                }
-                else {
-                    ontologyModule.RemoveActionFrom(selectedDomain, action);
-                    panelActionsIncluded.remove(cbx);
-                    panelActionsExcluded.add(cbx);
-                }
-                RefreshActionPanels();
-            }));
-            panelActionsExcluded.add(cbx);
-        });
+        ActionListener actionActionListener = (e) -> {
+            JCheckBox cbx = (JCheckBox) e.getSource();
+            if (cbx.isSelected())
+                ontologyModule.AddActionTo(selectedDomain, cbx.getText());
+            else
+                ontologyModule.RemoveActionFrom(selectedDomain, cbx.getText());
+            actionCheckboxPanel.UpdatePanels();
+        };        
+        actionCheckboxPanel.PopulateData(includedActions, excludedActions, actionActionListener, actionActionListener);
+        actionCheckboxPanel.UpdatePanels();
     }
 
-    public void RefreshModulePanels() {
-        panelModulesIncluded.setSize(panelModulesIncluded.getPreferredSize());
-        panelModulesExcluded.setSize(panelModulesExcluded.getPreferredSize());
-    }
-
-    public void RefreshActorPanels() {
-        panelActorsIncluded.setSize(panelActorsIncluded.getPreferredSize());
-        panelActorsExcluded.setSize(panelActorsExcluded.getPreferredSize());
-    }
-
-    public void RefreshActionPanels() {
-        panelActionsIncluded.setSize(panelActionsIncluded.getPreferredSize());
-        panelActionsExcluded.setSize(panelActionsExcluded.getPreferredSize());
-    }
 }

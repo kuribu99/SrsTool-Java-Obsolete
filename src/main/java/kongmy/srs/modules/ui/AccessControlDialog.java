@@ -43,7 +43,9 @@ public class AccessControlDialog extends javax.swing.JDialog {
         else {
             allDomains.forEach((val) -> domainModel.addElement(val));
             initComponents();
-            accessControlCheckboxPanel.setPanelNames("Allowed Actors", "Restricted Actors");
+            accessControlCheckboxPanel.setPanelNames("Allowed Actors", "Restricted Actors");        
+            UpdateModules();
+            UpdateActors();
         }
     }
 
@@ -111,7 +113,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
 
         tabbedPane.addTab("Access Control", accessControlPanel);
 
-        lblSelectedModule1.setText("Selected User:");
+        lblSelectedModule1.setText("Selected Actor:");
 
         cbxSelectedActor.setModel(actorModel);
         cbxSelectedActor.addItemListener(new java.awt.event.ItemListener() {

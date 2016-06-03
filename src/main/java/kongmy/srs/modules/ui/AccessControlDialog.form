@@ -180,7 +180,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="lblSelectedModule1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Selected User:"/>
+                <Property name="text" type="java.lang.String" value="Selected Actor:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="cbxSelectedActor">
