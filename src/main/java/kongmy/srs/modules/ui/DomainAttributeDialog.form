@@ -31,8 +31,6 @@
                       <Component id="lblSelectedModule1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="cbxSelectedDomain" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="btnModifyDomain" min="-2" pref="80" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -51,11 +49,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="lblSelectedModule1" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cbxSelectedDomain" alignment="3" max="32767" attributes="0"/>
-                      <Component id="btnModifyDomain" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="lblSelectedModule1" pref="23" max="32767" attributes="0"/>
+                  <Component id="cbxSelectedDomain" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="tabbedPane" max="32767" attributes="0"/>
@@ -346,11 +341,6 @@
         </Container>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="btnModifyDomain">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Modify"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="btnCancel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancel"/>

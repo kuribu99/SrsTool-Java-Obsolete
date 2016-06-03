@@ -171,8 +171,7 @@ public class ModifyModuleDialog extends javax.swing.JDialog {
             else {
                 listModel.removeElement(oldModule);
                 listModel.addElement(newModule.toString().replaceAll("[\\W+]", " ").trim());
-                module.RemoveModule(oldModule);
-                module.AddNewModule(newModule.toString());   
+                module.Rename(oldModule, newModule.toString());   
                 return;
             }
         }

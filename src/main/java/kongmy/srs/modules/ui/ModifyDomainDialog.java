@@ -171,8 +171,7 @@ public class ModifyDomainDialog extends javax.swing.JDialog {
             else {
                 listModel.removeElement(oldDomain);
                 listModel.addElement(newDomain.toString().replaceAll("[\\W+]", " ").trim());
-                module.RemoveDomain(oldDomain);
-                module.AddNewDomain(newDomain.toString());   
+                module.Rename(oldDomain, newDomain.toString());   
                 return;
             }
         }

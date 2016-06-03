@@ -171,8 +171,7 @@ public class ModifyActorDialog extends javax.swing.JDialog {
             else {
                 listModel.removeElement(oldActor);
                 listModel.addElement(newActor.toString().replaceAll("[\\W+]", " ").trim());
-                module.RemoveActor(oldActor);
-                module.AddNewActor(newActor.toString());   
+                module.Rename(oldActor, newActor.toString());   
                 return;
             }
         }

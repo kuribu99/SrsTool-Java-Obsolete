@@ -174,5 +174,9 @@ public class OntologyModule extends Module
     public void RemoveAction(String actionName) {
         helper.RemoveIndividual(OntologyKey.Class.ACTION, actionName);
     }
+    
+    public void Rename(String oldName, String newName) {
+        helper.Rename(oldName, newName);
+    }
 
 }

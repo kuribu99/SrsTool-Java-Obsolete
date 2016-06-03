@@ -171,8 +171,7 @@ public class ModifyActionDialog extends javax.swing.JDialog {
             else {
                 listModel.removeElement(oldAction);
                 listModel.addElement(newAction.toString().replaceAll("[\\W+]", " ").trim());
-                module.RemoveAction(oldAction);
-                module.AddNewAction(newAction.toString());   
+                module.Rename(oldAction, newAction.toString());
                 return;
             }
         }

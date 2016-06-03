@@ -58,7 +58,6 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         panelActionsIncluded = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         panelActionsExcluded = new javax.swing.JPanel();
-        btnModifyDomain = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
 
@@ -179,8 +178,6 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
 
         tabbedPane.addTab("Actions", panelAction);
 
-        btnModifyDomain.setText("Modify");
-
         btnCancel.setText("Cancel");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -205,9 +202,7 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblSelectedModule1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbxSelectedDomain, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnModifyDomain, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbxSelectedDomain, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -221,10 +216,8 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblSelectedModule1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbxSelectedDomain)
-                        .addComponent(btnModifyDomain)))
+                    .addComponent(lblSelectedModule1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                    .addComponent(cbxSelectedDomain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabbedPane)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -256,7 +249,6 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnModifyDomain;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cbxSelectedDomain;
     private javax.swing.JScrollPane jScrollPane1;

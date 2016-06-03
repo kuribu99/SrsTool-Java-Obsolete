@@ -8,6 +8,7 @@ package kongmy.ontology;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
+import org.semanticweb.owlapi.util.OWLEntityRenamer;
 
 /**
  *
@@ -82,6 +84,13 @@ public class OWLHelper {
             builder.append(Character.toLowerCase(ch));
         }
         return builder.toString();
+    }
+    
+    public void Rename(String oldName, String newName) {
+        Set<OWLOntology> ontologies = new HashSet<>();
+        ontologies.add(ontology);
+        OWLEntityRenamer renamer = new OWLEntityRenamer(manager, ontologies);
+        manager.applyChanges(renamer.changeIRI(getIRI(oldName), getIRI(newName)));
     }
     
     public OWLClass getClass(String className) {
