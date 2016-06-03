@@ -51,8 +51,21 @@ public class OWLHelper {
     }
     
     public static IRI getIRI(String baseIRI, String name) {
-        name = name.replaceAll("[\\W+]", " ").trim();
-        return IRI.create(baseIRI + "#" + name);
+        String[] arr = name.trim().split("[\\W+]");
+        
+        StringBuilder builder = new StringBuilder(arr[0]);
+        
+        // Concat as camelCase
+        for(int i = 1; i < arr.length; i++) {
+            if(arr[i].length() == 0)
+                continue;
+            else {
+                builder.append(Character.toUpperCase(arr[i].charAt(0)));
+                if(arr[i].length() > 1)
+                    builder.append(arr[i].substring(1));
+            }
+        }
+        return IRI.create(baseIRI + "#" + builder.toString());
     }
     
     public IRI getIRI(String name) {
@@ -61,7 +74,14 @@ public class OWLHelper {
     
     public static String getString(IRI iri) {
         String str = iri.toString();
-        return str.substring(str.indexOf("#") + 1);
+        str = str.substring(str.indexOf("#") + 1);
+        StringBuilder builder = new StringBuilder();
+        for(char ch: str.toCharArray()) {
+            if(Character.isUpperCase(ch))
+                builder.append(" ");
+            builder.append(Character.toLowerCase(ch));
+        }
+        return builder.toString();
     }
     
     public OWLClass getClass(String className) {

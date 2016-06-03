@@ -29,7 +29,7 @@ public class DomainAttributeModule extends Module implements HasMenu {
 
     @Override
     public Component getMenu(JFrame parent) {
-        JMenuItem menuItem = new JMenuItem("Configure Domain Attributres");
+        JMenuItem menuItem = new JMenuItem("Configure Domain Attributes");
         menuItem.addActionListener((e) -> {
             DomainAttributeDialog dlg = new DomainAttributeDialog(parent, true, this);
             dlg.setVisible(true);

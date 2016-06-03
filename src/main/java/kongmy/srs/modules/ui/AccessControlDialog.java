@@ -6,11 +6,11 @@
 package kongmy.srs.modules.ui;
 
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import kongmy.core.Application;
-import kongmy.srs.SrsApplication;
 import kongmy.srs.modules.AccessControlModule;
 import kongmy.srs.modules.OntologyModule;
 
@@ -26,8 +26,25 @@ public class AccessControlDialog extends javax.swing.JDialog {
     public AccessControlDialog(java.awt.Frame parent, boolean modal, AccessControlModule module) {
         super(parent, modal);
         this.module = module;
-        initComponents();
-        initData();
+        this.domainModel = new DefaultComboBoxModel<>();
+        this.moduleModel = new DefaultComboBoxModel<>();
+        this.actorModel = new DefaultComboBoxModel<>();
+
+        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+        List<String> allDomains = ontologyModule.getAllDomains();
+        if (allDomains.size() == 0) {
+            JOptionPane.showMessageDialog(
+                    parent, 
+                    "There is no domain to configure, please add at least 1 domain by modifying domains", 
+                    "No domain found", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        }
+        else {
+            allDomains.forEach((val) -> domainModel.addElement(val));
+            initComponents();
+            accessControlCheckboxPanel.setPanelNames("Allowed Actors", "Restricted Actors");
+        }
     }
 
     /**
@@ -41,18 +58,30 @@ public class AccessControlDialog extends javax.swing.JDialog {
 
         tabbedPane = new javax.swing.JTabbedPane();
         accessControlPanel = new javax.swing.JPanel();
-        accessControlCheckboxDualPanel = new kongmy.srs.ui.CheckboxDualPanel();
+        accessControlCheckboxPanel = new kongmy.srs.ui.CheckboxDualPanel();
+        lblSelectedModule = new javax.swing.JLabel();
+        cbxSelectedModule = new javax.swing.JComboBox();
         actionControlPanel = new javax.swing.JPanel();
         lblSelectedModule1 = new javax.swing.JLabel();
-        cbxSelectedUser = new javax.swing.JComboBox();
+        cbxSelectedActor = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         panelActions = new javax.swing.JPanel();
-        cbxSelectedModule = new javax.swing.JComboBox();
-        lblSelectedModule = new javax.swing.JLabel();
-        btnBack = new javax.swing.JButton();
+        cbxSelectedDomain = new javax.swing.JComboBox();
+        lblSelectedDomain = new javax.swing.JLabel();
+        btnSave = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure Access Control");
+
+        lblSelectedModule.setText("Selected Module:");
+
+        cbxSelectedModule.setModel(moduleModel);
+        cbxSelectedModule.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbxSelectedModuleItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout accessControlPanelLayout = new javax.swing.GroupLayout(accessControlPanel);
         accessControlPanel.setLayout(accessControlPanelLayout);
@@ -60,14 +89,23 @@ public class AccessControlDialog extends javax.swing.JDialog {
             accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(accessControlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(accessControlCheckboxDualPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                .addGroup(accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(accessControlCheckboxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                    .addGroup(accessControlPanelLayout.createSequentialGroup()
+                        .addComponent(lblSelectedModule, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbxSelectedModule, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         accessControlPanelLayout.setVerticalGroup(
             accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(accessControlPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, accessControlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(accessControlCheckboxDualPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(accessControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxSelectedModule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSelectedModule))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(accessControlCheckboxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -75,10 +113,10 @@ public class AccessControlDialog extends javax.swing.JDialog {
 
         lblSelectedModule1.setText("Selected User:");
 
-        cbxSelectedUser.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "lecturer", "officer", "student" }));
-        cbxSelectedUser.addItemListener(new java.awt.event.ItemListener() {
+        cbxSelectedActor.setModel(actorModel);
+        cbxSelectedActor.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbxSelectedUserItemStateChanged(evt);
+                cbxSelectedActorItemStateChanged(evt);
             }
         });
 
@@ -98,7 +136,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
                     .addGroup(actionControlPanelLayout.createSequentialGroup()
                         .addComponent(lblSelectedModule1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbxSelectedUser, 0, 333, Short.MAX_VALUE))
+                        .addComponent(cbxSelectedActor, 0, 333, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -108,7 +146,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(actionControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSelectedModule1)
-                    .addComponent(cbxSelectedUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbxSelectedActor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1)
                 .addContainerGap())
@@ -116,14 +154,26 @@ public class AccessControlDialog extends javax.swing.JDialog {
 
         tabbedPane.addTab("Action Control", actionControlPanel);
 
-        cbxSelectedModule.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Subject registration module" }));
+        cbxSelectedDomain.setModel(domainModel);
+        cbxSelectedDomain.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbxSelectedDomainItemStateChanged(evt);
+            }
+        });
 
-        lblSelectedModule.setText("Selected Module:");
+        lblSelectedDomain.setText("Selected Domain:");
 
-        btnBack.setText("Back");
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
             }
         });
 
@@ -136,12 +186,14 @@ public class AccessControlDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tabbedPane)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblSelectedModule, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblSelectedDomain, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbxSelectedModule, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(cbxSelectedDomain, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnBack, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -149,12 +201,14 @@ public class AccessControlDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbxSelectedModule, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSelectedModule))
+                    .addComponent(cbxSelectedDomain, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSelectedDomain))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tabbedPane)
+                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnBack)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSave)
+                    .addComponent(btnCancel))
                 .addContainerGap())
         );
 
@@ -163,73 +217,131 @@ public class AccessControlDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnBackActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+        ontologyModule.Save();
+        dispose();
+    }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void cbxSelectedUserItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSelectedUserItemStateChanged
-        RefreshActionPanel();
-    }//GEN-LAST:event_cbxSelectedUserItemStateChanged
+    private void cbxSelectedActorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSelectedActorItemStateChanged
+        String selectedString = cbxSelectedActor.getSelectedItem() == null?
+                "": cbxSelectedActor.getSelectedItem().toString();
+        
+        panelActions.removeAll();
+        if(!selectedString.isEmpty())
+            UpdateActionControlData();
+    }//GEN-LAST:event_cbxSelectedActorItemStateChanged
+
+    private void cbxSelectedDomainItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSelectedDomainItemStateChanged
+        UpdateModules();
+        UpdateActors();
+    }//GEN-LAST:event_cbxSelectedDomainItemStateChanged
+
+    private void cbxSelectedModuleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSelectedModuleItemStateChanged
+        String selectedString = cbxSelectedModule.getSelectedItem() == null?
+                "": cbxSelectedModule.getSelectedItem().toString();
+        
+        accessControlCheckboxPanel.ClearPanels();
+        if(!selectedString.isEmpty())
+            UpdateAccessControlData();
+    }//GEN-LAST:event_cbxSelectedModuleItemStateChanged
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+        ontologyModule.Load();
+        dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private kongmy.srs.ui.CheckboxDualPanel accessControlCheckboxDualPanel;
+    private kongmy.srs.ui.CheckboxDualPanel accessControlCheckboxPanel;
     private javax.swing.JPanel accessControlPanel;
     private javax.swing.JPanel actionControlPanel;
-    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JComboBox cbxSelectedActor;
+    private javax.swing.JComboBox cbxSelectedDomain;
     private javax.swing.JComboBox cbxSelectedModule;
-    private javax.swing.JComboBox cbxSelectedUser;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblSelectedDomain;
     private javax.swing.JLabel lblSelectedModule;
     private javax.swing.JLabel lblSelectedModule1;
     private javax.swing.JPanel panelActions;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
-    private List<String> availableActions;
     private final AccessControlModule module;
+    private final DefaultComboBoxModel<String> domainModel;
+    private final DefaultComboBoxModel<String> moduleModel;
+    private final DefaultComboBoxModel<String> actorModel;
 
-    private void initData() {
+    private void UpdateAccessControlData() {
+        String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
         String selectedModule = cbxSelectedModule.getSelectedItem().toString();
         OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        List<String> allowedActor = ontologyModule.getActorsFromModule(selectedModule);
-        List<String> restrictedActor = ontologyModule.getActorsFromDomain(null);
+        
+        List<String> allowedActor = ontologyModule.getActorsFrom(selectedModule);
+        List<String> restrictedActor = ontologyModule.getActorsFrom(selectedDomain);
         restrictedActor.removeAll(allowedActor);
 
         ActionListener moduleAccessListener = (e) -> {
             JCheckBox cbx = (JCheckBox) e.getSource();
-            if(cbx.isSelected())
-                ontologyModule.AddActorToModule(selectedModule, cbx.getText());
-            else
-                ontologyModule.RemoveActorFromModule(selectedModule, cbx.getText());
+            if (cbx.isSelected()) {
+                ontologyModule.AddActorTo(selectedModule, cbx.getText());
+            } else {
+                ontologyModule.RemoveActorFrom(selectedModule, cbx.getText());
+            }
         };
-        
-        accessControlCheckboxDualPanel.setPanelNames("Allowed Modules", "Restricted Modules");
-        accessControlCheckboxDualPanel.PopulateData(allowedActor, restrictedActor, 
+
+        accessControlCheckboxPanel.PopulateData(
+                allowedActor, restrictedActor,
                 moduleAccessListener, moduleAccessListener);
-        
-        RefreshActionPanel();
     }
 
-    public void RefreshActionPanel() {
-        panelActions.removeAll();
-
-        String selectedModule = cbxSelectedModule.getSelectedItem().toString();
+    public void UpdateActionControlData() {
+        String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
+        String selectedActor = cbxSelectedActor.getSelectedItem().toString();
         OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
 
-        availableActions = ontologyModule.getAllActions();
-        availableActions.forEach((action) -> {
-            JCheckBox cbx = new JCheckBox(action, false);
-            cbx.addActionListener(((e)-> {
-                if(cbx.isSelected())
-                    ontologyModule.AddActionToModule(selectedModule, action);
-                else                    
-                    ontologyModule.RemoveActionFromModule(selectedModule, action);
+        List<String> selectedActions = ontologyModule.getActionsFrom(selectedActor);
+        List<String> notSelectedActions = ontologyModule.getActionsFrom(selectedDomain);
+        notSelectedActions.removeAll(selectedActions);
+
+        selectedActions.forEach((action) -> {
+            JCheckBox cbx = new JCheckBox(action, true);
+            cbx.addActionListener(((e) -> {
+                if (cbx.isSelected()) 
+                    ontologyModule.AddActionTo(selectedActor, action);
+                else
+                    ontologyModule.RemoveActionFrom(selectedActor, action);                
             }));
             panelActions.add(cbx);
         });
-        panelActions.validate();
-    }
 
-    public void RefreshActionControlPanel() {
+        notSelectedActions.forEach((action) -> {
+            JCheckBox cbx = new JCheckBox(action, false);
+            cbx.addActionListener(((e) -> {
+                if (cbx.isSelected())
+                    ontologyModule.AddActionTo(selectedActor, action);
+                else
+                    ontologyModule.RemoveActionFrom(selectedActor, action);
+            }));
+            panelActions.add(cbx);
+        });
         panelActions.setSize(panelActions.getPreferredSize());
     }
+
+    private void UpdateModules() {
+        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+        List<String> modules = ontologyModule.getModulesFrom(cbxSelectedDomain.getSelectedItem().toString());
+        moduleModel.removeAllElements();
+        modules.forEach((val) -> moduleModel.addElement(val));
+        
+    }
+
+    private void UpdateActors() {
+        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+        List<String> modules = ontologyModule.getActorsFrom(cbxSelectedDomain.getSelectedItem().toString());
+        actorModel.removeAllElements();
+        modules.forEach((val) -> actorModel.addElement(val));  
+    }
+
 }

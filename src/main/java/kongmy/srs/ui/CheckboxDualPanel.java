@@ -117,6 +117,8 @@ public class CheckboxDualPanel extends javax.swing.JPanel {
             List<String> leftData, List<String> rightData,
             ActionListener leftDataActionListener, ActionListener rightDataActionListener) {
         
+        ClearPanels();
+        
         leftData.forEach((datum) -> {
             JCheckBox cbx = new JCheckBox(datum, true);
             cbx.addActionListener(getPanelTransferListener(cbx));
@@ -129,7 +131,7 @@ public class CheckboxDualPanel extends javax.swing.JPanel {
             JCheckBox cbx = new JCheckBox(datum, false);
             cbx.addActionListener(getPanelTransferListener(cbx));
             if(rightDataActionListener != null)
-            cbx.addActionListener(rightDataActionListener);
+                cbx.addActionListener(rightDataActionListener);
             rightPanel.add(cbx);
         });
         
@@ -137,10 +139,13 @@ public class CheckboxDualPanel extends javax.swing.JPanel {
     }
     
     public void UpdatePanels() {
-        leftPanel.validate();
-        rightPanel.validate();
-//        leftPanel.setSize(leftPanel.getPreferredSize());
-//        rightPanel.setSize(rightPanel.getPreferredSize());
+        leftPanel.setSize(leftPanel.getPreferredSize());
+        rightPanel.setSize(rightPanel.getPreferredSize());
+    }
+    
+    public void ClearPanels() {
+        leftPanel.removeAll();
+        rightPanel.removeAll();
     }
     
 }

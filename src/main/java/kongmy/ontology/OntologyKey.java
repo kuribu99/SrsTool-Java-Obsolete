@@ -19,9 +19,9 @@ public final class OntologyKey {
     }
     
     public static final class ObjectProperty {
-        public static final String HAS_ACTOR = "has actor";
-        public static final String HAS_MODULE = "has module";
-        public static final String HAS_ACTION = "has action";
+        public static final String HAS_ACTOR = "hasActor";
+        public static final String HAS_MODULE = "hasModule";
+        public static final String HAS_ACTION = "hasAction";
     }
     
 }

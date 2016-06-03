@@ -107,60 +107,40 @@ public class OntologyModule extends Module
         return helper.getClassIndividuals(OntologyKey.Class.ACTION);
     }
 
-    public List<String> getModulesFromDomain(String domainName) {
-        return helper.getTargetIndividualsByObjectProperty(domainName, OntologyKey.ObjectProperty.HAS_MODULE);
+    public List<String> getModulesFrom(String sourceName) {
+        return helper.getTargetIndividualsByObjectProperty(sourceName, OntologyKey.ObjectProperty.HAS_MODULE);
     }
 
-    public List<String> getActorsFromDomain(String domainName) {
-        return helper.getTargetIndividualsByObjectProperty(domainName, OntologyKey.ObjectProperty.HAS_ACTOR);
+    public List<String> getActorsFrom(String sourceName) {
+        return helper.getTargetIndividualsByObjectProperty(sourceName, OntologyKey.ObjectProperty.HAS_ACTOR);
     }
 
-    public List<String> getActionsFromDomain(String domainName) {
-        return helper.getTargetIndividualsByObjectProperty(domainName, OntologyKey.ObjectProperty.HAS_ACTION);
+    public List<String> getActionsFrom(String sourceName) {
+        return helper.getTargetIndividualsByObjectProperty(sourceName, OntologyKey.ObjectProperty.HAS_ACTION);
     }
 
-    public List<String> getActorsFromModule(String moduleName) {
-        return helper.getTargetIndividualsByObjectProperty(moduleName, OntologyKey.ObjectProperty.HAS_ACTOR);
+    public void AddModuleTo(String sourceName, String moduleName) {
+        helper.AddObjectPropertyAssertion(sourceName, OntologyKey.ObjectProperty.HAS_MODULE, moduleName);
     }
 
-    public void AddModuleToDomain(String domainName, String moduleName) {
-        helper.AddObjectPropertyAssertion(domainName, OntologyKey.ObjectProperty.HAS_MODULE, moduleName);
+    public void RemoveModuleFrom(String sourceName, String moduleName) {
+        helper.RemoveObjectPropertyAssertion(sourceName, OntologyKey.ObjectProperty.HAS_MODULE, moduleName);
     }
 
-    public void RemoveModuleFromDomain(String domainName, String moduleName) {
-        helper.RemoveObjectPropertyAssertion(domainName, OntologyKey.ObjectProperty.HAS_MODULE, moduleName);
+    public void AddActorTo(String sourceName, String actorName) {
+        helper.AddObjectPropertyAssertion(sourceName, OntologyKey.ObjectProperty.HAS_ACTOR, actorName);
     }
 
-    public void AddActorToDomain(String domainName, String actorName) {
-        helper.AddObjectPropertyAssertion(domainName, OntologyKey.ObjectProperty.HAS_ACTOR, actorName);
+    public void RemoveActorFrom(String sourceName, String actorName) {
+        helper.RemoveObjectPropertyAssertion(sourceName, OntologyKey.ObjectProperty.HAS_ACTOR, actorName);
     }
 
-    public void RemoveActorFromDomain(String domainName, String actorName) {
-        helper.RemoveObjectPropertyAssertion(domainName, OntologyKey.ObjectProperty.HAS_ACTOR, actorName);
+    public void AddActionTo(String sourceName, String actionName) {
+        helper.AddObjectPropertyAssertion(sourceName, OntologyKey.ObjectProperty.HAS_ACTION, actionName);
     }
 
-    public void AddActionToDomain(String domainName, String actionName) {
-        helper.AddObjectPropertyAssertion(domainName, OntologyKey.ObjectProperty.HAS_ACTION, actionName);
-    }
-
-    public void RemoveActionFromDomain(String domainName, String actionName) {
-        helper.RemoveObjectPropertyAssertion(domainName, OntologyKey.ObjectProperty.HAS_ACTION, actionName);
-    }
-    
-    public void AddActorToModule(String moduleName, String actorName) {
-        helper.AddObjectPropertyAssertion(moduleName, OntologyKey.ObjectProperty.HAS_ACTOR, actorName);
-    }
-
-    public void RemoveActorFromModule(String moduleName, String actorName) {
-        helper.RemoveObjectPropertyAssertion(moduleName, OntologyKey.ObjectProperty.HAS_ACTOR, actorName);
-    }
-    
-    public void AddActionToModule(String moduleName, String actionName) {
-        helper.AddObjectPropertyAssertion(moduleName, OntologyKey.ObjectProperty.HAS_ACTION, actionName);
-    }
-
-    public void RemoveActionFromModule(String moduleName, String actionName) {
-        helper.RemoveObjectPropertyAssertion(moduleName, OntologyKey.ObjectProperty.HAS_ACTION, actionName);
+    public void RemoveActionFrom(String sourceName, String actionName) {
+        helper.RemoveObjectPropertyAssertion(sourceName, OntologyKey.ObjectProperty.HAS_ACTION, actionName);
     }
     
     public void AddNewDomain(String domainName) {

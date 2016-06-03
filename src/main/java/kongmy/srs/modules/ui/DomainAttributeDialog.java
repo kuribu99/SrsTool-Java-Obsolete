@@ -6,6 +6,7 @@
 package kongmy.srs.modules.ui;
 
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import kongmy.core.Application;
 import kongmy.srs.modules.DomainAttributeModule;
@@ -23,6 +24,9 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
     public DomainAttributeDialog(java.awt.Frame parent, boolean modal, DomainAttributeModule module) {
         super(parent, modal);
         this.module = module;
+        this.domainModel = new DefaultComboBoxModel<>();
+        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+        ontologyModule.getAllDomains().forEach((val) -> domainModel.addElement(val));
         initComponents();
         UpdateData();
     }
@@ -40,47 +44,35 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         cbxSelectedDomain = new javax.swing.JComboBox();
         tabbedPane = new javax.swing.JTabbedPane();
         panelModules = new javax.swing.JPanel();
-        btnModifyModule = new javax.swing.JButton();
-        lblModuleFilter = new javax.swing.JLabel();
-        tbxModuleFilter = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         panelModulesIncluded = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         panelModulesExcluded = new javax.swing.JPanel();
         panelActor = new javax.swing.JPanel();
-        btnModifyActor = new javax.swing.JButton();
-        lblActorFilter = new javax.swing.JLabel();
-        tbxActorFilter = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         panelActorsIncluded = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         panelActorsExcluded = new javax.swing.JPanel();
         panelAction = new javax.swing.JPanel();
-        btnModifyActions = new javax.swing.JButton();
-        lblActionFilter = new javax.swing.JLabel();
-        tbxActionFilter = new javax.swing.JTextField();
         jScrollPane5 = new javax.swing.JScrollPane();
         panelActionsIncluded = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         panelActionsExcluded = new javax.swing.JPanel();
         btnModifyDomain = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure Domain Attributes");
 
         lblSelectedModule1.setText("Selected Domain:");
 
-        cbxSelectedDomain.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "university subject registration system", "university venue booking system", " " }));
+        cbxSelectedDomain.setModel(domainModel);
         cbxSelectedDomain.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbxSelectedDomainItemStateChanged(evt);
             }
         });
-
-        btnModifyModule.setText("Modify");
-
-        lblModuleFilter.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblModuleFilter.setText("Filter");
 
         jScrollPane1.setBorder(null);
 
@@ -99,42 +91,23 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         panelModulesLayout.setHorizontalGroup(
             panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelModulesLayout.createSequentialGroup()
-                .addGroup(panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelModulesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2))
-                    .addGroup(panelModulesLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(lblModuleFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tbxModuleFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                        .addComponent(btnModifyModule, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelModulesLayout.setVerticalGroup(
             panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelModulesLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelModulesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnModifyModule)
-                    .addComponent(lblModuleFilter)
-                    .addComponent(tbxModuleFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelModulesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Modules", panelModules);
-
-        btnModifyActor.setText("Modify");
-
-        lblActorFilter.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblActorFilter.setText("Filter");
 
         jScrollPane3.setBorder(null);
 
@@ -153,42 +126,23 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         panelActorLayout.setHorizontalGroup(
             panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelActorLayout.createSequentialGroup()
-                .addGroup(panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelActorLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane4))
-                    .addGroup(panelActorLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(lblActorFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tbxActorFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                        .addComponent(btnModifyActor, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelActorLayout.setVerticalGroup(
             panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelActorLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelActorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                .addGroup(panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                     .addComponent(jScrollPane4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelActorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnModifyActor)
-                    .addComponent(lblActorFilter)
-                    .addComponent(tbxActorFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Actor", panelActor);
-
-        btnModifyActions.setText("Modify");
-
-        lblActionFilter.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblActionFilter.setText("Filter");
 
         jScrollPane5.setBorder(null);
 
@@ -207,39 +161,39 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         panelActionLayout.setHorizontalGroup(
             panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelActionLayout.createSequentialGroup()
-                .addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(panelActionLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane6))
-                    .addGroup(panelActionLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(lblActionFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tbxActionFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                        .addComponent(btnModifyActions, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelActionLayout.setVerticalGroup(
             panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelActionLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelActionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                .addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                     .addComponent(jScrollPane6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnModifyActions)
-                    .addComponent(lblActionFilter)
-                    .addComponent(tbxActionFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Actions", panelAction);
 
         btnModifyDomain.setText("Modify");
+
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -248,13 +202,18 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tabbedPane)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblSelectedModule1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cbxSelectedDomain, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnModifyDomain, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnModifyDomain, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tabbedPane))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -266,8 +225,12 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cbxSelectedDomain)
                         .addComponent(btnModifyDomain)))
-                .addGap(7, 7, 7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabbedPane)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancel)
+                    .addComponent(btnSave))
                 .addContainerGap())
         );
 
@@ -278,12 +241,23 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         UpdateData();
     }//GEN-LAST:event_cbxSelectedDomainItemStateChanged
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+        ontologyModule.Save();
+        dispose();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+        ontologyModule.Load();
+        dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnModifyActions;
-    private javax.swing.JButton btnModifyActor;
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnModifyDomain;
-    private javax.swing.JButton btnModifyModule;
+    private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cbxSelectedDomain;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -291,9 +265,6 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JLabel lblActionFilter;
-    private javax.swing.JLabel lblActorFilter;
-    private javax.swing.JLabel lblModuleFilter;
     private javax.swing.JLabel lblSelectedModule1;
     private javax.swing.JPanel panelAction;
     private javax.swing.JPanel panelActionsExcluded;
@@ -305,16 +276,15 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
     private javax.swing.JPanel panelModulesExcluded;
     private javax.swing.JPanel panelModulesIncluded;
     private javax.swing.JTabbedPane tabbedPane;
-    private javax.swing.JTextField tbxActionFilter;
-    private javax.swing.JTextField tbxActorFilter;
-    private javax.swing.JTextField tbxModuleFilter;
     // End of variables declaration//GEN-END:variables
     private final DomainAttributeModule module;
+    private DefaultComboBoxModel<String> domainModel;
 
     private void UpdateData() {
         OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
         String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
-        List<String> includedModules = ontologyModule.getModulesFromDomain(selectedDomain);
+        
+        List<String> includedModules = ontologyModule.getModulesFrom(selectedDomain);
         List<String> excludedModules = ontologyModule.getAllModules();
         excludedModules.removeAll(includedModules);
 
@@ -322,12 +292,12 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             JCheckBox cbx = new JCheckBox(module, true);
             cbx.addActionListener(((e)-> {
                 if(cbx.isSelected()) {
-                    ontologyModule.AddModuleToDomain(selectedDomain, module);
+                    ontologyModule.AddModuleTo(selectedDomain, module);
                     panelModulesExcluded.remove(cbx);
                     panelModulesIncluded.add(cbx);
                 }
                 else {
-                    ontologyModule.RemoveModuleFromDomain(selectedDomain, module);
+                    ontologyModule.RemoveModuleFrom(selectedDomain, module);
                     panelModulesIncluded.remove(cbx);
                     panelModulesExcluded.add(cbx);
                 }
@@ -340,12 +310,12 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             JCheckBox cbx = new JCheckBox(module, false);
             cbx.addActionListener(((e)-> {
                 if(cbx.isSelected()) {
-                    ontologyModule.AddModuleToDomain(selectedDomain, module);
+                    ontologyModule.AddModuleTo(selectedDomain, module);
                     panelModulesExcluded.remove(cbx);
                     panelModulesIncluded.add(cbx);
                 }
                 else {
-                    ontologyModule.RemoveModuleFromDomain(selectedDomain, module);
+                    ontologyModule.RemoveModuleFrom(selectedDomain, module);
                     panelModulesIncluded.remove(cbx);
                     panelModulesExcluded.add(cbx);
                 }
@@ -354,7 +324,7 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             panelModulesExcluded.add(cbx);
         });
 
-        List<String> includedActors = ontologyModule.getActorsFromDomain(selectedDomain);
+        List<String> includedActors = ontologyModule.getActorsFrom(selectedDomain);
         List<String> excludedActors = ontologyModule.getAllActors();
         excludedActors.removeAll(includedActors);
 
@@ -362,16 +332,16 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             JCheckBox cbx = new JCheckBox(actor, true);
             cbx.addActionListener(((e)-> {
                 if(cbx.isSelected()) {
-                    ontologyModule.AddActorToDomain(selectedDomain, actor);
+                    ontologyModule.AddActorTo(selectedDomain, actor);
                     panelActorsExcluded.remove(cbx);
                     panelActorsIncluded.add(cbx);
                 }
                 else {
-                    ontologyModule.RemoveActorFromDomain(selectedDomain, actor);
+                    ontologyModule.RemoveActorFrom(selectedDomain, actor);
                     panelActorsIncluded.remove(cbx);
                     panelActorsExcluded.add(cbx);
                 }
-                RefreshModulePanels();
+                RefreshActorPanels();
             }));
             panelActorsIncluded.add(cbx);
         });
@@ -380,12 +350,12 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             JCheckBox cbx = new JCheckBox(actor, false);
             cbx.addActionListener(((e)-> {
                 if(cbx.isSelected()) {
-                    ontologyModule.AddActorToDomain(selectedDomain, actor);
+                    ontologyModule.AddActorTo(selectedDomain, actor);
                     panelActorsExcluded.remove(cbx);
                     panelActorsIncluded.add(cbx);
                 }
                 else {
-                    ontologyModule.RemoveActorFromDomain(selectedDomain, actor);
+                    ontologyModule.RemoveActorFrom(selectedDomain, actor);
                     panelActorsIncluded.remove(cbx);
                     panelActorsExcluded.add(cbx);
                 }
@@ -394,7 +364,7 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             panelActorsExcluded.add(cbx);
         });
 
-        List<String> includedActions = ontologyModule.getActionsFromDomain(selectedDomain);
+        List<String> includedActions = ontologyModule.getActionsFrom(selectedDomain);
         List<String> excludedActions = ontologyModule.getAllActions();
         excludedActions.removeAll(includedActions);
 
@@ -402,16 +372,16 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             JCheckBox cbx = new JCheckBox(action, true);
             cbx.addActionListener(((e)-> {
                 if(cbx.isSelected()) {
-                    ontologyModule.AddActionToDomain(selectedDomain, action);
+                    ontologyModule.AddActionTo(selectedDomain, action);
                     panelActionsExcluded.remove(cbx);
                     panelActionsIncluded.add(cbx);
                 }
                 else {
-                    ontologyModule.RemoveActionFromDomain(selectedDomain, action);
+                    ontologyModule.RemoveActionFrom(selectedDomain, action);
                     panelActionsIncluded.remove(cbx);
                     panelActionsExcluded.add(cbx);
                 }
-                RefreshModulePanels();
+                RefreshActionPanels();
             }));
             panelActionsIncluded.add(cbx);
         });
@@ -420,12 +390,12 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
             JCheckBox cbx = new JCheckBox(action, false);
             cbx.addActionListener(((e)-> {
                 if(cbx.isSelected()) {
-                    ontologyModule.AddActionToDomain(selectedDomain, action);
+                    ontologyModule.AddActionTo(selectedDomain, action);
                     panelActionsExcluded.remove(cbx);
                     panelActionsIncluded.add(cbx);
                 }
                 else {
-                    ontologyModule.RemoveActionFromDomain(selectedDomain, action);
+                    ontologyModule.RemoveActionFrom(selectedDomain, action);
                     panelActionsIncluded.remove(cbx);
                     panelActionsExcluded.add(cbx);
                 }
