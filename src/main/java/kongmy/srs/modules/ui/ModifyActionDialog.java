@@ -240,5 +240,5 @@ public class ModifyActionDialog extends javax.swing.JDialog {
     private javax.swing.JList list;
     // End of variables declaration//GEN-END:variables
     private final OntologyModule module;
-    private DefaultListModel<String> listModel;
+    private final DefaultListModel<String> listModel;
 }

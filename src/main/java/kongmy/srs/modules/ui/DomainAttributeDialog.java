@@ -9,8 +9,6 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
-import kongmy.core.Application;
-import kongmy.srs.modules.DomainAttributeModule;
 import kongmy.srs.modules.OntologyModule;
 
 /**
@@ -22,12 +20,13 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
     /**
      * Creates new form DomainAttributeDialog
      */
-    public DomainAttributeDialog(java.awt.Frame parent, boolean modal, DomainAttributeModule module) {
+    public DomainAttributeDialog(java.awt.Frame parent, boolean modal, OntologyModule module) {
         super(parent, modal);
         this.module = module;
         this.domainModel = new DefaultComboBoxModel<>();
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        ontologyModule.getAllDomains().forEach((val) -> domainModel.addElement(val));
+
+        module.getAllDomains().forEach((val) -> domainModel.addElement(val));
+
         initComponents();
         UpdateData();
 
@@ -183,14 +182,12 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cbxSelectedDomainItemStateChanged
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        ontologyModule.Save();
+        module.Save();
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        ontologyModule.Load();
+        module.Load();
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
@@ -207,55 +204,54 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
     private javax.swing.JPanel panelModules;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
-    private final DomainAttributeModule module;
-    private DefaultComboBoxModel<String> domainModel;
+    private final OntologyModule module;
+    private final DefaultComboBoxModel<String> domainModel;
 
     private void UpdateData() {
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
         String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
 
-        List<String> includedModules = ontologyModule.getModulesFrom(selectedDomain);
-        List<String> excludedModules = ontologyModule.getAllModules();
+        List<String> includedModules = module.getModulesFrom(selectedDomain);
+        List<String> excludedModules = module.getAllModules();
         excludedModules.removeAll(includedModules);
 
         ActionListener moduleActionListener = (e) -> {
             JCheckBox cbx = (JCheckBox) e.getSource();
             if (cbx.isSelected()) {
-                ontologyModule.AddModuleTo(selectedDomain, cbx.getText());
+                module.AddModuleTo(selectedDomain, cbx.getText());
             } else {
-                ontologyModule.RemoveModuleFrom(selectedDomain, cbx.getText());
+                module.RemoveModuleFrom(selectedDomain, cbx.getText());
             }
             moduleCheckboxPanel.UpdatePanels();
         };
         moduleCheckboxPanel.PopulateData(includedModules, excludedModules, moduleActionListener, moduleActionListener);
         moduleCheckboxPanel.UpdatePanels();
 
-        List<String> includedActors = ontologyModule.getActorsFrom(selectedDomain);
-        List<String> excludedActors = ontologyModule.getAllActors();
+        List<String> includedActors = module.getActorsFrom(selectedDomain);
+        List<String> excludedActors = module.getAllActors();
         excludedActors.removeAll(includedActors);
 
         ActionListener actorActionListener = (e) -> {
             JCheckBox cbx = (JCheckBox) e.getSource();
             if (cbx.isSelected()) {
-                ontologyModule.AddActorTo(selectedDomain, cbx.getText());
+                module.AddActorTo(selectedDomain, cbx.getText());
             } else {
-                ontologyModule.RemoveActorFrom(selectedDomain, cbx.getText());
+                module.RemoveActorFrom(selectedDomain, cbx.getText());
             }
             actorCheckboxPanel.UpdatePanels();
         };
         actorCheckboxPanel.PopulateData(includedActors, excludedActors, actorActionListener, actorActionListener);
         actorCheckboxPanel.UpdatePanels();
 
-        List<String> includedActions = ontologyModule.getActionsFrom(selectedDomain);
-        List<String> excludedActions = ontologyModule.getAllActions();
+        List<String> includedActions = module.getActionsFrom(selectedDomain);
+        List<String> excludedActions = module.getAllActions();
         excludedActions.removeAll(includedActions);
 
         ActionListener actionActionListener = (e) -> {
             JCheckBox cbx = (JCheckBox) e.getSource();
             if (cbx.isSelected()) {
-                ontologyModule.AddActionTo(selectedDomain, cbx.getText());
+                module.AddActionTo(selectedDomain, cbx.getText());
             } else {
-                ontologyModule.RemoveActionFrom(selectedDomain, cbx.getText());
+                module.RemoveActionFrom(selectedDomain, cbx.getText());
             }
             actionCheckboxPanel.UpdatePanels();
         };

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import kongmy.core.Application;
 import kongmy.core.HasMenu;
 import kongmy.core.Module;
 import kongmy.srs.modules.ui.DomainAttributeDialog;
@@ -31,7 +32,8 @@ public class DomainAttributeModule extends Module implements HasMenu {
     public Component getMenu(JFrame parent) {
         JMenuItem menuItem = new JMenuItem("Configure Domain Attributes");
         menuItem.addActionListener((e) -> {
-            DomainAttributeDialog dlg = new DomainAttributeDialog(parent, true, this);
+            OntologyModule module = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+            DomainAttributeDialog dlg = new DomainAttributeDialog(parent, true, module);
             dlg.setVisible(true);
         });
         return menuItem;

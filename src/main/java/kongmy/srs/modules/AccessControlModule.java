@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import kongmy.core.Application;
 import kongmy.core.HasMenu;
 import kongmy.srs.core.RequirementModule;
 import kongmy.srs.modules.ui.AccessControlDialog;
@@ -40,7 +41,8 @@ public class AccessControlModule extends RequirementModule implements HasMenu {
     public Component getMenu(JFrame parent) {
         JMenuItem menuItem = new JMenuItem("Configure Access Control");
         menuItem.addActionListener((e) -> {
-            AccessControlDialog dlg = new AccessControlDialog(parent, true, this);
+            OntologyModule module = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
+            AccessControlDialog dlg = new AccessControlDialog(parent, true, module);
             dlg.setVisible(true);
         });
         return menuItem;

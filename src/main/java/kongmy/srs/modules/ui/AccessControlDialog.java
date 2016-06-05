@@ -10,8 +10,6 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
-import kongmy.core.Application;
-import kongmy.srs.modules.AccessControlModule;
 import kongmy.srs.modules.OntologyModule;
 
 /**
@@ -23,15 +21,14 @@ public class AccessControlDialog extends javax.swing.JDialog {
     /**
      * Creates new form AccessControlDialog
      */
-    public AccessControlDialog(java.awt.Frame parent, boolean modal, AccessControlModule module) {
+    public AccessControlDialog(java.awt.Frame parent, boolean modal, OntologyModule module) {
         super(parent, modal);
         this.module = module;
         this.domainModel = new DefaultComboBoxModel<>();
         this.moduleModel = new DefaultComboBoxModel<>();
         this.actorModel = new DefaultComboBoxModel<>();
 
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        List<String> allDomains = ontologyModule.getAllDomains();
+        List<String> allDomains = module.getAllDomains();
         if (allDomains.size() == 0) {
             JOptionPane.showMessageDialog(
                     parent,
@@ -219,8 +216,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        ontologyModule.Save();
+        module.Save();
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -250,8 +246,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cbxSelectedModuleItemStateChanged
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        ontologyModule.Load();
+        module.Load();
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
@@ -271,7 +266,7 @@ public class AccessControlDialog extends javax.swing.JDialog {
     private javax.swing.JPanel panelActions;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
-    private final AccessControlModule module;
+    private final OntologyModule module;
     private final DefaultComboBoxModel<String> domainModel;
     private final DefaultComboBoxModel<String> moduleModel;
     private final DefaultComboBoxModel<String> actorModel;
@@ -279,18 +274,17 @@ public class AccessControlDialog extends javax.swing.JDialog {
     private void UpdateAccessControlData() {
         String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
         String selectedModule = cbxSelectedModule.getSelectedItem().toString();
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
 
-        List<String> allowedActor = ontologyModule.getActorsFrom(selectedModule);
-        List<String> restrictedActor = ontologyModule.getActorsFrom(selectedDomain);
+        List<String> allowedActor = module.getActorsFrom(selectedModule);
+        List<String> restrictedActor = module.getActorsFrom(selectedDomain);
         restrictedActor.removeAll(allowedActor);
 
         ActionListener moduleAccessListener = (e) -> {
             JCheckBox cbx = (JCheckBox) e.getSource();
             if (cbx.isSelected()) {
-                ontologyModule.AddActorTo(selectedModule, cbx.getText());
+                module.AddActorTo(selectedModule, cbx.getText());
             } else {
-                ontologyModule.RemoveActorFrom(selectedModule, cbx.getText());
+                module.RemoveActorFrom(selectedModule, cbx.getText());
             }
         };
 
@@ -302,19 +296,18 @@ public class AccessControlDialog extends javax.swing.JDialog {
     public void UpdateActionControlData() {
         String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
         String selectedActor = cbxSelectedActor.getSelectedItem().toString();
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
 
-        List<String> selectedActions = ontologyModule.getActionsFrom(selectedActor);
-        List<String> notSelectedActions = ontologyModule.getActionsFrom(selectedDomain);
+        List<String> selectedActions = module.getActionsFrom(selectedActor);
+        List<String> notSelectedActions = module.getActionsFrom(selectedDomain);
         notSelectedActions.removeAll(selectedActions);
 
         selectedActions.forEach((action) -> {
             JCheckBox cbx = new JCheckBox(action, true);
             cbx.addActionListener(((e) -> {
                 if (cbx.isSelected()) {
-                    ontologyModule.AddActionTo(selectedActor, action);
+                    module.AddActionTo(selectedActor, action);
                 } else {
-                    ontologyModule.RemoveActionFrom(selectedActor, action);
+                    module.RemoveActionFrom(selectedActor, action);
                 }
             }));
             panelActions.add(cbx);
@@ -324,9 +317,9 @@ public class AccessControlDialog extends javax.swing.JDialog {
             JCheckBox cbx = new JCheckBox(action, false);
             cbx.addActionListener(((e) -> {
                 if (cbx.isSelected()) {
-                    ontologyModule.AddActionTo(selectedActor, action);
+                    module.AddActionTo(selectedActor, action);
                 } else {
-                    ontologyModule.RemoveActionFrom(selectedActor, action);
+                    module.RemoveActionFrom(selectedActor, action);
                 }
             }));
             panelActions.add(cbx);
@@ -335,18 +328,16 @@ public class AccessControlDialog extends javax.swing.JDialog {
     }
 
     private void UpdateModules() {
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        List<String> modules = ontologyModule.getModulesFrom(cbxSelectedDomain.getSelectedItem().toString());
+        List<String> modules = module.getModulesFrom(cbxSelectedDomain.getSelectedItem().toString());
         moduleModel.removeAllElements();
         modules.forEach((val) -> moduleModel.addElement(val));
 
     }
 
     private void UpdateActors() {
-        OntologyModule ontologyModule = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-        List<String> modules = ontologyModule.getActorsFrom(cbxSelectedDomain.getSelectedItem().toString());
+        List<String> actors = module.getActorsFrom(cbxSelectedDomain.getSelectedItem().toString());
         actorModel.removeAllElements();
-        modules.forEach((val) -> actorModel.addElement(val));
+        actors.forEach((val) -> actorModel.addElement(val));
     }
 
 }
