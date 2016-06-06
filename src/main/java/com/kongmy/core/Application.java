@@ -22,15 +22,38 @@ public abstract class Application implements Runnable {
     protected final Configuration configuration;
     protected final Map<String, Module> modules;
     protected final Set<String> modulesNotFound;
+    protected DataContext dataContext;
 
     public Application(Configuration configuration) {
         this.configuration = configuration;
         this.modules = new HashMap<>();
         this.modulesNotFound = new HashSet<>();
+        this.dataContext = DataContext.newInstance();
     }
 
     public static Application getInstance() {
         return instance;
+    }
+    
+    public DataContext getDataContext() {
+        return dataContext;
+    }
+    
+    public void Save(String filePath) {
+        this.modules.values().stream()
+                .filter((module) -> module instanceof HasData)
+                .map((module) -> (HasData) module)
+                .forEach((module) -> module.Save(dataContext));
+        dataContext.setFilePath(filePath);
+        dataContext.Save();
+    }
+    
+    public void Load(String filePath) {
+        dataContext = DataContext.Load(filePath);
+        this.modules.values().stream()
+                .filter((module) -> module instanceof HasData)
+                .map((module) -> (HasData) module)
+                .forEach((module) -> module.Load(dataContext));
     }
 
     public Module getModule(String moduleName) {

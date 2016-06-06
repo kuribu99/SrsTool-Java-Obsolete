@@ -23,12 +23,10 @@ import com.kongmy.srs.ui.MainFrame;
 public class SrsApplication extends Application {
 
     protected final List<Requirement> userDefinedRequirements;
-    protected DataContext dataContext;
 
     public SrsApplication() {
         super(SrsConfiguration.ReadOrDefaultConfiguration());
         userDefinedRequirements = new ArrayList<>();
-        dataContext = new DataContext();
     }
 
     public static Application bootstrap() {
