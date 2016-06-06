@@ -39,7 +39,7 @@ public abstract class Application implements Runnable {
         return dataContext;
     }
     
-    public void Save(String filePath) {
+    public void SaveDataContext(String filePath) {
         this.modules.values().stream()
                 .filter((module) -> module instanceof HasData)
                 .map((module) -> (HasData) module)
@@ -48,7 +48,7 @@ public abstract class Application implements Runnable {
         dataContext.Save();
     }
     
-    public void Load(String filePath) {
+    public void LoadDataContext(String filePath) {
         dataContext = DataContext.Load(filePath);
         this.modules.values().stream()
                 .filter((module) -> module instanceof HasData)

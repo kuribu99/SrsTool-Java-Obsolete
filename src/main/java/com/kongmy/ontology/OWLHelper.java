@@ -5,6 +5,7 @@
  */
 package com.kongmy.ontology;
 
+import com.kongmy.util.CamelCaseEncoder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -53,22 +54,7 @@ public class OWLHelper {
     }
 
     public static IRI getIRI(String baseIRI, String name) {
-        String[] arr = name.trim().split("[\\W+]");
-
-        StringBuilder builder = new StringBuilder(arr[0]);
-
-        // Concat as camelCase
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i].length() == 0) {
-                continue;
-            } else {
-                builder.append(Character.toUpperCase(arr[i].charAt(0)));
-                if (arr[i].length() > 1) {
-                    builder.append(arr[i].substring(1));
-                }
-            }
-        }
-        return IRI.create(baseIRI + "#" + builder.toString());
+        return IRI.create(baseIRI + "#" + CamelCaseEncoder.encode(name));
     }
 
     public IRI getIRI(String name) {
@@ -78,14 +64,7 @@ public class OWLHelper {
     public static String getString(IRI iri) {
         String str = iri.toString();
         str = str.substring(str.indexOf("#") + 1);
-        StringBuilder builder = new StringBuilder();
-        for (char ch : str.toCharArray()) {
-            if (Character.isUpperCase(ch)) {
-                builder.append(" ");
-            }
-            builder.append(Character.toLowerCase(ch));
-        }
-        return builder.toString();
+        return CamelCaseEncoder.decode(str);
     }
 
     public void Rename(String oldName, String newName) {
