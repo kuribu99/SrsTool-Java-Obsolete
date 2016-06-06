@@ -86,6 +86,10 @@ public class OntologyModule extends Module
 
         return menu;
     }
+    
+    public void setHelper(OntologyHelper helper) {
+        this.helper = helper;
+    }
 
     public void Save() {
         helper.Save();

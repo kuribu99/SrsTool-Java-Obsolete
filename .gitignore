@@ -4,3 +4,4 @@ config.txt
 /target/
 catalog-v001.xml
 *.owl
+*.srs
