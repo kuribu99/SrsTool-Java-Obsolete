@@ -63,9 +63,9 @@ public class OntologyHelper extends OWLHelper {
             super.AddIndividual(OntologyKey.Class.ACTOR, null);
             super.AddIndividual(OntologyKey.Class.DOMAIN, null);
             super.AddIndividual(OntologyKey.Class.MODULE, null);
-            super.AddObjectProperty(null, OntologyKey.ObjectProperty.HAS_ACTION, null);
-            super.AddObjectProperty(null, OntologyKey.ObjectProperty.HAS_ACTOR, null);
-            super.AddObjectProperty(null, OntologyKey.ObjectProperty.HAS_MODULE, null);
+            super.AddObjectPropertyAssertion(null, OntologyKey.ObjectProperty.HAS_ACTION, null);
+            super.AddObjectPropertyAssertion(null, OntologyKey.ObjectProperty.HAS_ACTOR, null);
+            super.AddObjectPropertyAssertion(null, OntologyKey.ObjectProperty.HAS_MODULE, null);
             Save();
         } catch (OWLOntologyStorageException | OWLOntologyCreationException | IOException ex) {
             Logger.getLogger(OntologyHelper.class.getName()).log(Level.SEVERE, null, ex);

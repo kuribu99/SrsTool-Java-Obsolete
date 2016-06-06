@@ -105,7 +105,7 @@ public class OWLHelper {
                 : factory.getOWLNamedIndividual(getIRI(name));
     }
 
-    public OWLIndividual getNamedIndividual(String name) {
+    public OWLNamedIndividual getNamedIndividual(String name) {
         return factory.getOWLNamedIndividual(getIRI(name));
     }
 
@@ -166,11 +166,6 @@ public class OWLHelper {
     public void RemoveIndividual(String className, String individualName) {
         OWLClassAssertionAxiom axiom = getClassAxiom(className, individualName);
         manager.removeAxiom(ontology, axiom);
-    }
-
-    public void AddObjectProperty(String sourceName, String propertyName, String targetName) {
-        OWLObjectPropertyAssertionAxiom axiom = getObjectPropertyAxiom(sourceName, propertyName, targetName);
-        manager.addAxiom(ontology, axiom);
     }
 
     public void AddObjectPropertyAssertion(String sourceName, String propertyName, String targetName) {
