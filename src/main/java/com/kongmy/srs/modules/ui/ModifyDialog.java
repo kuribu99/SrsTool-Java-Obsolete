@@ -67,6 +67,11 @@ public class ModifyDialog extends javax.swing.JDialog {
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(listener.getBorderTitle()));
 
         list.setModel(listModel);
+        list.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listMouseClicked(evt);
+            }
+        });
         list.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 listValueChanged(evt);
@@ -190,7 +195,7 @@ public class ModifyDialog extends javax.swing.JDialog {
             } else {
                 listModel.removeElement(oldValue);
                 listModel.addElement(CamelCaseEncoder.transform(newValue.toString()));
-                listener.onEditButtonClicked(oldValue, oldValue);
+                listener.onEditButtonClicked(oldValue, newValue.toString());
                 return;
             }
         }
@@ -249,6 +254,12 @@ public class ModifyDialog extends javax.swing.JDialog {
         btnEdit.setEnabled(selected == 1);
         btnDelete.setEnabled(selected > 0);
     }//GEN-LAST:event_listValueChanged
+
+    private void listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listMouseClicked
+        if (evt.getClickCount() == 2 && list.getSelectedValuesList().size() == 1) {
+            btnEditActionPerformed(null);
+        }
+    }//GEN-LAST:event_listMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
