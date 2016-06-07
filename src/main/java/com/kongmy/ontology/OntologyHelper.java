@@ -56,16 +56,20 @@ public class OntologyHelper extends OWLHelper {
 
     public void CreateDefaultOntologyFile() {
         try {
+            manager.getOntologies().stream().forEach((ontology) -> manager.removeOntology(ontology));
             ontology = manager.createOntology(IRI.create(DEFAULT_ONTOLOGY_IRI));
             manager.saveOntology(ontology, new FileOutputStream(fileName));
             Load();
-            super.AddIndividual(OntologyKey.Class.ACTION, null);
-            super.AddIndividual(OntologyKey.Class.ACTOR, null);
-            super.AddIndividual(OntologyKey.Class.DOMAIN, null);
-            super.AddIndividual(OntologyKey.Class.MODULE, null);
-            super.AddObjectPropertyAssertion(null, OntologyKey.ObjectProperty.HAS_ACTION, null);
-            super.AddObjectPropertyAssertion(null, OntologyKey.ObjectProperty.HAS_ACTOR, null);
-            super.AddObjectPropertyAssertion(null, OntologyKey.ObjectProperty.HAS_MODULE, null);
+
+            OntologyKey.Class.getReservedKeywords().stream()
+                    .forEach((val) -> AddIndividual(val, null));
+
+            OntologyKey.ObjectProperty.getReservedKeywords().stream()
+                    .forEach((val) -> AddObjectPropertyAssertion(null, val, null));
+
+            OntologyKey.QualityCharacteristics.getReservedKeywords().stream()
+                    .forEach((val) -> AddIndividual(OntologyKey.Class.QUALITY_CHARACTERISTICS, val));
+
             Save();
         } catch (OWLOntologyStorageException | OWLOntologyCreationException | IOException ex) {
             Logger.getLogger(OntologyHelper.class.getName()).log(Level.SEVERE, null, ex);

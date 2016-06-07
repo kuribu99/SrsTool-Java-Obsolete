@@ -6,7 +6,6 @@
 package com.kongmy.srs;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,11 +21,15 @@ import com.kongmy.srs.ui.MainFrame;
  */
 public class SrsApplication extends Application {
 
-    protected final List<Requirement> userDefinedRequirements;
+    protected final List<Requirement> generatedRequirements;
 
     public SrsApplication() {
         super(SrsConfiguration.ReadOrDefaultConfiguration());
-        userDefinedRequirements = new ArrayList<>();
+        generatedRequirements = new ArrayList<>();
+    }
+
+    public List<Requirement> getGeneratedRequirements() {
+        return this.generatedRequirements;
     }
 
     public static Application bootstrap() {

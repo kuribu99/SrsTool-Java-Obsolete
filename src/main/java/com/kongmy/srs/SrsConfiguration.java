@@ -11,9 +11,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.kongmy.core.Configuration;
 import com.kongmy.srs.modules.AccessControlModule;
+import com.kongmy.srs.modules.ActionResourceConstraintModule;
 import com.kongmy.srs.modules.DomainAttributeModule;
-import com.kongmy.srs.modules.DummyDataModule;
 import com.kongmy.srs.modules.OntologyModule;
+import com.kongmy.srs.modules.RefreshGeneratedRequirementModule;
 
 /**
  *
@@ -39,10 +40,12 @@ public class SrsConfiguration extends Configuration {
 
     private static String[] getDefaultModules() {
         return new String[]{
-            DummyDataModule.class.getName(),
+            //DummyDataModule.class.getName(),
             OntologyModule.class.getName(),
             AccessControlModule.class.getName(),
-            DomainAttributeModule.class.getName()
+            DomainAttributeModule.class.getName(),
+            RefreshGeneratedRequirementModule.class.getName(),
+            ActionResourceConstraintModule.class.getName()
         };
     }
 

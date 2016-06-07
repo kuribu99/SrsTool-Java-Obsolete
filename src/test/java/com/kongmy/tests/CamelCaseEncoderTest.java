@@ -36,4 +36,10 @@ public class CamelCaseEncoderTest {
         assertEquals(beforeEncode, CamelCaseEncoder.decode(afterEncode));
     }
 
+    @Test
+    @Parameters(method = "getParams")
+    public void TestTransform(String beforeEncode, String afterEncode) {
+        assertEquals(beforeEncode, CamelCaseEncoder.transform(afterEncode));
+    }
+
 }

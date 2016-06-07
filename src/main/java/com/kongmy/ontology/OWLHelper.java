@@ -9,7 +9,6 @@ import com.kongmy.util.CamelCaseEncoder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +27,7 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
+import org.semanticweb.owlapi.util.OWLEntityRemover;
 import org.semanticweb.owlapi.util.OWLEntityRenamer;
 
 /**
@@ -36,8 +36,8 @@ import org.semanticweb.owlapi.util.OWLEntityRenamer;
  */
 public class OWLHelper {
 
-    protected final OWLOntologyManager manager;
-    protected final OWLDataFactory factory;
+    protected OWLOntologyManager manager;
+    protected OWLDataFactory factory;
     protected OWLReasoner reasoner;
     protected String baseIRI;
     protected OWLOntology ontology;
@@ -68,9 +68,7 @@ public class OWLHelper {
     }
 
     public void Rename(String oldName, String newName) {
-        Set<OWLOntology> ontologies = new HashSet<>();
-        ontologies.add(ontology);
-        OWLEntityRenamer renamer = new OWLEntityRenamer(manager, ontologies);
+        OWLEntityRenamer renamer = new OWLEntityRenamer(manager, manager.getOntologies());
         manager.applyChanges(renamer.changeIRI(getIRI(oldName), getIRI(newName)));
     }
 
@@ -142,9 +140,10 @@ public class OWLHelper {
         manager.addAxiom(ontology, axiom);
     }
 
-    public void RemoveIndividual(String className, String individualName) {
-        OWLClassAssertionAxiom axiom = getClassAxiom(className, individualName);
-        manager.removeAxiom(ontology, axiom);
+    public void RemoveIndividual(String individualName) {
+        OWLEntityRemover remover = new OWLEntityRemover(manager, manager.getOntologies());
+        remover.visit(getNamedIndividual(individualName));
+        manager.applyChanges(remover.getChanges());
     }
 
     public void AddObjectPropertyAssertion(String sourceName, String propertyName, String targetName) {

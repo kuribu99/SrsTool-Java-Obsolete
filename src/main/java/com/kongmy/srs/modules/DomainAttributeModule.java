@@ -13,7 +13,6 @@ import javax.swing.JMenuItem;
 import com.kongmy.core.Application;
 import com.kongmy.core.HasMenu;
 import com.kongmy.core.Module;
-import com.kongmy.srs.modules.ui.AccessControlDialog;
 import com.kongmy.srs.modules.ui.DomainAttributeDialog;
 import javax.swing.JOptionPane;
 

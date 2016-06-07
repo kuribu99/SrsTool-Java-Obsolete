@@ -344,7 +344,7 @@ public class OWLHelperTest {
         manager.saveOntology(ontology, new FileOutputStream(FILE_NAME));
 
         helper.Load(FILE_NAME);
-        helper.RemoveIndividual("testClass", "testIndividual");
+        helper.RemoveIndividual("testIndividual");
         helper.Save();
 
         manager = OWLManager.createOWLOntologyManager();

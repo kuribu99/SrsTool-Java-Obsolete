@@ -15,7 +15,7 @@ public class Requirement {
     private String requirement;
 
     public Requirement(String module, String requirement) {
-        this.module = module;
+        this.module = (module != null && !module.isEmpty()) ? module : "Overall";
         this.requirement = requirement;
     }
 

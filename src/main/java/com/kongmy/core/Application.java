@@ -34,11 +34,11 @@ public abstract class Application implements Runnable {
     public static Application getInstance() {
         return instance;
     }
-    
+
     public DataContext getDataContext() {
         return dataContext;
     }
-    
+
     public void SaveDataContext(String filePath) {
         this.modules.values().stream()
                 .filter((module) -> module instanceof HasData)
@@ -47,7 +47,7 @@ public abstract class Application implements Runnable {
         dataContext.setFilePath(filePath);
         dataContext.Save();
     }
-    
+
     public void LoadDataContext(String filePath) {
         dataContext = DataContext.Load(filePath);
         this.modules.values().stream()
@@ -86,7 +86,7 @@ public abstract class Application implements Runnable {
                 .filter((module) -> module instanceof Configurable)
                 .map((module) -> (Configurable) module)
                 .forEach((conf) -> {
-                    instance.getConfiguration().AddConfiguration(conf);
+                    configuration.AddConfiguration(conf);
                 });
         this.modules.values().stream()
                 .filter((module) -> module instanceof Loadable)
@@ -120,4 +120,5 @@ public abstract class Application implements Runnable {
             return false;
         }
     }
+
 }

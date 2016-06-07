@@ -65,7 +65,23 @@ public class OntologyModule extends Module
     public Component getMenu(JFrame parent) {
         JMenu menu = new JMenu("Modify Ontology Attributes");
 
-        JMenuItem menuItem = new JMenuItem("Modify Domains");
+        JMenuItem menuItem = new JMenuItem("Create default ontology");
+        menuItem.addActionListener((e) -> {
+            if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(
+                    parent,
+                    "This will override existing ontology.\nAre you sure?",
+                    "Confirmation",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE)) {
+
+                helper.CreateDefaultOntologyFile();
+                JOptionPane.showMessageDialog(parent, "Created successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                Load();
+            }
+        });
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Modify Domains");
         menuItem.addActionListener((e) -> {
             Load();
             ModifyDialog dlg = new ModifyDialog(parent, true, new DomainDialogListener());
@@ -97,6 +113,14 @@ public class OntologyModule extends Module
         });
         menu.add(menuItem);
 
+        menuItem = new JMenuItem("Modify Resource Constraints");
+        menuItem.addActionListener((e) -> {
+            Load();
+            ModifyDialog dlg = new ModifyDialog(parent, true, new ResourceConstraintDialogListener());
+            dlg.setVisible(true);
+        });
+        menu.add(menuItem);
+
         return menu;
     }
 
@@ -105,6 +129,11 @@ public class OntologyModule extends Module
         @Override
         public void onEditButtonClicked(String oldValue, String newValue) {
             Rename(oldValue, newValue);
+        }
+
+        @Override
+        public void onDeleteButtonClicked(List<String> selectedValue) {
+            selectedValue.stream().forEach((val) -> helper.RemoveIndividual(val));
         }
 
         @Override
@@ -124,11 +153,6 @@ public class OntologyModule extends Module
         @Override
         public void onAddButtonClicked(String newValue) {
             AddNewDomain(newValue);
-        }
-
-        @Override
-        public void onDeleteButtonClicked(List<String> selectedValue) {
-            selectedValue.stream().forEach((val) -> RemoveDomain(val));
         }
 
         @Override
@@ -157,7 +181,7 @@ public class OntologyModule extends Module
 
         @Override
         public void onDeleteButtonClicked(List<String> selectedValue) {
-            selectedValue.stream().forEach((val) -> RemoveModule(val));
+            selectedValue.stream().forEach((val) -> helper.RemoveIndividual(val));
         }
 
         @Override
@@ -185,11 +209,6 @@ public class OntologyModule extends Module
         }
 
         @Override
-        public void onDeleteButtonClicked(List<String> selectedValue) {
-            selectedValue.stream().forEach((val) -> RemoveActor(val));
-        }
-
-        @Override
         public List<String> getData() {
             return getAllActors();
         }
@@ -214,11 +233,6 @@ public class OntologyModule extends Module
         }
 
         @Override
-        public void onDeleteButtonClicked(List<String> selectedValue) {
-            selectedValue.stream().forEach((val) -> RemoveAction(val));
-        }
-
-        @Override
         public List<String> getData() {
             return getAllActions();
         }
@@ -231,6 +245,30 @@ public class OntologyModule extends Module
         @Override
         public String getBorderTitle() {
             return "Actions";
+        }
+
+    }
+
+    private class ResourceConstraintDialogListener extends OntologyDialogListener {
+
+        @Override
+        public void onAddButtonClicked(String newValue) {
+            AddNewResourceConstraint(newValue);
+        }
+
+        @Override
+        public List<String> getData() {
+            return getAllResourceConstraintMetrics();
+        }
+
+        @Override
+        public String getTitle() {
+            return "Modify Resource Constraints";
+        }
+
+        @Override
+        public String getBorderTitle() {
+            return "Resource Constraints";
         }
 
     }
@@ -311,24 +349,29 @@ public class OntologyModule extends Module
         helper.AddIndividual(OntologyKey.Class.ACTION, actionName);
     }
 
-    public void RemoveDomain(String domainName) {
-        helper.RemoveIndividual(OntologyKey.Class.DOMAIN, domainName);
-    }
-
-    public void RemoveModule(String moduleName) {
-        helper.RemoveIndividual(OntologyKey.Class.MODULE, moduleName);
-    }
-
-    public void RemoveActor(String actorName) {
-        helper.RemoveIndividual(OntologyKey.Class.ACTOR, actorName);
-    }
-
-    public void RemoveAction(String actionName) {
-        helper.RemoveIndividual(OntologyKey.Class.ACTION, actionName);
-    }
-
     public void Rename(String oldName, String newName) {
         helper.Rename(oldName, newName);
+    }
+
+    public List<String> getAllResourceConstraintMetrics() {
+        return helper.getTargetIndividualsByObjectProperty(
+                OntologyKey.QualityCharacteristics.PERFORMANCE_EFFICIENCY,
+                OntologyKey.ObjectProperty.HAS_METRIC);
+    }
+
+    public void AddNewResourceConstraint(String constraintName) {
+        helper.AddIndividual(OntologyKey.Class.METRIC, constraintName);
+        this.AddResourceConstraintTo(
+                OntologyKey.QualityCharacteristics.PERFORMANCE_EFFICIENCY,
+                constraintName);
+    }
+
+    public void AddResourceConstraintTo(String sourceName, String constraintName) {
+        helper.AddObjectPropertyAssertion(sourceName, OntologyKey.ObjectProperty.HAS_METRIC, constraintName);
+    }
+
+    public void RemoveResourceConstraintFrom(String sourceName, String constraintName) {
+        helper.RemoveObjectPropertyAssertion(sourceName, OntologyKey.ObjectProperty.HAS_METRIC, constraintName);
     }
 
 }

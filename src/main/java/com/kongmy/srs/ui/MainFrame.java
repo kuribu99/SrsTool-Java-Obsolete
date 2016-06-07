@@ -405,7 +405,7 @@ public class MainFrame extends javax.swing.JFrame {
         moduleTabbedPane.addTab(panel.getModuleName(), scrollPane);
     }
 
-    private void UpdateRequirements() {
+    public void UpdateRequirements() {
         requirementByModules.clear();
         moduleTabbedPane.removeAll();
 

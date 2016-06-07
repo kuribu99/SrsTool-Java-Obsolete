@@ -3,12 +3,16 @@
 package com.kongmy.srs.modules.ui;
 
 import com.kongmy.srs.modules.OntologyModule;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.DefaultListModel;
 
 /**
  *
  * @author Kong My
  */
-public class ActionResourceContraintDialog extends javax.swing.JDialog {
+public class ActionResourceContraintDialog extends javax.swing.JDialog
+        implements ResourceContraintPanel.ResourceConstraintListener {
 
     /**
      * Creates new form ActionResourceContraintDialog
@@ -16,7 +20,12 @@ public class ActionResourceContraintDialog extends javax.swing.JDialog {
     public ActionResourceContraintDialog(java.awt.Frame parent, boolean modal, OntologyModule module) {
         super(parent, modal);
         this.module = module;
+        this.listModel = new DefaultListModel();
+        this.panelMap = new HashMap<>();
+        this.contraintMap = new HashMap<>();
+
         initComponents();
+        initData();
     }
 
     /**
@@ -28,24 +37,145 @@ public class ActionResourceContraintDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panelActions = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        actionList = new javax.swing.JList();
+        btnCancel = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        panelResourceContraints = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        panelActions.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Actions", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        panelActions.setLayout(new javax.swing.BoxLayout(panelActions, javax.swing.BoxLayout.Y_AXIS));
+
+        actionList.setModel(listModel);
+        actionList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        actionList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                actionListValueChanged(evt);
+            }
+        });
+        jScrollPane4.setViewportView(actionList);
+
+        panelActions.add(jScrollPane4);
+
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        jScrollPane1.setBorder(null);
+
+        panelResourceContraints.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Resource Constraints", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        panelResourceContraints.setLayout(new javax.swing.BoxLayout(panelResourceContraints, javax.swing.BoxLayout.Y_AXIS));
+        jScrollPane1.setViewportView(panelResourceContraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(panelActions, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 349, Short.MAX_VALUE)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelActions, javax.swing.GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancel)
+                    .addComponent(btnSave))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void actionListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_actionListValueChanged
+        int selectedIndex = actionList.getSelectedIndex();
+        panelResourceContraints.setEnabled(selectedIndex >= 0);
+
+        if (selectedIndex >= 0) {
+            panelMap.entrySet().stream().forEach((entry) -> {
+                String key = entry.getKey();
+                ResourceContraintPanel panel = entry.getValue();
+                panel.setConstraintValue(contraintMap.getOrDefault(key, ""));
+            });
+        } else {
+            panelMap.values().forEach((panel) -> {
+                panel.setCheckBoxState(false);
+                panel.setConstraintValue("");
+            });
+        }
+    }//GEN-LAST:event_actionListValueChanged
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        module.Load();
+        dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        module.Save();
+        dispose();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList actionList;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JPanel panelActions;
+    private javax.swing.JPanel panelResourceContraints;
     // End of variables declaration//GEN-END:variables
     private final OntologyModule module;
+    private final DefaultListModel listModel;
+    private final Map<String, String> contraintMap;
+    private final Map<String, ResourceContraintPanel> panelMap;
+
+    private void initData() {
+        module.getAllActions().stream().forEach((val) -> listModel.addElement(val));
+        module.getAllResourceConstraintMetrics().stream().forEach((val) -> {
+            ResourceContraintPanel panel = new ResourceContraintPanel(val, "", this);
+            panelResourceContraints.add(panel);
+            panelMap.put(val, panel);
+        });
+        panelResourceContraints.setSize(panelResourceContraints.getPreferredSize());
+        panelResourceContraints.setEnabled(false);
+    }
+
+    @Override
+    public void onCheckBoxStatedChanged(String resourceName, String value) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void onTextBoxKeyUp(String oldValue, String newValue) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

@@ -17,6 +17,8 @@ public abstract class Module {
         return this.getClass().getName();
     }
 
-    public abstract List<String> getDependencies();
+    public List<String> getDependencies() {
+        return null;
+    }
 
 }
