@@ -20,7 +20,7 @@ public class CamelCaseEncoder {
                 }
             }
         }
-        return builder.toString();
+        return builder.toString().trim();
     }
 
     public static String decode(String str) {
@@ -31,7 +31,11 @@ public class CamelCaseEncoder {
             }
             builder.append(Character.toLowerCase(ch));
         }
-        return builder.toString();
+        return builder.toString().trim();
+    }
+    
+    public static String transform(String str) {
+        return decode(encode(str));
     }
 
 }

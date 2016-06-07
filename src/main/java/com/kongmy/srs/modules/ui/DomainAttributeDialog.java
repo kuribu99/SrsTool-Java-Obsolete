@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import com.kongmy.srs.modules.OntologyModule;
-import javax.swing.JOptionPane;
 
 /**
  *

@@ -20,10 +20,7 @@ import com.kongmy.core.Loadable;
 import com.kongmy.core.Module;
 import com.kongmy.ontology.OntologyHelper;
 import com.kongmy.ontology.OntologyKey;
-import com.kongmy.srs.modules.ui.ModifyActionDialog;
-import com.kongmy.srs.modules.ui.ModifyActorDialog;
-import com.kongmy.srs.modules.ui.ModifyDomainDialog;
-import com.kongmy.srs.modules.ui.ModifyModuleDialog;
+import com.kongmy.srs.modules.ui.ModifyDialog;
 
 /**
  *
@@ -69,24 +66,175 @@ public class OntologyModule extends Module
         JMenu menu = new JMenu("Modify Ontology Attributes");
 
         JMenuItem menuItem = new JMenuItem("Modify Domains");
-        menuItem.addActionListener((e) -> new ModifyDomainDialog(parent, true, this).setVisible(true));
+        menuItem.addActionListener((e) -> {
+            Load();
+            ModifyDialog dlg = new ModifyDialog(parent, true, new DomainDialogListener());
+            dlg.setVisible(true);
+        });
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Modify Modules");
-        menuItem.addActionListener((e) -> new ModifyModuleDialog(parent, true, this).setVisible(true));
+        menuItem.addActionListener((e) -> {
+            Load();
+            ModifyDialog dlg = new ModifyDialog(parent, true, new ModuleDialogListener());
+            dlg.setVisible(true);
+        });
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Modify Actors");
-        menuItem.addActionListener((e) -> new ModifyActorDialog(parent, true, this).setVisible(true));
+        menuItem.addActionListener((e) -> {
+            Load();
+            ModifyDialog dlg = new ModifyDialog(parent, true, new ActorDialogListener());
+            dlg.setVisible(true);
+        });
         menu.add(menuItem);
 
         menuItem = new JMenuItem("Modify Actions");
-        menuItem.addActionListener((e) -> new ModifyActionDialog(parent, true, this).setVisible(true));
+        menuItem.addActionListener((e) -> {
+            Load();
+            ModifyDialog dlg = new ModifyDialog(parent, true, new ActionDialogListener());
+            dlg.setVisible(true);
+        });
         menu.add(menuItem);
 
         return menu;
     }
-    
+
+    private abstract class OntologyDialogListener implements ModifyDialog.DialogListener {
+
+        @Override
+        public void onEditButtonClicked(String oldValue, String newValue) {
+            Rename(oldValue, newValue);
+        }
+
+        @Override
+        public void onSaveButtonClicked() {
+            Save();
+        }
+
+        @Override
+        public void onCancelButtonClicked() {
+            Load();
+        }
+
+    }
+
+    private class DomainDialogListener extends OntologyDialogListener {
+
+        @Override
+        public void onAddButtonClicked(String newValue) {
+            AddNewDomain(newValue);
+        }
+
+        @Override
+        public void onDeleteButtonClicked(List<String> selectedValue) {
+            selectedValue.stream().forEach((val) -> RemoveDomain(val));
+        }
+
+        @Override
+        public List<String> getData() {
+            return getAllDomains();
+        }
+
+        @Override
+        public String getTitle() {
+            return "Modify Domain";
+        }
+
+        @Override
+        public String getBorderTitle() {
+            return "Domains";
+        }
+
+    }
+
+    private class ModuleDialogListener extends OntologyDialogListener {
+
+        @Override
+        public void onAddButtonClicked(String newValue) {
+            AddNewModule(newValue);
+        }
+
+        @Override
+        public void onDeleteButtonClicked(List<String> selectedValue) {
+            selectedValue.stream().forEach((val) -> RemoveModule(val));
+        }
+
+        @Override
+        public List<String> getData() {
+            return getAllModules();
+        }
+
+        @Override
+        public String getTitle() {
+            return "Modify Module";
+        }
+
+        @Override
+        public String getBorderTitle() {
+            return "Modules";
+        }
+
+    }
+
+    private class ActorDialogListener extends OntologyDialogListener {
+
+        @Override
+        public void onAddButtonClicked(String newValue) {
+            AddNewActor(newValue);
+        }
+
+        @Override
+        public void onDeleteButtonClicked(List<String> selectedValue) {
+            selectedValue.stream().forEach((val) -> RemoveActor(val));
+        }
+
+        @Override
+        public List<String> getData() {
+            return getAllActors();
+        }
+
+        @Override
+        public String getTitle() {
+            return "Modify Actor";
+        }
+
+        @Override
+        public String getBorderTitle() {
+            return "Actors";
+        }
+
+    }
+
+    private class ActionDialogListener extends OntologyDialogListener {
+
+        @Override
+        public void onAddButtonClicked(String newValue) {
+            AddNewAction(newValue);
+        }
+
+        @Override
+        public void onDeleteButtonClicked(List<String> selectedValue) {
+            selectedValue.stream().forEach((val) -> RemoveAction(val));
+        }
+
+        @Override
+        public List<String> getData() {
+            return getAllActions();
+        }
+
+        @Override
+        public String getTitle() {
+            return "Modify Action";
+        }
+
+        @Override
+        public String getBorderTitle() {
+            return "Actions";
+        }
+
+    }
+
     public void setHelper(OntologyHelper helper) {
         this.helper = helper;
     }

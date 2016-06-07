@@ -2,24 +2,45 @@
  */
 package com.kongmy.srs.modules.ui;
 
+import com.kongmy.util.CamelCaseEncoder;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import com.kongmy.srs.modules.OntologyModule;
 
 /**
  *
  * @author Kong My
  */
-public class ModifyActionDialog extends javax.swing.JDialog {
+public class ModifyDialog extends javax.swing.JDialog {
+
+    public interface DialogListener {
+
+        public void onAddButtonClicked(String newValue);
+
+        public void onEditButtonClicked(String oldValue, String newValue);
+
+        public void onDeleteButtonClicked(List<String> selectedValue);
+
+        public void onSaveButtonClicked();
+
+        public void onCancelButtonClicked();
+
+        public List<String> getData();
+
+        public String getTitle();
+
+        public String getBorderTitle();
+
+    }
 
     /**
      * Creates new form OntologyAttributesDialog
      */
-    public ModifyActionDialog(java.awt.Frame parent, boolean modal, OntologyModule module) {
+    public ModifyDialog(java.awt.Frame parent, boolean modal, DialogListener listener) {
         super(parent, modal);
-        this.module = module;
+        this.listener = listener;
         this.listModel = new DefaultListModel<>();
-        module.getAllActions().forEach((val) -> listModel.addElement(val));
+        listener.getData().forEach((val) -> listModel.addElement(val));
         initComponents();
     }
 
@@ -41,8 +62,9 @@ public class ModifyActionDialog extends javax.swing.JDialog {
         btnSave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle(listener.getTitle());
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions"));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(listener.getBorderTitle()));
 
         list.setModel(listModel);
         list.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -122,7 +144,7 @@ public class ModifyActionDialog extends javax.swing.JDialog {
                         .addComponent(btnDelete)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSave)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancel))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE))
                 .addContainerGap())
@@ -132,63 +154,61 @@ public class ModifyActionDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        String oldAction = list.getSelectedValue().toString();
-        Object newAction = null;
+        String oldValue = list.getSelectedValue().toString();
+        Object newValue = null;
 
         while (true) {
-            newAction = JOptionPane.showInputDialog(
+            newValue = JOptionPane.showInputDialog(
                     rootPane,
-                    "Please enter the name of action",
-                    "Add Action",
+                    "Please enter new value",
+                    "Edit Value",
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     null,
-                    oldAction);
+                    oldValue);
 
-            if (newAction == null) {
+            if (newValue == null) {
                 return;
-            } else if (newAction.toString().isEmpty()) {
+            } else if (newValue.toString().isEmpty()) {
                 JOptionPane.showMessageDialog(
                         rootPane,
-                        "Please enter a name",
+                        "Please enter a value",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
-            } else if (listModel.contains(newAction)) {
+            } else if (listModel.contains(newValue)) {
                 JOptionPane.showMessageDialog(
                         rootPane,
-                        "New action already exist",
+                        "New value already exist",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
-            } else if (newAction.equals(oldAction)) {
+            } else if (newValue.equals(oldValue)) {
                 JOptionPane.showMessageDialog(
                         rootPane,
-                        "Please enter new value for action",
+                        "Please enter a different value",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
             } else {
-                listModel.removeElement(oldAction);
-                listModel.addElement(newAction.toString().replaceAll("[\\W+]", " ").trim());
-                module.Rename(oldAction, newAction.toString());
+                listModel.removeElement(oldValue);
+                listModel.addElement(CamelCaseEncoder.transform(newValue.toString()));
+                listener.onEditButtonClicked(oldValue, oldValue);
                 return;
             }
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        list.getSelectedValuesList()
-                .forEach((val) -> {
-                    module.RemoveAction(val.toString());
-                    listModel.removeElement(val);
-                });
+        List<String> selectedValues = list.getSelectedValuesList();
+        selectedValues.stream().forEach((val) -> listModel.removeElement(val));
+        listener.onDeleteButtonClicked(selectedValues);
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-        module.Load();
+        listener.onCancelButtonClicked();
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        module.Save();
+        listener.onSaveButtonClicked();
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -198,8 +218,8 @@ public class ModifyActionDialog extends javax.swing.JDialog {
         while (true) {
             newAction = JOptionPane.showInputDialog(
                     rootPane,
-                    "Please enter the name of action",
-                    "Add Action",
+                    "Please enter new value",
+                    "Add Value",
                     JOptionPane.QUESTION_MESSAGE);
 
             if (newAction == null) {
@@ -207,18 +227,18 @@ public class ModifyActionDialog extends javax.swing.JDialog {
             } else if (newAction.isEmpty()) {
                 JOptionPane.showMessageDialog(
                         rootPane,
-                        "Please enter a name",
+                        "Please enter a value",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
             } else if (listModel.contains(newAction)) {
                 JOptionPane.showMessageDialog(
                         rootPane,
-                        "New action already exist",
+                        "New value already exist",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
             } else {
-                listModel.addElement(newAction.replaceAll("[\\W+]", " ").trim());
-                module.AddNewAction(newAction);
+                listModel.addElement(CamelCaseEncoder.transform(newAction));
+                listener.onAddButtonClicked(newAction);
                 return;
             }
         }
@@ -239,6 +259,7 @@ public class ModifyActionDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList list;
     // End of variables declaration//GEN-END:variables
-    private final OntologyModule module;
+    private final DialogListener listener;
     private final DefaultListModel<String> listModel;
+
 }

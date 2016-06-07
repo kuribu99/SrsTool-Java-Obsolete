@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import com.kongmy.srs.modules.OntologyModule;
 
 /**
