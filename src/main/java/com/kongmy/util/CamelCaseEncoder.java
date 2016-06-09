@@ -9,6 +9,9 @@ package com.kongmy.util;
 public class CamelCaseEncoder {
 
     public static String encode(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
         String[] arr = str.trim().split("[\\W+]");
         StringBuilder builder = new StringBuilder(arr[0]);
 
@@ -24,6 +27,9 @@ public class CamelCaseEncoder {
     }
 
     public static String decode(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
         StringBuilder builder = new StringBuilder();
         for (char ch : str.toCharArray()) {
             if (Character.isUpperCase(ch)) {
@@ -33,7 +39,7 @@ public class CamelCaseEncoder {
         }
         return builder.toString().trim();
     }
-    
+
     public static String transform(String str) {
         return decode(encode(str));
     }

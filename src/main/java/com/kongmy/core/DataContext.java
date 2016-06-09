@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  */
 public class DataContext {
 
+    public static final String GENERATED_REQUIREMENTS = "generatedRequirements";
     private static final String FORMAT = ".srs";
 
     private String projectName;
@@ -102,7 +103,7 @@ public class DataContext {
         dataContext.filePath = filePath;
         return dataContext;
     }
-    
+
     public boolean FileExists() {
         return new File(filePath).exists();
     }

@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import com.kongmy.srs.core.Requirement;
 import com.kongmy.core.Application;
+import com.kongmy.core.DataContext;
 import com.kongmy.core.HasMenu;
 import com.kongmy.srs.SrsApplication;
 import com.kongmy.srs.core.RequirementModule;
@@ -421,6 +422,7 @@ public class MainFrame extends javax.swing.JFrame {
                     });
                 });
 
+        Application.getInstance().getDataContext().putData(DataContext.GENERATED_REQUIREMENTS, requirementByModules);
         requirementByModules.entrySet().forEach((entry) -> {
             AddModuleTab(new ModulePanel(entry.getKey(), entry.getValue()));
         });

@@ -8,19 +8,19 @@ import com.kongmy.util.CamelCaseEncoder;
  *
  * @author Kong My
  */
-public class ResourceContraintPanel extends javax.swing.JPanel {
+public class ResourceConstraintPanel extends javax.swing.JPanel {
 
     public interface ResourceConstraintListener {
-        
-        public void onCheckBoxStatedChanged(String resourceName, String value);
 
-        public void onTextBoxKeyUp(String oldValue, String newValue);
+        public void onCheckBoxStatedChanged(boolean isChecked, String resourceName, String value);
+
+        public void onTextBoxKeyUp(String resourceName, String oldValue, String newValue);
     }
 
     /**
      * Creates new form ResourceContraintPanel
      */
-    public ResourceContraintPanel(String resourceName, String constraintValue, ResourceConstraintListener listener) {
+    public ResourceConstraintPanel(String resourceName, String constraintValue, ResourceConstraintListener listener) {
         this.resourceName = resourceName;
         this.constraintValue = constraintValue;
         this.listener = listener;
@@ -59,26 +59,28 @@ public class ResourceContraintPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(2, 2, 2)
                 .addComponent(cbxResource, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(tbxConstraint, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tbxConstraint, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tbxConstraint, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(cbxResource)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(cbxResource, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tbxConstraint, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbxConstraintKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbxConstraintKeyReleased
         String newValue = CamelCaseEncoder.transform(tbxConstraint.getText());
-        listener.onTextBoxKeyUp(constraintValue, newValue);
+        listener.onTextBoxKeyUp(resourceName, constraintValue, newValue);
         constraintValue = newValue;
         tbxConstraint.setText(constraintValue);
     }//GEN-LAST:event_tbxConstraintKeyReleased
 
     private void cbxResourceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cbxResourceStateChanged
-        listener.onCheckBoxStatedChanged(resourceName, constraintValue);
+        listener.onCheckBoxStatedChanged(cbxResource.isSelected(), resourceName, constraintValue);
     }//GEN-LAST:event_cbxResourceStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -88,13 +90,14 @@ public class ResourceContraintPanel extends javax.swing.JPanel {
     private final String resourceName;
     private String constraintValue;
     private final ResourceConstraintListener listener;
-    
+
     public void setCheckBoxState(boolean checked) {
         cbxResource.setSelected(checked);
     }
-    
+
     public void setConstraintValue(String val) {
         constraintValue = val;
+        tbxConstraint.setText(val);
     }
-    
+
 }

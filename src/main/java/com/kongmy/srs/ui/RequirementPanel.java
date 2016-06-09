@@ -61,7 +61,6 @@ public class RequirementPanel extends javax.swing.JPanel {
         lblRequirement.setBackground(new java.awt.Color(255, 255, 255));
         lblRequirement.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblRequirement.setText("Requirement");
-        lblRequirement.setToolTipText("");
         lblRequirement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 formMouseEntered(evt);

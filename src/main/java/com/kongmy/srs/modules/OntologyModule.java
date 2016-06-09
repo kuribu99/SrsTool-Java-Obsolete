@@ -365,6 +365,10 @@ public class OntologyModule extends Module
                 OntologyKey.QualityCharacteristics.PERFORMANCE_EFFICIENCY,
                 constraintName);
     }
+    
+    public List<String> getResourceConstraintFrom(String sourceName) {
+        return helper.getTargetIndividualsByObjectProperty(sourceName, OntologyKey.ObjectProperty.HAS_METRIC);
+    }
 
     public void AddResourceConstraintTo(String sourceName, String constraintName) {
         helper.AddObjectPropertyAssertion(sourceName, OntologyKey.ObjectProperty.HAS_METRIC, constraintName);

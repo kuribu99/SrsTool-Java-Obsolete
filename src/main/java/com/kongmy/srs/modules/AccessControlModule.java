@@ -15,6 +15,7 @@ import com.kongmy.core.HasMenu;
 import com.kongmy.srs.core.Requirement;
 import com.kongmy.srs.core.RequirementModule;
 import com.kongmy.srs.modules.ui.AccessControlDialog;
+import com.kongmy.util.Sentences;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,6 +24,8 @@ import javax.swing.JOptionPane;
  */
 public class AccessControlModule extends RequirementModule implements HasMenu {
 
+    private static final String MODULE_NAME = "Access Control";
+    
     public AccessControlModule() {
         super();
     }
@@ -62,49 +65,59 @@ public class AccessControlModule extends RequirementModule implements HasMenu {
     }
 
     private void GenerateActionControlRequirements(OntologyModule module) {
-        final String actorBoilerplate = "Only <actor> are allowed to access to <module>";
+        final String allowedBoilerplate = "<actor> are allowed to access to <module> module";
+        final String restrictedBoilerplate = "<actor> are restricted from accessing to <module> module";
 
         module.getAllDomains().forEach((final String domain) -> {
             module.getModulesFrom(domain).forEach((final String mod) -> {
-                String boilerplate = actorBoilerplate.replace("<module>", mod);
-                List<String> actors = module.getActorsFrom(mod);
-                String placeholderValue = null;
-                if (actors.size() == 0) {
-                    return;
-                } else if (actors.size() == 1) {
-                    placeholderValue = actors.get(0);
-                } else if (actors.size() == 2) {
-                    placeholderValue = actors.get(0) + " and " + actors.get(1);
-                } else {
-                    placeholderValue = String.join(", ", actors.subList(0, actors.size() - 1))
-                            + " and "
-                            + actors.get(actors.size() - 1);
+                List<String> allowedActors = module.getActorsFrom(mod);
+                List<String> restrictedActors = module.getActorsFrom(domain);
+                restrictedActors.removeAll(allowedActors);
+
+                if (!allowedActors.isEmpty()) {
+                    generatedRequirements.add(new Requirement(MODULE_NAME,
+                            Sentences.asSentence(
+                                    allowedBoilerplate
+                                    .replace("<module>", mod)
+                                    .replace("<actor>", Sentences.JoinArrayAsSentence(allowedActors)))));
                 }
-                generatedRequirements.add(new Requirement(mod, boilerplate.replace("<actor>", placeholderValue)));
+
+                if (!restrictedActors.isEmpty()) {
+                    generatedRequirements.add(new Requirement(MODULE_NAME,
+                            Sentences.asSentence(
+                                    restrictedBoilerplate
+                                    .replace("<module>", mod)
+                                    .replace("<actor>", Sentences.JoinArrayAsSentence(restrictedActors)))));
+                }
             });
         });
     }
 
     private void GenerateAccessControlRequirements(OntologyModule module) {
-        final String actorBoilerplate = "Only <actor> are allowed to access to <module>";
+        final String allowedBoilerplate = "<actor> are allowed to <actions>";
+        final String restrictedBoilerplate = "<actor> are not allowed to <actions>";
 
         module.getAllDomains().forEach((final String domain) -> {
-            module.getModulesFrom(domain).forEach((final String mod) -> {
-                String boilerplate = actorBoilerplate.replace("<module>", mod);
-                List<String> actors = module.getActorsFrom(mod);
-                String placeholderValue = null;
-                if (actors.size() == 0) {
-                    return;
-                } else if (actors.size() == 1) {
-                    placeholderValue = actors.get(0);
-                } else if (actors.size() == 2) {
-                    placeholderValue = actors.get(0) + " and " + actors.get(1);
-                } else {
-                    placeholderValue = String.join(", ", actors.subList(0, actors.size() - 1))
-                            + " and "
-                            + actors.get(actors.size() - 1);
+            module.getActorsFrom(domain).forEach((final String actor) -> {
+                List<String> allowedActions = module.getActionsFrom(actor);
+                List<String> restrictedActions = module.getActionsFrom(domain);
+                restrictedActions.removeAll(allowedActions);
+
+                if (!allowedActions.isEmpty()) {
+                    generatedRequirements.add(new Requirement(MODULE_NAME,
+                            Sentences.asSentence(
+                                    allowedBoilerplate
+                                    .replace("<actor>", actor)
+                                    .replace("<actions>", Sentences.JoinArrayAsSentence(allowedActions)))));
                 }
-                generatedRequirements.add(new Requirement(mod, boilerplate.replace("<actor>", placeholderValue)));
+
+                if (!restrictedActions.isEmpty()) {
+                    generatedRequirements.add(new Requirement(MODULE_NAME,
+                            Sentences.asSentence(
+                                    restrictedBoilerplate
+                                    .replace("<actor>", actor)
+                                    .replace("<actions>", Sentences.JoinArrayAsSentence(restrictedActions)))));
+                }
             });
         });
     }

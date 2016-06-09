@@ -10,13 +10,16 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import com.kongmy.core.HasMenu;
 import com.kongmy.srs.core.RequirementModule;
-import com.kongmy.srs.modules.ui.ActionResourceContraintDialog;
+import com.kongmy.srs.modules.ui.ActionResourceConstraintDialog;
+import java.util.Map;
 
 /**
  *
  * @author Kong My
  */
 public class ActionResourceConstraintModule extends RequirementModule implements HasMenu {
+
+    public static String CONSTRAINT_MAP = "resourceMap";
 
     @Override
     public List<String> getDependencies() {
@@ -29,9 +32,18 @@ public class ActionResourceConstraintModule extends RequirementModule implements
     public Component getMenu(JFrame parent) {
         JMenuItem menuItem = new JMenuItem("Configure Action Resource Constraints");
         menuItem.addActionListener((e) -> {
+            Map<String, Map<String, String>> data = (Map<String, Map<String, String>>) Application.getInstance()
+                    .getDataContext().getData(CONSTRAINT_MAP);
+            System.out.println(data);
+
             OntologyModule module = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
-            ActionResourceContraintDialog dlg = new ActionResourceContraintDialog(parent, true, module);
+            ActionResourceConstraintDialog dlg = new ActionResourceConstraintDialog(parent, true, module);
             dlg.setVisible(true);
+
+            data = (Map<String, Map<String, String>>) Application.getInstance()
+                    .getDataContext().getData(CONSTRAINT_MAP);
+            System.out.println(data);
+
         });
         return menuItem;
     }
