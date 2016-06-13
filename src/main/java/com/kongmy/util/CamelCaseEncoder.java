@@ -41,6 +41,9 @@ public class CamelCaseEncoder {
     }
 
     public static String transform(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
         return decode(encode(str));
     }
 

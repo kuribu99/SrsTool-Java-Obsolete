@@ -20,7 +20,7 @@
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Component id="cbxResource" min="-2" pref="93" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="tbxConstraint" pref="202" max="32767" attributes="0"/>
+              <Component id="tbxValue" pref="202" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -28,7 +28,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="103" groupAlignment="3" attributes="0">
               <Component id="cbxResource" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-              <Component id="tbxConstraint" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+              <Component id="tbxValue" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -44,13 +44,12 @@
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="cbxResourceStateChanged"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="tbxConstraint">
+    <Component class="javax.swing.JTextField" name="tbxValue">
       <Properties>
-        <Property name="text" type="java.lang.String" value="constraint"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="metricValue" type="code"/>
+        </Property>
       </Properties>
-      <Events>
-        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tbxConstraintKeyReleased"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>

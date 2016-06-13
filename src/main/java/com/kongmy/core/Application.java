@@ -5,6 +5,8 @@
  */
 package com.kongmy.core;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,17 +41,19 @@ public abstract class Application implements Runnable {
         return dataContext;
     }
 
-    public void SaveDataContext(String filePath) {
+    public void newDataContext() {
+        dataContext = new DataContext();
+    }
+
+    public void SaveDataContext() throws IOException {
         this.modules.values().stream()
                 .filter((module) -> module instanceof HasData)
                 .map((module) -> (HasData) module)
                 .forEach((module) -> module.Save(dataContext));
-        dataContext.setFilePath(filePath);
         dataContext.Save();
     }
 
-    public void LoadDataContext(String filePath) {
-        dataContext = DataContext.Load(filePath);
+    public void LoadData() {
         this.modules.values().stream()
                 .filter((module) -> module instanceof HasData)
                 .map((module) -> (HasData) module)
@@ -119,6 +123,10 @@ public abstract class Application implements Runnable {
             modulesNotFound.add(className);
             return false;
         }
+    }
+
+    public void setDataContext(DataContext dataContext) {
+        this.dataContext = dataContext;
     }
 
 }

@@ -18,12 +18,17 @@ import com.kongmy.core.DataContext;
 import com.kongmy.core.HasMenu;
 import com.kongmy.srs.SrsApplication;
 import com.kongmy.srs.core.RequirementModule;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /**
  *
  * @author Kong My
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements PropertyChangeListener {
 
     /**
      * Creates new form MainFrame
@@ -39,6 +44,8 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         UpdateRequirements();
+        Application.getInstance().getDataContext().addPropertyChangeListener(this);
+        UpdateTitle(DataContext.UNTITLED_PROJECT_NAME, false);
     }
 
     /**
@@ -59,12 +66,13 @@ public class MainFrame extends javax.swing.JFrame {
         moduleTabbedPane = new javax.swing.JTabbedPane();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
-        menuItemNewSRS = new javax.swing.JMenuItem();
-        menuItemOpenSRS = new javax.swing.JMenuItem();
-        separatorOpenClose = new javax.swing.JPopupMenu.Separator();
-        menuItemSaveSRS = new javax.swing.JMenuItem();
-        menuItemExportSRS = new javax.swing.JMenuItem();
-        menuItemCloseSRS = new javax.swing.JMenuItem();
+        menuItemNew = new javax.swing.JMenuItem();
+        menuItemOpen = new javax.swing.JMenuItem();
+        separatorOpen = new javax.swing.JPopupMenu.Separator();
+        menuItemSave = new javax.swing.JMenuItem();
+        menuItemSaveAs = new javax.swing.JMenuItem();
+        menuItemExport = new javax.swing.JMenuItem();
+        menuItemClose = new javax.swing.JMenuItem();
         separatorClose = new javax.swing.JPopupMenu.Separator();
         menuItemRestart = new javax.swing.JMenuItem();
         menuItemExit = new javax.swing.JMenuItem();
@@ -81,8 +89,13 @@ public class MainFrame extends javax.swing.JFrame {
         menuItemWriteConfigurationFile = new javax.swing.JMenuItem();
         menuItemWriteDefaultConfigurationFile = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Software Requirement Specification Tool");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         actionPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -164,21 +177,54 @@ public class MainFrame extends javax.swing.JFrame {
 
         menuFile.setText("File");
 
-        menuItemNewSRS.setText("New SRS");
-        menuFile.add(menuItemNewSRS);
+        menuItemNew.setText("New");
+        menuItemNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemNewActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemNew);
 
-        menuItemOpenSRS.setText("Open SRS");
-        menuFile.add(menuItemOpenSRS);
-        menuFile.add(separatorOpenClose);
+        menuItemOpen.setText("Open");
+        menuItemOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemOpenActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemOpen);
+        menuFile.add(separatorOpen);
 
-        menuItemSaveSRS.setText("Save SRS");
-        menuFile.add(menuItemSaveSRS);
+        menuItemSave.setText("Save");
+        menuItemSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSaveActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemSave);
 
-        menuItemExportSRS.setText("Export SRS");
-        menuFile.add(menuItemExportSRS);
+        menuItemSaveAs.setText("Save as");
+        menuItemSaveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSaveAsActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemSaveAs);
 
-        menuItemCloseSRS.setText("Close");
-        menuFile.add(menuItemCloseSRS);
+        menuItemExport.setText("Export");
+        menuItemExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemExportActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemExport);
+
+        menuItemClose.setText("Close");
+        menuItemClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemCloseActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemClose);
         menuFile.add(separatorClose);
 
         menuItemRestart.setText("Restart");
@@ -360,11 +406,136 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemWriteDefaultConfigurationFileActionPerformed
 
     private void menuItemRestartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemRestartActionPerformed
+        if (!Application.getInstance().getDataContext().isSaved()
+                && JOptionPane.CANCEL_OPTION == HandleSaveDialog()) {
+            return;
+        }
         new Thread(() -> {
             SrsApplication.bootstrap().run();
         }).start();
         this.dispose();
     }//GEN-LAST:event_menuItemRestartActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if (!Application.getInstance().getDataContext().isSaved()
+                && JOptionPane.CANCEL_OPTION == HandleSaveDialog()) {
+            return;
+        }
+        dispose();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void menuItemNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemNewActionPerformed
+        if (!Application.getInstance().getDataContext().isSaved()
+                && JOptionPane.CANCEL_OPTION == HandleSaveDialog()) {
+            return;
+        }
+        Application.getInstance().newDataContext();
+        Application.getInstance().getDataContext().addPropertyChangeListener(this);
+        UpdateTitle(DataContext.UNTITLED_PROJECT_NAME, false);
+        this.UpdateRequirements();
+    }//GEN-LAST:event_menuItemNewActionPerformed
+
+    private void menuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemOpenActionPerformed
+        if (!Application.getInstance().getDataContext().isSaved()
+                && JOptionPane.CANCEL_OPTION == HandleSaveDialog()) {
+            return;
+        }
+
+        JFileChooser fileChooser = new JFileChooser();
+        switch (fileChooser.showOpenDialog(this)) {
+            case JFileChooser.APPROVE_OPTION: {
+                try {
+                    DataContext newDataContext = DataContext.Load(fileChooser.getSelectedFile());
+                    Application.getInstance().setDataContext(newDataContext);
+                    Application.getInstance().LoadData();
+                    this.UpdateRequirements();
+                    Application.getInstance().getDataContext().addPropertyChangeListener(this);
+                    UpdateTitle();
+                } catch (ClassNotFoundException | IOException ex) {
+                    Logger.getLogger(MainFrame.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this,
+                            "Error opening file", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_menuItemOpenActionPerformed
+
+    private void menuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveActionPerformed
+        DataContext dataContext = Application.getInstance().getDataContext();
+        if (dataContext.isSaved()) {
+            return;
+        }
+        if (!dataContext.hasFile()) {
+            JFileChooser fileChooser = new JFileChooser();
+            switch (fileChooser.showSaveDialog(this)) {
+                case JFileChooser.APPROVE_OPTION:
+                    dataContext.setFilePath(fileChooser.getSelectedFile().getAbsolutePath());
+                    break;
+                default:
+                    return;
+            }
+        }
+        try {
+            dataContext.Save();
+            dataContext.setSaved(true);
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this,
+                    "Error saving file",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_menuItemSaveActionPerformed
+
+    private void menuItemSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveAsActionPerformed
+        DataContext dataContext = Application.getInstance().getDataContext();
+        JFileChooser fileChooser = new JFileChooser();
+
+        switch (fileChooser.showSaveDialog(this)) {
+            case JFileChooser.APPROVE_OPTION:
+                dataContext.setFilePath(fileChooser.getSelectedFile().getAbsolutePath());
+                break;
+            default:
+                return;
+        }
+
+        try {
+            dataContext.Save();
+            dataContext.setSaved(true);
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this,
+                    "Error saving file",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_menuItemSaveAsActionPerformed
+
+    private void menuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemCloseActionPerformed
+        if (!Application.getInstance().getDataContext().isSaved()
+                && JOptionPane.CANCEL_OPTION == HandleSaveDialog()) {
+            return;
+        }
+        Application.getInstance().newDataContext();
+        this.UpdateRequirements();
+        UpdateTitle(DataContext.UNTITLED_PROJECT_NAME, false);
+    }//GEN-LAST:event_menuItemCloseActionPerformed
+
+    private void menuItemExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExportActionPerformed
+        String longString = Application.getInstance().getDataContext().getData().toString();
+
+        int size = 75;
+        String[] newArr = new String[(int) Math.ceil(1.0 * longString.length() / size)];
+        for (int i = 0; i < newArr.length - 1;) {
+            int start = i * size;
+            int end = ++i * size;
+            newArr[i - 1] = longString.substring(start, end);
+        }
+        newArr[newArr.length - 1] = longString.substring((newArr.length - 1) * size);
+
+        JOptionPane.showMessageDialog(this, String.join("\n", newArr));
+    }//GEN-LAST:event_menuItemExportActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel actionPanel;
@@ -375,19 +546,20 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuBoilerplate;
     private javax.swing.JMenu menuFile;
-    private javax.swing.JMenuItem menuItemCloseSRS;
+    private javax.swing.JMenuItem menuItemClose;
     private javax.swing.JMenuItem menuItemExit;
+    private javax.swing.JMenuItem menuItemExport;
     private javax.swing.JMenuItem menuItemExportBoilerplates;
-    private javax.swing.JMenuItem menuItemExportSRS;
     private javax.swing.JMenuItem menuItemImportBoilerplates;
     private javax.swing.JMenuItem menuItemLoadOntology;
     private javax.swing.JMenuItem menuItemModifyBoilerplates;
     private javax.swing.JMenuItem menuItemModifyDomain;
     private javax.swing.JMenuItem menuItemModifyMetrics;
-    private javax.swing.JMenuItem menuItemNewSRS;
-    private javax.swing.JMenuItem menuItemOpenSRS;
+    private javax.swing.JMenuItem menuItemNew;
+    private javax.swing.JMenuItem menuItemOpen;
     private javax.swing.JMenuItem menuItemRestart;
-    private javax.swing.JMenuItem menuItemSaveSRS;
+    private javax.swing.JMenuItem menuItemSave;
+    private javax.swing.JMenuItem menuItemSaveAs;
     private javax.swing.JMenuItem menuItemWriteConfigurationFile;
     private javax.swing.JMenuItem menuItemWriteDefaultConfigurationFile;
     private javax.swing.JMenu menuModules;
@@ -395,10 +567,57 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu menuSettings;
     private javax.swing.JTabbedPane moduleTabbedPane;
     private javax.swing.JPopupMenu.Separator separatorClose;
-    private javax.swing.JPopupMenu.Separator separatorOpenClose;
+    private javax.swing.JPopupMenu.Separator separatorOpen;
     private javax.swing.JTextField tbxSelectedDomainAndModule;
     // End of variables declaration//GEN-END:variables
     private final Map<String, List<Requirement>> requirementByModules;
+
+    private int HandleSaveDialog() {
+        int result = JOptionPane.showConfirmDialog(
+                this,
+                "Do you want to save your document before closing?",
+                "Save Document",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        switch (result) {
+            case JOptionPane.YES_OPTION: {
+                try {
+                    DataContext dataContext = Application.getInstance().getDataContext();
+                    if (!dataContext.hasFile()) {
+                        JFileChooser fileChooser = new JFileChooser();
+                        switch (fileChooser.showSaveDialog(this)) {
+                            case JFileChooser.APPROVE_OPTION:
+                                dataContext.setFilePath(fileChooser.getSelectedFile().getAbsolutePath());
+                                break;
+                            default:
+                                return result;
+                        }
+                    }
+                    Application.getInstance().SaveDataContext();
+                    dataContext.setSaved(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainFrame.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this,
+                            "Error saving file",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        return result;
+    }
+    
+    private void UpdateTitle() {
+        DataContext dataContext = Application.getInstance().getDataContext();
+        UpdateTitle(dataContext.getProjectName(), dataContext.isSaved());
+    }
+
+    private void UpdateTitle(String projectName, boolean isSaved) {
+        this.setTitle(String.format("Software Requirement Specification Tool - %s%s",
+                projectName, isSaved ? "" : "*"));
+    }
 
     private void AddModuleTab(ModulePanel panel) {
         JScrollPane scrollPane = new JScrollPane(panel);
@@ -422,9 +641,14 @@ public class MainFrame extends javax.swing.JFrame {
                     });
                 });
 
-        Application.getInstance().getDataContext().putData(DataContext.GENERATED_REQUIREMENTS, requirementByModules);
+        Application.getInstance().getDataContext().getData().put(SrsApplication.DATA_GENERATED_REQUIREMENTS, requirementByModules);
         requirementByModules.entrySet().forEach((entry) -> {
             AddModuleTab(new ModulePanel(entry.getKey(), entry.getValue()));
         });
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        UpdateTitle(((DataContext) evt.getSource()).getProjectName(), (boolean) evt.getNewValue());
     }
 }

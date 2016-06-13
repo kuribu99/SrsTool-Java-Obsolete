@@ -40,7 +40,7 @@ public class DataContextTest {
 
     @Test
     public void TestSave() throws IOException, ClassNotFoundException {
-        dataContext.putData("key", "value");
+        dataContext.getData().put("key", "value");
         dataContext.setFilePath(FILE_PATH);
         dataContext.Save();
 
@@ -53,7 +53,8 @@ public class DataContextTest {
             map = (Map<String, Object>) objectStream.readObject();
         }
 
-        assertEquals(map.size(), 1);
+        assertEquals(map.size(), 2);
+        assertEquals(map.get(DataContext.PROJECT_NAME), "untitled");
         assertEquals(map.get("key"), "value");
     }
 
@@ -62,15 +63,15 @@ public class DataContextTest {
         Map<String, Object> map = new HashMap<>();
         map.put("key", "value");
 
-        File file = new File(FILE_PATH + ".srs");
+        File file = new File(FILE_PATH);
         try (FileOutputStream fileStream = new FileOutputStream(file);
                 ObjectOutputStream objectStream = new ObjectOutputStream(fileStream)) {
             objectStream.writeObject(map);
         }
 
-        dataContext = DataContext.Load(FILE_PATH);
+        dataContext = DataContext.Load(new File(FILE_PATH));
 
-        assertEquals("value", dataContext.getData("key"));
+        assertEquals("value", dataContext.getData().get("key"));
     }
 
 }

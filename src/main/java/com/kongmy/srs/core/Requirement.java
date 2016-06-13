@@ -5,11 +5,13 @@
  */
 package com.kongmy.srs.core;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Kong My
  */
-public class Requirement {
+public class Requirement implements Serializable {
 
     private String module;
     private String requirement;

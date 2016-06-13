@@ -21,6 +21,7 @@ import com.kongmy.srs.ui.MainFrame;
  */
 public class SrsApplication extends Application {
 
+    public static final String DATA_GENERATED_REQUIREMENTS = "generatedRequirements";
     protected final List<Requirement> generatedRequirements;
 
     public SrsApplication() {

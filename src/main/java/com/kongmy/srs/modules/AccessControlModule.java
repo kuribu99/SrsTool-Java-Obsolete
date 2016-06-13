@@ -76,18 +76,18 @@ public class AccessControlModule extends RequirementModule implements HasMenu {
 
                 if (!allowedActors.isEmpty()) {
                     generatedRequirements.add(new Requirement(MODULE_NAME,
-                            Sentences.asSentence(
+                            Sentences.FormatAsSentence(
                                     allowedBoilerplate
                                     .replace("<module>", mod)
-                                    .replace("<actor>", Sentences.JoinArrayAsSentence(allowedActors)))));
+                                    .replace("<actor>", Sentences.JoinArray(allowedActors)))));
                 }
 
                 if (!restrictedActors.isEmpty()) {
                     generatedRequirements.add(new Requirement(MODULE_NAME,
-                            Sentences.asSentence(
+                            Sentences.FormatAsSentence(
                                     restrictedBoilerplate
                                     .replace("<module>", mod)
-                                    .replace("<actor>", Sentences.JoinArrayAsSentence(restrictedActors)))));
+                                    .replace("<actor>", Sentences.JoinArray(restrictedActors)))));
                 }
             });
         });
@@ -105,18 +105,18 @@ public class AccessControlModule extends RequirementModule implements HasMenu {
 
                 if (!allowedActions.isEmpty()) {
                     generatedRequirements.add(new Requirement(MODULE_NAME,
-                            Sentences.asSentence(
+                            Sentences.FormatAsSentence(
                                     allowedBoilerplate
                                     .replace("<actor>", actor)
-                                    .replace("<actions>", Sentences.JoinArrayAsSentence(allowedActions)))));
+                                    .replace("<actions>", Sentences.JoinArray(allowedActions)))));
                 }
 
                 if (!restrictedActions.isEmpty()) {
                     generatedRequirements.add(new Requirement(MODULE_NAME,
-                            Sentences.asSentence(
+                            Sentences.FormatAsSentence(
                                     restrictedBoilerplate
                                     .replace("<actor>", actor)
-                                    .replace("<actions>", Sentences.JoinArrayAsSentence(restrictedActions)))));
+                                    .replace("<actions>", Sentences.JoinArray(restrictedActions)))));
                 }
             });
         });

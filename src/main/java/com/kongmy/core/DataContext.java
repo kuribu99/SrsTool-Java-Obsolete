@@ -2,6 +2,8 @@
  */
 package com.kongmy.core;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,8 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -19,41 +19,57 @@ import java.util.logging.Logger;
  */
 public class DataContext {
 
-    public static final String GENERATED_REQUIREMENTS = "generatedRequirements";
-    private static final String FORMAT = ".srs";
+    public static final String PROJECT_NAME = "projectName";
+    public static final String UNTITLED_PROJECT_NAME = "untitled";
+    private static final String PROPERTY_SAVED = "saved";
 
-    private String projectName;
+    private PropertyChangeSupport pcs;
     private String filePath;
     private Map<String, Object> data;
+    private boolean saved;
 
     public DataContext() {
         data = new HashMap<>();
-        projectName = "untitled";
-        filePath = projectName + FORMAT;
+        saved = false;
+        pcs = new PropertyChangeSupport(this);
+
+        data.put(PROJECT_NAME, UNTITLED_PROJECT_NAME);
     }
 
-    private static String FormatFilePath(String filePath) {
-        if (filePath.endsWith(FORMAT)) {
-            return filePath;
-        } else {
-            return filePath + FORMAT;
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(PROPERTY_SAVED, listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(PROPERTY_SAVED, listener);
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        if (this.saved != saved) {
+            boolean oldVal = this.saved;
+            this.saved = saved;
+            pcs.firePropertyChange(PROPERTY_SAVED, oldVal, saved);
         }
     }
 
-    public void putData(String key, Object value) {
-        data.put(key, value);
+    public boolean hasFile() {
+        return filePath != null && new File(filePath).exists();
     }
 
-    public Object getData(String key) {
-        return data.get(key);
+    public Map<String, Object> getData() {
+        return data;
     }
 
     public String getProjectName() {
-        return projectName;
+        return data.get(PROJECT_NAME).toString();
     }
 
     public void setProjectName(String projectName) {
-        this.projectName = projectName;
+        data.put(PROJECT_NAME, projectName);
     }
 
     public String getFilePath() {
@@ -64,19 +80,11 @@ public class DataContext {
         this.filePath = filePath;
     }
 
-    public void Save() {
+    public void Save() throws IOException {
         try (FileOutputStream fileStream = new FileOutputStream(filePath)) {
-
             try (ObjectOutputStream objectStream = new ObjectOutputStream(fileStream)) {
-
                 objectStream.writeObject(data);
-
-            } catch (IOException ex) {
-                Logger.getLogger(DataContext.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        } catch (IOException ex) {
-            Logger.getLogger(DataContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -84,28 +92,16 @@ public class DataContext {
         return new DataContext();
     }
 
-    public static DataContext Load(String filePath) {
+    public static DataContext Load(File file) throws ClassNotFoundException, IOException {
         DataContext dataContext = new DataContext();
-        filePath = FormatFilePath(filePath);
-        try (FileInputStream fileStream = new FileInputStream(filePath)) {
-
+        try (FileInputStream fileStream = new FileInputStream(file)) {
             try (ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
-
                 dataContext.data = (Map<String, Object>) objectStream.readObject();
-
-            } catch (IOException | ClassNotFoundException ex) {
-                Logger.getLogger(DataContext.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        } catch (IOException ex) {
-            Logger.getLogger(DataContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        dataContext.filePath = filePath;
+        dataContext.filePath = file.getAbsolutePath();
+        dataContext.setSaved(true);
         return dataContext;
-    }
-
-    public boolean FileExists() {
-        return new File(filePath).exists();
     }
 
 }

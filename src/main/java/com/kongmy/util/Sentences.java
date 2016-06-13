@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Sentences {
     
-    public static String JoinArrayAsSentence(List<String> arr) {
+    public static String JoinArray(List<String> arr) {
         if (arr.isEmpty()) {
             return "";
         } else if (arr.size() == 1) {
@@ -22,7 +22,7 @@ public class Sentences {
         }
     }
 
-    public static String asSentence(String sentence) {
+    public static String FormatAsSentence(String sentence) {
         if(sentence == null || sentence.isEmpty())
             return "";
         else {

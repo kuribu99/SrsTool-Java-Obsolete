@@ -3,7 +3,9 @@
 package com.kongmy.srs.modules.ui;
 
 import com.kongmy.core.Application;
+import com.kongmy.core.DataContext;
 import com.kongmy.srs.modules.ActionResourceConstraintModule;
+import com.kongmy.srs.modules.ActionResourceConstraintModule.ActionResourceConstraintData;
 import com.kongmy.srs.modules.OntologyModule;
 import java.awt.CardLayout;
 import java.util.HashMap;
@@ -15,8 +17,7 @@ import javax.swing.DefaultListModel;
  *
  * @author Kong My
  */
-public class ActionResourceConstraintDialog extends javax.swing.JDialog
-        implements ResourceConstraintPanel.ResourceConstraintListener {
+public class ActionResourceConstraintDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form ActionResourceContraintDialog
@@ -48,9 +49,8 @@ public class ActionResourceConstraintDialog extends javax.swing.JDialog
         btnSave = new javax.swing.JButton();
         panelCard = new javax.swing.JPanel();
         panelNoAction = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        panelResourceConstraints = new javax.swing.JPanel();
+        lbl = new javax.swing.JLabel();
+        panelMetrics = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -85,9 +85,9 @@ public class ActionResourceConstraintDialog extends javax.swing.JDialog
         panelCard.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Resource Constraints", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         panelCard.setLayout(new java.awt.CardLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Please select an action");
+        lbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        lbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl.setText("Please select an action");
 
         javax.swing.GroupLayout panelNoActionLayout = new javax.swing.GroupLayout(panelNoAction);
         panelNoAction.setLayout(panelNoActionLayout);
@@ -95,25 +95,21 @@ public class ActionResourceConstraintDialog extends javax.swing.JDialog
             panelNoActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelNoActionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                .addComponent(lbl, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelNoActionLayout.setVerticalGroup(
             panelNoActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelNoActionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                .addComponent(lbl, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         panelCard.add(panelNoAction, "noAction");
 
-        jScrollPane1.setBorder(null);
-
-        panelResourceConstraints.setLayout(new javax.swing.BoxLayout(panelResourceConstraints, javax.swing.BoxLayout.Y_AXIS));
-        jScrollPane1.setViewportView(panelResourceConstraints);
-
-        panelCard.add(jScrollPane1, "hasAction");
+        panelMetrics.setLayout(new javax.swing.BoxLayout(panelMetrics, javax.swing.BoxLayout.Y_AXIS));
+        panelCard.add(panelMetrics, "hasAction");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -150,29 +146,36 @@ public class ActionResourceConstraintDialog extends javax.swing.JDialog
     }// </editor-fold>//GEN-END:initComponents
 
     private void actionListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_actionListValueChanged
-        int selectedIndex = actionList.getSelectedIndex();
+        Object selectedObject = actionList.getSelectedValue();
         CardLayout layout = (CardLayout) panelCard.getLayout();
 
-        if (selectedIndex >= 0) {
-            String actionName = actionList.getSelectedValue().toString();
-            List<String> addedConstraints = module.getResourceConstraintFrom(actionName);
-
+        if (selectedObject != null) {
             layout.show(panelCard, HAS_ACTION);
+            String actionName = selectedObject.toString();
 
-            if (!dataMap.containsKey(actionName)) {
-                dataMap.put(actionName, new HashMap<>());
-            }
+            panelMap.forEach((metric, panel) -> {
+                panel.setResourceConstraintListener(null);
+                panel.UpdateData(dataMap.get(actionName).get(metric));
+                panel.setResourceConstraintListener(new ResourceConstraintPanel.ResourceConstraintListener() {
 
-            panelMap.entrySet().stream().forEach((entry) -> {
-                String constraintName = entry.getKey();
-                ResourceConstraintPanel panel = entry.getValue();
-                Map<String, String> constraintMap = dataMap.get(actionName);
-                
-                panel.setCheckBoxState(addedConstraints.contains(constraintName));
-                if (!constraintMap.containsKey(constraintName)) {
-                    constraintMap.put(constraintName, "");
-                }
-                panel.setConstraintValue(constraintMap.get(constraintName));
+                    @Override
+                    public void onCheckBoxStatedChanged(boolean isChecked, String resourceName, String value) {
+                        ActionResourceConstraintData data = dataMap.get(actionName).get(resourceName);
+                        if (isChecked) {
+                            module.AddResourceConstraintTo(actionName, resourceName);
+                            data.setChecked(true);
+                        } else {
+                            module.RemoveResourceConstraintFrom(actionName, resourceName);
+                            data.setChecked(false);
+                        }
+                    }
+
+                    @Override
+                    public void onTextBoxDocumentChanged(String resourceName, String oldValue, String newValue) {
+                        ActionResourceConstraintData data = dataMap.get(actionName).get(resourceName);
+                        data.setValue(newValue);
+                    }
+                });
             });
         } else {
             layout.show(panelCard, NO_ACTION);
@@ -185,7 +188,9 @@ public class ActionResourceConstraintDialog extends javax.swing.JDialog
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        Application.getInstance().getDataContext().putData(ActionResourceConstraintModule.CONSTRAINT_MAP, dataMap);
+        DataContext dataContext = Application.getInstance().getDataContext();
+        dataContext.getData().put(ActionResourceConstraintModule.DATA_ACTION_RESOURCE_CONSTRAINT_MAP, dataMap);
+        dataContext.setSaved(false);
         module.Save();
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -194,61 +199,53 @@ public class ActionResourceConstraintDialog extends javax.swing.JDialog
     private javax.swing.JList actionList;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSave;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel lbl;
     private javax.swing.JPanel panelActions;
     private javax.swing.JPanel panelCard;
+    private javax.swing.JPanel panelMetrics;
     private javax.swing.JPanel panelNoAction;
-    private javax.swing.JPanel panelResourceConstraints;
     // End of variables declaration//GEN-END:variables
     private static final String NO_ACTION = "noAction";
     private static final String HAS_ACTION = "hasAction";
+
     private final OntologyModule module;
     private final DefaultListModel listModel;
-    private final Map<String, Map<String, String>> dataMap;
+    private final Map<String, Map<String, ActionResourceConstraintData>> dataMap;
     private final Map<String, ResourceConstraintPanel> panelMap;
 
     private void initData() {
         // Duplicate current data
-        Map<String, Map<String, String>> currentData = (Map<String, Map<String, String>>) Application
-                .getInstance().getDataContext()
-                .getData(ActionResourceConstraintModule.CONSTRAINT_MAP);
+        Map<String, Map<String, ActionResourceConstraintData>> currentData = (Map<String, Map<String, ActionResourceConstraintData>>) Application
+                .getInstance().getDataContext().getData()
+                .get(ActionResourceConstraintModule.DATA_ACTION_RESOURCE_CONSTRAINT_MAP);
 
+        List<String> allActions = module.getAllActions();
+        List<String> allMetrics = module.getAllResourceConstraintMetrics();
+
+        // Initialize data
+        allActions.forEach((action) -> {
+            listModel.addElement(action);
+            Map<String, ActionResourceConstraintData> map = new HashMap<>();
+            allMetrics.forEach((metric) -> map.put(metric, new ActionResourceConstraintData(metric, "")));
+            dataMap.put(action, map);
+        });
+
+        // Add existing data
         if (currentData != null) {
-            currentData.forEach((k, v) -> {
-                Map<String, String> newValue = new HashMap<>();
-                newValue.putAll(v);
-                dataMap.put(k, newValue);
+            currentData.forEach((action, metricMap) -> {
+                metricMap.forEach((metric, value) -> {
+                    dataMap.get(action).put(metric, value.clone());
+                });
             });
         }
 
-        module.getAllActions().stream().forEach((val) -> listModel.addElement(val));
-        module.getAllResourceConstraintMetrics().stream().forEach((metric) -> {
-            ResourceConstraintPanel panel = new ResourceConstraintPanel(metric, "", this);
-            panelResourceConstraints.add(panel);
+        // Create card for each action
+        allMetrics.forEach((metric) -> {
+            ResourceConstraintPanel panel = new ResourceConstraintPanel(metric, "");
             panelMap.put(metric, panel);
+            panelMetrics.add(panel);
         });
-        panelResourceConstraints.setSize(panelResourceConstraints.getPreferredSize());
-    }
-
-    @Override
-    public void onCheckBoxStatedChanged(boolean isChecked, String resourceName, String value) {
-        String actionName = actionList.getSelectedValue().toString();
-
-        if (isChecked) {
-            module.AddResourceConstraintTo(actionName, resourceName);
-            dataMap.get(actionName).put(resourceName, value);
-        } else {
-            module.RemoveResourceConstraintFrom(actionName, resourceName);
-            dataMap.get(actionName).remove(resourceName, value);
-        }
-    }
-
-    @Override
-    public void onTextBoxKeyUp(String resourceName, String oldValue, String newValue) {
-        String actionName = actionList.getSelectedValue().toString();
-        dataMap.get(actionName).put(resourceName, newValue);
     }
 
 }

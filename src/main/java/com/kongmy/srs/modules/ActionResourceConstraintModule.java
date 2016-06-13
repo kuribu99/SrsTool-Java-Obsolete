@@ -11,7 +11,7 @@ import javax.swing.JMenuItem;
 import com.kongmy.core.HasMenu;
 import com.kongmy.srs.core.RequirementModule;
 import com.kongmy.srs.modules.ui.ActionResourceConstraintDialog;
-import java.util.Map;
+import java.io.Serializable;
 
 /**
  *
@@ -19,7 +19,53 @@ import java.util.Map;
  */
 public class ActionResourceConstraintModule extends RequirementModule implements HasMenu {
 
-    public static String CONSTRAINT_MAP = "resourceMap";
+    public static class ActionResourceConstraintData implements Serializable {
+
+        private final String metric;
+        private String value;
+        private boolean checked;
+
+        public ActionResourceConstraintData(String metric, String value) {
+            this.metric = metric;
+            this.value = value;
+            this.checked = false;
+        }
+        
+        public String getMetric() {
+            return metric;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public boolean isChecked() {
+            return checked;
+        }
+
+        public void setChecked(boolean checked) {
+            this.checked = checked;
+        }
+        
+        @Override
+        public ActionResourceConstraintData clone() {
+            ActionResourceConstraintData clone = new ActionResourceConstraintData(this.metric, this.value);
+            clone.checked = this.checked;
+            return clone;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("ActionResourceConstraintData = { metric = %s, value = %s, checked = %s",
+                    metric, value, String.valueOf(checked));
+        }
+    }
+
+    public static String DATA_ACTION_RESOURCE_CONSTRAINT_MAP = "resourceMap";
 
     @Override
     public List<String> getDependencies() {
@@ -32,18 +78,9 @@ public class ActionResourceConstraintModule extends RequirementModule implements
     public Component getMenu(JFrame parent) {
         JMenuItem menuItem = new JMenuItem("Configure Action Resource Constraints");
         menuItem.addActionListener((e) -> {
-            Map<String, Map<String, String>> data = (Map<String, Map<String, String>>) Application.getInstance()
-                    .getDataContext().getData(CONSTRAINT_MAP);
-            System.out.println(data);
-
             OntologyModule module = (OntologyModule) Application.getInstance().getModule(OntologyModule.class.getName());
             ActionResourceConstraintDialog dlg = new ActionResourceConstraintDialog(parent, true, module);
             dlg.setVisible(true);
-
-            data = (Map<String, Map<String, String>>) Application.getInstance()
-                    .getDataContext().getData(CONSTRAINT_MAP);
-            System.out.println(data);
-
         });
         return menuItem;
     }

@@ -2,7 +2,10 @@
  */
 package com.kongmy.srs.modules.ui;
 
+import com.kongmy.srs.modules.ActionResourceConstraintModule.ActionResourceConstraintData;
 import com.kongmy.util.CamelCaseEncoder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -14,18 +17,42 @@ public class ResourceConstraintPanel extends javax.swing.JPanel {
 
         public void onCheckBoxStatedChanged(boolean isChecked, String resourceName, String value);
 
-        public void onTextBoxKeyUp(String resourceName, String oldValue, String newValue);
+        public void onTextBoxDocumentChanged(String resourceName, String oldValue, String newValue);
     }
 
     /**
      * Creates new form ResourceContraintPanel
      */
-    public ResourceConstraintPanel(String resourceName, String constraintValue, ResourceConstraintListener listener) {
+    public ResourceConstraintPanel(String resourceName, String constraintValue) {
         this.resourceName = resourceName;
-        this.constraintValue = constraintValue;
-        this.listener = listener;
+        this.metricValue = constraintValue;
 
-        initComponents();;
+        initComponents();
+        tbxValue.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                Update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                Update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                Update();
+            }
+
+            private void Update() {
+                String newValue = tbxValue.getText();
+                if (listener != null) {
+                    listener.onTextBoxDocumentChanged(resourceName, metricValue, newValue);
+                }
+                metricValue = newValue;
+            }
+        });
     }
 
     /**
@@ -38,7 +65,7 @@ public class ResourceConstraintPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         cbxResource = new javax.swing.JCheckBox();
-        tbxConstraint = new javax.swing.JTextField();
+        tbxValue = new javax.swing.JTextField();
 
         cbxResource.setText(resourceName);
         cbxResource.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -47,12 +74,7 @@ public class ResourceConstraintPanel extends javax.swing.JPanel {
             }
         });
 
-        tbxConstraint.setText("constraint");
-        tbxConstraint.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tbxConstraintKeyReleased(evt);
-            }
-        });
+        tbxValue.setText(metricValue);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -62,42 +84,37 @@ public class ResourceConstraintPanel extends javax.swing.JPanel {
                 .addGap(2, 2, 2)
                 .addComponent(cbxResource, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tbxConstraint, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
+                .addComponent(tbxValue, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(cbxResource, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(tbxConstraint, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tbxValue, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tbxConstraintKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbxConstraintKeyReleased
-        String newValue = CamelCaseEncoder.transform(tbxConstraint.getText());
-        listener.onTextBoxKeyUp(resourceName, constraintValue, newValue);
-        constraintValue = newValue;
-        tbxConstraint.setText(constraintValue);
-    }//GEN-LAST:event_tbxConstraintKeyReleased
-
     private void cbxResourceStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cbxResourceStateChanged
-        listener.onCheckBoxStatedChanged(cbxResource.isSelected(), resourceName, constraintValue);
+        if (listener != null) {
+            listener.onCheckBoxStatedChanged(cbxResource.isSelected(), resourceName, metricValue);
+        }
     }//GEN-LAST:event_cbxResourceStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cbxResource;
-    private javax.swing.JTextField tbxConstraint;
+    private javax.swing.JTextField tbxValue;
     // End of variables declaration//GEN-END:variables
     private final String resourceName;
-    private String constraintValue;
-    private final ResourceConstraintListener listener;
+    private String metricValue;
+    private ResourceConstraintListener listener;
 
-    public void setCheckBoxState(boolean checked) {
-        cbxResource.setSelected(checked);
+    public void setResourceConstraintListener(ResourceConstraintListener listener) {
+        this.listener = listener;
     }
 
-    public void setConstraintValue(String val) {
-        constraintValue = val;
-        tbxConstraint.setText(val);
+    public void UpdateData(ActionResourceConstraintData data) {
+        cbxResource.setSelected(data.isChecked());
+        tbxValue.setText(data.getValue());
     }
 
 }
