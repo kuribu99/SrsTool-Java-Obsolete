@@ -111,8 +111,8 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
         panelActionLayout.setHorizontalGroup(
             panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelActionLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(actionCheckboxPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(actionCheckboxPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelActionLayout.setVerticalGroup(
@@ -155,7 +155,7 @@ public class DomainAttributeDialog extends javax.swing.JDialog {
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(tabbedPane))
+                    .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

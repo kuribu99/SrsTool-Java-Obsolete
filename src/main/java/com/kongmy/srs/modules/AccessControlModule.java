@@ -16,6 +16,9 @@ import com.kongmy.srs.core.Requirement;
 import com.kongmy.srs.core.RequirementModule;
 import com.kongmy.srs.modules.ui.AccessControlDialog;
 import com.kongmy.util.Sentences;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,8 +27,57 @@ import javax.swing.JOptionPane;
  */
 public class AccessControlModule extends RequirementModule implements HasMenu {
 
+    public static class AccessControlData implements Serializable {
+
+        private String domainName;
+        private Map<String, List<String>> moduleAccessMap;
+        private Map<String, List<String>> actionControlMap;
+
+        public AccessControlData(String domainName) {
+            this.domainName = domainName;
+            this.moduleAccessMap = new HashMap<>();
+            this.actionControlMap = new HashMap<>();
+        }
+
+        public String getDomainName() {
+            return domainName;
+        }
+
+        public Map<String, List<String>> getModuleAccessMap() {
+            return moduleAccessMap;
+        }
+
+        public Map<String, List<String>> getActionControlMap() {
+            return actionControlMap;
+        }
+
+        @Override
+        public String toString() {
+            return String.format(
+                    "AccessControlData = { domainName = %s, moduleAccessMap = %s, actionControlMap = %s",
+                    this.domainName,
+                    this.moduleAccessMap.toString(),
+                    this.actionControlMap.toString());
+        }
+
+        @Override
+        public AccessControlData clone() {
+            AccessControlData clone = new AccessControlData(domainName);
+            this.moduleAccessMap.forEach((key, val) -> {
+                clone.moduleAccessMap.put(key, new ArrayList<>(val));
+            });
+            this.actionControlMap.forEach((key, val) -> {
+                
+                clone.actionControlMap.put(key, new ArrayList<>(val));
+            });
+            return clone;
+        }
+
+    }
+
     private static final String MODULE_NAME = "Access Control";
-    
+    public static String DATA_ACCESS_CONTROL = "accessControlData";
+
     public AccessControlModule() {
         super();
     }
@@ -40,7 +92,7 @@ public class AccessControlModule extends RequirementModule implements HasMenu {
 
     @Override
     public List<String> getDependencies() {
-        List<String> dependencies = new ArrayList<String>();
+        List<String> dependencies = new ArrayList<>();
         dependencies.add(OntologyModule.class.getName());
         return dependencies;
     }
@@ -68,58 +120,66 @@ public class AccessControlModule extends RequirementModule implements HasMenu {
         final String allowedBoilerplate = "<actor> are allowed to access to <module> module";
         final String restrictedBoilerplate = "<actor> are restricted from accessing to <module> module";
 
-        module.getAllDomains().forEach((final String domain) -> {
-            module.getModulesFrom(domain).forEach((final String mod) -> {
-                List<String> allowedActors = module.getActorsFrom(mod);
-                List<String> restrictedActors = module.getActorsFrom(domain);
-                restrictedActors.removeAll(allowedActors);
+        Map<String, AccessControlData> dataMap = (Map<String, AccessControlData>) Application.getInstance()
+                .getDataContext().getData().get(DATA_ACCESS_CONTROL);
 
-                if (!allowedActors.isEmpty()) {
-                    generatedRequirements.add(new Requirement(MODULE_NAME,
-                            Sentences.FormatAsSentence(
-                                    allowedBoilerplate
-                                    .replace("<module>", mod)
-                                    .replace("<actor>", Sentences.JoinArray(allowedActors)))));
-                }
+        if (dataMap != null) {
+            dataMap.forEach((domain, domainData) -> {
+                domainData.getModuleAccessMap().forEach((moduleName, allowedActors) -> {
+                    List<String> restrictedActors = module.getActorsFrom(domain);
+                    restrictedActors.removeAll(allowedActors);
 
-                if (!restrictedActors.isEmpty()) {
-                    generatedRequirements.add(new Requirement(MODULE_NAME,
-                            Sentences.FormatAsSentence(
-                                    restrictedBoilerplate
-                                    .replace("<module>", mod)
-                                    .replace("<actor>", Sentences.JoinArray(restrictedActors)))));
-                }
+                    if (!allowedActors.isEmpty()) {
+                        generatedRequirements.add(new Requirement(MODULE_NAME,
+                                Sentences.FormatAsSentence(
+                                        allowedBoilerplate
+                                        .replace("<module>", moduleName)
+                                        .replace("<actor>", Sentences.JoinArray(allowedActors)))));
+                    }
+
+                    if (!restrictedActors.isEmpty()) {
+                        generatedRequirements.add(new Requirement(MODULE_NAME,
+                                Sentences.FormatAsSentence(
+                                        restrictedBoilerplate
+                                        .replace("<module>", moduleName)
+                                        .replace("<actor>", Sentences.JoinArray(restrictedActors)))));
+                    }
+                });
             });
-        });
+        }
     }
 
     private void GenerateAccessControlRequirements(OntologyModule module) {
         final String allowedBoilerplate = "<actor> are allowed to <actions>";
         final String restrictedBoilerplate = "<actor> are not allowed to <actions>";
 
-        module.getAllDomains().forEach((final String domain) -> {
-            module.getActorsFrom(domain).forEach((final String actor) -> {
-                List<String> allowedActions = module.getActionsFrom(actor);
-                List<String> restrictedActions = module.getActionsFrom(domain);
-                restrictedActions.removeAll(allowedActions);
+        Map<String, AccessControlData> dataMap = (Map<String, AccessControlData>) Application.getInstance()
+                .getDataContext().getData().get(DATA_ACCESS_CONTROL);
 
-                if (!allowedActions.isEmpty()) {
-                    generatedRequirements.add(new Requirement(MODULE_NAME,
-                            Sentences.FormatAsSentence(
-                                    allowedBoilerplate
-                                    .replace("<actor>", actor)
-                                    .replace("<actions>", Sentences.JoinArray(allowedActions)))));
-                }
+        if (dataMap != null) {
+            dataMap.forEach((domain, domainData) -> {
+                domainData.getActionControlMap().forEach((actor, allowedActions) -> {
+                    List<String> restrictedActions = module.getActionsFrom(domain);
+                    restrictedActions.removeAll(allowedActions);
 
-                if (!restrictedActions.isEmpty()) {
-                    generatedRequirements.add(new Requirement(MODULE_NAME,
-                            Sentences.FormatAsSentence(
-                                    restrictedBoilerplate
-                                    .replace("<actor>", actor)
-                                    .replace("<actions>", Sentences.JoinArray(restrictedActions)))));
-                }
+                    if (!allowedActions.isEmpty()) {
+                        generatedRequirements.add(new Requirement(MODULE_NAME,
+                                Sentences.FormatAsSentence(
+                                        allowedBoilerplate
+                                        .replace("<actor>", actor)
+                                        .replace("<actions>", Sentences.JoinArray(allowedActions)))));
+                    }
+
+                    if (!restrictedActions.isEmpty()) {
+                        generatedRequirements.add(new Requirement(MODULE_NAME,
+                                Sentences.FormatAsSentence(
+                                        restrictedBoilerplate
+                                        .replace("<actor>", actor)
+                                        .replace("<actions>", Sentences.JoinArray(restrictedActions)))));
+                    }
+                });
             });
-        });
+        }
     }
 
 }

@@ -12,7 +12,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import jdk.nashorn.internal.runtime.regexp.joni.Config;
 
 /**
  *
@@ -79,7 +82,7 @@ public abstract class Application implements Runnable {
     public void LoadModules() {
         this.modules.clear();
         this.modulesNotFound.clear();
-        String[] moduleClassNames = this.configuration.settings.get(Configuration.MODULES_CLASS_NAMES).split("[, ]+");
+        String[] moduleClassNames = this.configuration.settings.get(Configuration.CONFIGURATION_MODULES).split("[, ]+");
 
         for (String moduleClassName : moduleClassNames) {
             if (!LoadModule(moduleClassName)) {
@@ -127,6 +130,22 @@ public abstract class Application implements Runnable {
 
     public void setDataContext(DataContext dataContext) {
         this.dataContext = dataContext;
+    }
+
+    public void LoadLastOpened() {
+        String lastOpened = configuration.getSetting(Configuration.CONFIGURATION_LAST_OPENED);
+        if (lastOpened != null) {
+            try {
+                this.dataContext = DataContext.Load(new File(lastOpened));
+            } catch (ClassNotFoundException | IOException ex) {
+                Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void SaveLastOpened() {
+        if(dataContext.hasFile())
+            configuration.AddConfiguration(Configuration.CONFIGURATION_LAST_OPENED, dataContext.getFilePath());
     }
 
 }

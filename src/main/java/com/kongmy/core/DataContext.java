@@ -21,7 +21,7 @@ public class DataContext {
 
     public static final String PROJECT_NAME = "projectName";
     public static final String UNTITLED_PROJECT_NAME = "untitled";
-    private static final String PROPERTY_SAVED = "saved";
+    private static final String PROPERTY_THIS = "this";
 
     private PropertyChangeSupport pcs;
     private String filePath;
@@ -37,11 +37,11 @@ public class DataContext {
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        pcs.addPropertyChangeListener(PROPERTY_SAVED, listener);
+        pcs.addPropertyChangeListener(PROPERTY_THIS, listener);
     }
 
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        pcs.removePropertyChangeListener(PROPERTY_SAVED, listener);
+        pcs.removePropertyChangeListener(PROPERTY_THIS, listener);
     }
 
     public boolean isSaved() {
@@ -52,7 +52,7 @@ public class DataContext {
         if (this.saved != saved) {
             boolean oldVal = this.saved;
             this.saved = saved;
-            pcs.firePropertyChange(PROPERTY_SAVED, oldVal, saved);
+            pcs.firePropertyChange(PROPERTY_THIS, oldVal, saved);
         }
     }
 
@@ -69,7 +69,11 @@ public class DataContext {
     }
 
     public void setProjectName(String projectName) {
-        data.put(PROJECT_NAME, projectName);
+        String oldProjectName = data.get(PROJECT_NAME).toString();
+        if (oldProjectName != projectName) {
+            data.put(PROJECT_NAME, projectName);
+            setSaved(false);
+        }
     }
 
     public String getFilePath() {

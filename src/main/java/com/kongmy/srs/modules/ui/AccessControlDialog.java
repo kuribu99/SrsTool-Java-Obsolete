@@ -5,11 +5,19 @@
  */
 package com.kongmy.srs.modules.ui;
 
+import com.kongmy.core.Application;
+import com.kongmy.core.DataContext;
+import com.kongmy.srs.modules.AccessControlModule;
+import com.kongmy.srs.modules.AccessControlModule.AccessControlData;
+import com.kongmy.srs.modules.ActionResourceConstraintModule;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import com.kongmy.srs.modules.OntologyModule;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -26,12 +34,12 @@ public class AccessControlDialog extends javax.swing.JDialog {
         this.domainModel = new DefaultComboBoxModel<>();
         this.moduleModel = new DefaultComboBoxModel<>();
         this.actorModel = new DefaultComboBoxModel<>();
+        this.dataMap = new HashMap<>();
 
-        List<String> allDomains = module.getAllDomains();
-        allDomains.forEach((val) -> domainModel.addElement(val));
-        
+        initData();
         initComponents();
         accessControlCheckboxPanel.setPanelNames("Allowed Actors", "Restricted Actors");
+
         UpdateModules();
         UpdateActors();
     }
@@ -207,6 +215,9 @@ public class AccessControlDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        DataContext dataContext = Application.getInstance().getDataContext();
+        dataContext.getData().put(AccessControlModule.DATA_ACCESS_CONTROL, dataMap);
+        dataContext.setSaved(false);
         module.Save();
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -261,12 +272,13 @@ public class AccessControlDialog extends javax.swing.JDialog {
     private final DefaultComboBoxModel<String> domainModel;
     private final DefaultComboBoxModel<String> moduleModel;
     private final DefaultComboBoxModel<String> actorModel;
+    private final Map<String, AccessControlData> dataMap;
 
     private void UpdateAccessControlData() {
         String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
         String selectedModule = cbxSelectedModule.getSelectedItem().toString();
 
-        List<String> allowedActor = module.getActorsFrom(selectedModule);
+        List<String> allowedActor = dataMap.get(selectedDomain).getModuleAccessMap().get(selectedModule);
         List<String> restrictedActor = module.getActorsFrom(selectedDomain);
         restrictedActor.removeAll(allowedActor);
 
@@ -274,8 +286,10 @@ public class AccessControlDialog extends javax.swing.JDialog {
             JCheckBox cbx = (JCheckBox) e.getSource();
             if (cbx.isSelected()) {
                 module.AddActorTo(selectedModule, cbx.getText());
+                allowedActor.add(cbx.getText());
             } else {
                 module.RemoveActorFrom(selectedModule, cbx.getText());
+                allowedActor.remove(cbx.getText());
             }
         };
 
@@ -288,47 +302,74 @@ public class AccessControlDialog extends javax.swing.JDialog {
         String selectedDomain = cbxSelectedDomain.getSelectedItem().toString();
         String selectedActor = cbxSelectedActor.getSelectedItem().toString();
 
-        List<String> selectedActions = module.getActionsFrom(selectedActor);
+        List<String> selectedActions = dataMap.get(selectedDomain).getActionControlMap().get(selectedActor);
         List<String> notSelectedActions = module.getActionsFrom(selectedDomain);
         notSelectedActions.removeAll(selectedActions);
 
+        ActionListener actionListener = (e) -> {
+            JCheckBox cbx = (JCheckBox) e.getSource();
+            if (cbx.isSelected()) {
+                module.AddActionTo(selectedActor, cbx.getText());
+                selectedActions.add(cbx.getText());
+            } else {
+                module.RemoveActionFrom(selectedActor, cbx.getText());
+                selectedActions.remove(cbx.getText());
+            }
+        };
+        
         selectedActions.forEach((action) -> {
             JCheckBox cbx = new JCheckBox(action, true);
-            cbx.addActionListener(((e) -> {
-                if (cbx.isSelected()) {
-                    module.AddActionTo(selectedActor, action);
-                } else {
-                    module.RemoveActionFrom(selectedActor, action);
-                }
-            }));
+            cbx.addActionListener(actionListener);
             panelActions.add(cbx);
         });
 
         notSelectedActions.forEach((action) -> {
             JCheckBox cbx = new JCheckBox(action, false);
-            cbx.addActionListener(((e) -> {
-                if (cbx.isSelected()) {
-                    module.AddActionTo(selectedActor, action);
-                } else {
-                    module.RemoveActionFrom(selectedActor, action);
-                }
-            }));
+            cbx.addActionListener(actionListener);
             panelActions.add(cbx);
         });
+        
         panelActions.setSize(panelActions.getPreferredSize());
     }
 
     private void UpdateModules() {
-        List<String> modules = module.getModulesFrom(cbxSelectedDomain.getSelectedItem().toString());
         moduleModel.removeAllElements();
-        modules.forEach((val) -> moduleModel.addElement(val));
-
+        dataMap.get(cbxSelectedDomain.getSelectedItem().toString()).getModuleAccessMap().keySet()
+                .forEach((val) -> moduleModel.addElement(val));
     }
 
     private void UpdateActors() {
-        List<String> actors = module.getActorsFrom(cbxSelectedDomain.getSelectedItem().toString());
         actorModel.removeAllElements();
-        actors.forEach((val) -> actorModel.addElement(val));
+        dataMap.get(cbxSelectedDomain.getSelectedItem().toString()).getActionControlMap().keySet()
+                .forEach((val) -> actorModel.addElement(val));
+    }
+
+    private void initData() {
+        List<String> allDomains = module.getAllDomains();
+
+        // Initialize data
+        allDomains.forEach((domain) -> {
+            domainModel.addElement(domain);
+
+            AccessControlData data = new AccessControlData(domain);
+            dataMap.put(domain, data);
+
+            Map<String, List<String>> moduleAccessMap = data.getModuleAccessMap();
+            Map<String, List<String>> actionControlMap = data.getActionControlMap();
+
+            module.getModulesFrom(domain).forEach((module) -> moduleAccessMap.put(module, new ArrayList<>()));
+            module.getActorsFrom(domain).forEach((actor) -> actionControlMap.put(actor, new ArrayList<>()));
+        });
+
+        Map<String, AccessControlData> currentData = (Map<String, AccessControlData>) Application
+                .getInstance().getDataContext().getData()
+                .get(AccessControlModule.DATA_ACCESS_CONTROL);
+
+        if (currentData != null) {
+            currentData.forEach((domainName, data) -> {
+                dataMap.put(domainName, data.clone());
+            });
+        }
     }
 
 }

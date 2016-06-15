@@ -1,4 +1,7 @@
 /*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package com.kongmy.srs.ui;
 
@@ -49,15 +52,13 @@ public class CheckboxDualPanel extends javax.swing.JPanel {
         rightScrollPane = new javax.swing.JScrollPane();
         rightPanel = new javax.swing.JPanel();
 
-        leftScrollPane.setBorder(null);
+        leftScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        leftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         leftPanel.setLayout(new javax.swing.BoxLayout(leftPanel, javax.swing.BoxLayout.Y_AXIS));
         leftScrollPane.setViewportView(leftPanel);
 
-        rightScrollPane.setBorder(null);
+        rightScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        rightPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         rightPanel.setLayout(new javax.swing.BoxLayout(rightPanel, javax.swing.BoxLayout.Y_AXIS));
         rightScrollPane.setViewportView(rightPanel);
 
@@ -83,12 +84,10 @@ public class CheckboxDualPanel extends javax.swing.JPanel {
     private javax.swing.JPanel rightPanel;
     private javax.swing.JScrollPane rightScrollPane;
     // End of variables declaration//GEN-END:variables
-    private String leftPanelName;
-    private String rightPanelName;
 
     public void setPanelNames(String leftPanelName, String rightPanelName) {
-        ((TitledBorder) this.leftPanel.getBorder()).setTitle(leftPanelName);
-        ((TitledBorder) this.rightPanel.getBorder()).setTitle(rightPanelName);
+        ((TitledBorder) this.leftScrollPane.getBorder()).setTitle(leftPanelName);
+        ((TitledBorder) this.rightScrollPane.getBorder()).setTitle(rightPanelName);
     }
 
     public JPanel getLeftPanel() {

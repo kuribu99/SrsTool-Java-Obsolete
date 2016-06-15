@@ -52,6 +52,6 @@ public class SrsConfiguration extends Configuration {
     @Override
     public void LoadDefaultConfiguration() {
         settings.clear();
-        settings.put(MODULES_CLASS_NAMES, String.join(",", getDefaultModules()));
+        settings.put(CONFIGURATION_MODULES, String.join(",", getDefaultModules()));
     }
 }

@@ -100,10 +100,7 @@ public class ActionResourceConstraintDialog extends javax.swing.JDialog {
         );
         panelNoActionLayout.setVerticalGroup(
             panelNoActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelNoActionLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbl, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(lbl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
         );
 
         panelCard.add(panelNoAction, "noAction");

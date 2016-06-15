@@ -6,7 +6,6 @@
 package com.kongmy.srs.ui;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,6 @@ import com.kongmy.core.Application;
 import com.kongmy.core.DataContext;
 import com.kongmy.core.HasMenu;
 import com.kongmy.srs.SrsApplication;
-import com.kongmy.srs.core.RequirementModule;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
@@ -42,10 +40,9 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
                 menuModules.add(((HasMenu) module).getMenu(this));
             }
         });
-
-        UpdateRequirements();
         Application.getInstance().getDataContext().addPropertyChangeListener(this);
-        UpdateTitle(DataContext.UNTITLED_PROJECT_NAME, false);
+        UpdateTitle();
+        UpdateRequirements();
     }
 
     /**
@@ -76,6 +73,8 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         separatorClose = new javax.swing.JPopupMenu.Separator();
         menuItemRestart = new javax.swing.JMenuItem();
         menuItemExit = new javax.swing.JMenuItem();
+        menuProject = new javax.swing.JMenu();
+        menuItemChangeProjectName = new javax.swing.JMenuItem();
         menuOntology = new javax.swing.JMenu();
         menuItemLoadOntology = new javax.swing.JMenuItem();
         menuItemModifyDomain = new javax.swing.JMenuItem();
@@ -177,6 +176,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
 
         menuFile.setText("File");
 
+        menuItemNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         menuItemNew.setText("New");
         menuItemNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,6 +185,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         });
         menuFile.add(menuItemNew);
 
+        menuItemOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         menuItemOpen.setText("Open");
         menuItemOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -194,6 +195,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         menuFile.add(menuItemOpen);
         menuFile.add(separatorOpen);
 
+        menuItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         menuItemSave.setText("Save");
         menuItemSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -202,6 +204,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         });
         menuFile.add(menuItemSave);
 
+        menuItemSaveAs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         menuItemSaveAs.setText("Save as");
         menuItemSaveAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -210,6 +213,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         });
         menuFile.add(menuItemSaveAs);
 
+        menuItemExport.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         menuItemExport.setText("Export");
         menuItemExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -218,6 +222,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         });
         menuFile.add(menuItemExport);
 
+        menuItemClose.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.CTRL_MASK));
         menuItemClose.setText("Close");
         menuItemClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,6 +232,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         menuFile.add(menuItemClose);
         menuFile.add(separatorClose);
 
+        menuItemRestart.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
         menuItemRestart.setText("Restart");
         menuItemRestart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -235,6 +241,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         });
         menuFile.add(menuItemRestart);
 
+        menuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         menuItemExit.setText("Exit");
         menuItemExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -244,6 +251,19 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         menuFile.add(menuItemExit);
 
         menuBar.add(menuFile);
+
+        menuProject.setText("Project");
+
+        menuItemChangeProjectName.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemChangeProjectName.setText("Change Project Name");
+        menuItemChangeProjectName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemChangeProjectNameActionPerformed(evt);
+            }
+        });
+        menuProject.add(menuItemChangeProjectName);
+
+        menuBar.add(menuProject);
 
         menuOntology.setText("Ontology");
 
@@ -421,6 +441,12 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
                 && JOptionPane.CANCEL_OPTION == HandleSaveDialog()) {
             return;
         }
+        Application.getInstance().SaveLastOpened();
+        try {
+            Application.getInstance().getConfiguration().WriteConfigurationToFile();
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         dispose();
     }//GEN-LAST:event_formWindowClosing
 
@@ -431,7 +457,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         }
         Application.getInstance().newDataContext();
         Application.getInstance().getDataContext().addPropertyChangeListener(this);
-        UpdateTitle(DataContext.UNTITLED_PROJECT_NAME, false);
+        UpdateTitle();
         this.UpdateRequirements();
     }//GEN-LAST:event_menuItemNewActionPerformed
 
@@ -518,14 +544,14 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
             return;
         }
         Application.getInstance().newDataContext();
-        this.UpdateRequirements();
-        UpdateTitle(DataContext.UNTITLED_PROJECT_NAME, false);
+        UpdateRequirements();
+        UpdateTitle();
     }//GEN-LAST:event_menuItemCloseActionPerformed
 
     private void menuItemExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExportActionPerformed
         String longString = Application.getInstance().getDataContext().getData().toString();
 
-        int size = 75;
+        int size = 200;
         String[] newArr = new String[(int) Math.ceil(1.0 * longString.length() / size)];
         for (int i = 0; i < newArr.length - 1;) {
             int start = i * size;
@@ -537,6 +563,40 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         JOptionPane.showMessageDialog(this, String.join("\n", newArr));
     }//GEN-LAST:event_menuItemExportActionPerformed
 
+    private void menuItemChangeProjectNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemChangeProjectNameActionPerformed
+        String oldValue = Application.getInstance().getDataContext().getProjectName();
+        Object newValue;
+        while (true) {
+            newValue = JOptionPane.showInputDialog(
+                    rootPane,
+                    "Please enter new project name",
+                    "Edit Project Name",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    null,
+                    oldValue);
+
+            if (newValue == null) {
+                return;
+            } else if (newValue.toString().isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "Please enter a project name",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else if (newValue.equals(oldValue)) {
+                JOptionPane.showMessageDialog(
+                        rootPane,
+                        "Please enter a different project name",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                Application.getInstance().getDataContext().setProjectName(newValue.toString());
+                return;
+            }
+        }
+    }//GEN-LAST:event_menuItemChangeProjectNameActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel actionPanel;
     private javax.swing.JButton btnAddFunctionalRequirement;
@@ -546,6 +606,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menuBoilerplate;
     private javax.swing.JMenu menuFile;
+    private javax.swing.JMenuItem menuItemChangeProjectName;
     private javax.swing.JMenuItem menuItemClose;
     private javax.swing.JMenuItem menuItemExit;
     private javax.swing.JMenuItem menuItemExport;
@@ -564,13 +625,14 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
     private javax.swing.JMenuItem menuItemWriteDefaultConfigurationFile;
     private javax.swing.JMenu menuModules;
     private javax.swing.JMenu menuOntology;
+    private javax.swing.JMenu menuProject;
     private javax.swing.JMenu menuSettings;
     private javax.swing.JTabbedPane moduleTabbedPane;
     private javax.swing.JPopupMenu.Separator separatorClose;
     private javax.swing.JPopupMenu.Separator separatorOpen;
     private javax.swing.JTextField tbxSelectedDomainAndModule;
     // End of variables declaration//GEN-END:variables
-    private final Map<String, List<Requirement>> requirementByModules;
+    private Map<String, List<Requirement>> requirementByModules;
 
     private int HandleSaveDialog() {
         int result = JOptionPane.showConfirmDialog(
@@ -608,7 +670,7 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
         }
         return result;
     }
-    
+
     private void UpdateTitle() {
         DataContext dataContext = Application.getInstance().getDataContext();
         UpdateTitle(dataContext.getProjectName(), dataContext.isSaved());
@@ -626,29 +688,25 @@ public class MainFrame extends javax.swing.JFrame implements PropertyChangeListe
     }
 
     public void UpdateRequirements() {
-        requirementByModules.clear();
+        Map<String, List<Requirement>> requirementMap = (Map<String, List<Requirement>>) Application.getInstance()
+                .getDataContext().getData().get(SrsApplication.DATA_GENERATED_REQUIREMENTS);
+
+        if (requirementMap == null) {
+            requirementByModules = new HashMap<>();
+        } else {
+            requirementByModules = requirementMap;
+        }
+
         moduleTabbedPane.removeAll();
-
-        Application.getInstance().getModules().values().stream()
-                .filter((module) -> module instanceof RequirementModule)
-                .map((module) -> (RequirementModule) module)
-                .forEach((module) -> {
-                    module.getRequirements().forEach((requirement) -> {
-                        if (!requirementByModules.containsKey(requirement.getModule())) {
-                            requirementByModules.put(requirement.getModule(), new ArrayList<>());
-                        }
-                        requirementByModules.get(requirement.getModule()).add(requirement);
-                    });
-                });
-
-        Application.getInstance().getDataContext().getData().put(SrsApplication.DATA_GENERATED_REQUIREMENTS, requirementByModules);
         requirementByModules.entrySet().forEach((entry) -> {
             AddModuleTab(new ModulePanel(entry.getKey(), entry.getValue()));
         });
+
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        UpdateTitle(((DataContext) evt.getSource()).getProjectName(), (boolean) evt.getNewValue());
+        UpdateTitle();
     }
+
 }

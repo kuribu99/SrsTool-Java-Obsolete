@@ -14,6 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import com.kongmy.core.Application;
 import com.kongmy.srs.core.Requirement;
 import com.kongmy.srs.ui.MainFrame;
+import javax.swing.JFrame;
 
 /**
  *
@@ -36,6 +37,7 @@ public class SrsApplication extends Application {
     public static Application bootstrap() {
         instance = new SrsApplication();
         instance.LoadModules();
+        instance.LoadLastOpened();
         return instance;
     }
 
@@ -65,6 +67,8 @@ public class SrsApplication extends Application {
         }
 
         // Show main UI
-        (new MainFrame()).setVisible(true);
+        MainFrame frame = new MainFrame();
+        frame.setExtendedState(frame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        frame.setVisible(true);
     }
 }

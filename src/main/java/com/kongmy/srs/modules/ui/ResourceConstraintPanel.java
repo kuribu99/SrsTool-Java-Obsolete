@@ -3,7 +3,6 @@
 package com.kongmy.srs.modules.ui;
 
 import com.kongmy.srs.modules.ActionResourceConstraintModule.ActionResourceConstraintData;
-import com.kongmy.util.CamelCaseEncoder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -18,6 +17,7 @@ public class ResourceConstraintPanel extends javax.swing.JPanel {
         public void onCheckBoxStatedChanged(boolean isChecked, String resourceName, String value);
 
         public void onTextBoxDocumentChanged(String resourceName, String oldValue, String newValue);
+        
     }
 
     /**

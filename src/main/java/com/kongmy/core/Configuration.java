@@ -22,9 +22,9 @@ import java.util.logging.Logger;
 public abstract class Configuration {
 
     // Constants
-
     protected static final String FILE_NAME = "config.txt";
-    public static final String MODULES_CLASS_NAMES = "modules_class_name";
+    public static final String CONFIGURATION_MODULES = "modules_class_name";
+    public static final String CONFIGURATION_LAST_OPENED = "lastOpenedFilePath";
 
     protected final Map<String, String> settings;
 
@@ -34,6 +34,10 @@ public abstract class Configuration {
 
     public String getSetting(String key) {
         return this.settings.get(key);
+    }
+
+    public void AddConfiguration(String key, String val) {
+        settings.put(key, val);
     }
 
     public void AddConfiguration(Configurable conf) {

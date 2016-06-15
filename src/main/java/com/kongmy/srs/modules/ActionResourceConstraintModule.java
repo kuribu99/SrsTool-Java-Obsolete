@@ -9,9 +9,11 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import com.kongmy.core.HasMenu;
+import com.kongmy.srs.core.Requirement;
 import com.kongmy.srs.core.RequirementModule;
 import com.kongmy.srs.modules.ui.ActionResourceConstraintDialog;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  *
@@ -30,7 +32,7 @@ public class ActionResourceConstraintModule extends RequirementModule implements
             this.value = value;
             this.checked = false;
         }
-        
+
         public String getMetric() {
             return metric;
         }
@@ -50,7 +52,7 @@ public class ActionResourceConstraintModule extends RequirementModule implements
         public void setChecked(boolean checked) {
             this.checked = checked;
         }
-        
+
         @Override
         public ActionResourceConstraintData clone() {
             ActionResourceConstraintData clone = new ActionResourceConstraintData(this.metric, this.value);
@@ -65,7 +67,9 @@ public class ActionResourceConstraintModule extends RequirementModule implements
         }
     }
 
+    private static final String MODULE_NAME = "Action Resource Constraint";
     public static String DATA_ACTION_RESOURCE_CONSTRAINT_MAP = "resourceMap";
+    private static final String REQUIREMENT_BOILERPLATE = "The <metric> of <action> action must be <value>";
 
     @Override
     public List<String> getDependencies() {
@@ -87,6 +91,24 @@ public class ActionResourceConstraintModule extends RequirementModule implements
 
     @Override
     protected void UpdateGeneratedRequirements() {
+        this.generatedRequirements.clear();
+
+        Map<String, Map<String, ActionResourceConstraintData>> dataMap
+                = (Map<String, Map<String, ActionResourceConstraintData>>) Application.getInstance()
+                .getDataContext().getData().get(DATA_ACTION_RESOURCE_CONSTRAINT_MAP);
+
+        if (dataMap != null) {
+            dataMap.forEach((action, map) -> {
+                String boilerplate = REQUIREMENT_BOILERPLATE.replace("<action>", action);
+                map.forEach((metric, data) -> {
+                    if (data.isChecked()) {
+                        this.generatedRequirements.add(new Requirement(
+                                MODULE_NAME,
+                                boilerplate.replace("<metric>", metric).replace("<value>", data.getValue())));
+                    }
+                });
+            });
+        }
     }
 
 }
